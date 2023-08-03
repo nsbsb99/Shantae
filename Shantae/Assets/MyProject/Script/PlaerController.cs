@@ -37,7 +37,16 @@ public class PlaerController : MonoBehaviour
     {
         Debug.Log(isDown);
 
-        platerAnimation();          // 플레이어가 보여줄 애니메이션
+        playerAnimation();          // 플레이어가 보여줄 애니메이션
+
+        if(Input.GetKeyDown(KeyCode.Z))
+        {
+            // 공격
+        }
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            // 점프
+        }
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -63,9 +72,10 @@ public class PlaerController : MonoBehaviour
             boxCollider.size = new Vector2(0.7f, 2.1f);
             boxCollider.offset = new Vector2(0.385f, -0.2f);
         }
+
     }
 
-    private void platerAnimation()
+    private void playerAnimation()      // 플레이어 지상 애니메이션
     {
         if (!isDown)
         {
@@ -79,15 +89,18 @@ public class PlaerController : MonoBehaviour
                 Debug.Assert(animator != null);
                 if (Input.GetKeyDown (KeyCode.DownArrow))
                 {
+                    boxCollider.size = new Vector2(1.3f, 0.9f);
+                    boxCollider.offset = new Vector2(0f, -0.7f);
+
                     isRun = false;
-                    animator.SetBool("DownRun", isDownAndRun);
+                    animator.SetBool("Run", isRun);
+
                     isDownAndRun = true;
-
-
                     animator.SetBool("DownRun", isDownAndRun);
 
+                    isDown = true;
+                    animator.SetBool("Down", isDown);
                 }
-
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -96,10 +109,17 @@ public class PlaerController : MonoBehaviour
                 animator.SetBool("Run", isRun);
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
+                    boxCollider.size = new Vector2(1.3f, 0.9f);
+                    boxCollider.offset = new Vector2(0f, -0.7f);
+
+                    isRun = false;
+                    animator.SetBool("Run", isRun);
+
                     isDownAndRun = true;
-
-
                     animator.SetBool("DownRun", isDownAndRun);
+
+                    isDown = true;
+                    animator.SetBool("Down", isDown);
 
                 }
             }
@@ -193,6 +213,15 @@ public class PlaerController : MonoBehaviour
                 animator.SetBool("DownRun", isDownAndRun);
             }
         }
+    }       
+
+    private void playerAttackAniamtoin()
+    {
+
+    }
+    private void playerJumpAnimation()
+    {
+
     }
 }
 
