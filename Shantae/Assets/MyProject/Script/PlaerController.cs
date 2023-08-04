@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class PlaerController : MonoBehaviour
 {
-
     public float moveSpeed;
 
+    private Vector3 originalPosition; // 원래 위치를 저장하는 변수
+    private bool isPositionFixed = false;
+
     public float jumpForce = 350f;
+    private bool isJumping = false;
+
     private Animator animator = default;
 
     private bool isRun;
     private bool isDown;
     private bool isDownAndRun;
-    private bool isJumping = false;
-    private CapsuleCollider capsuleCollider;
 
     private Rigidbody2D playerRigid = default;
     private AudioSource playerAudio = default;
@@ -41,7 +43,14 @@ public class PlaerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            // 공격
+            originalPosition = transform.position;
+            isPositionFixed = true;
+
+            StartCoroutine(ResetPositionFixedStatus(1.0f));         //공격하면 
+        }
+        if(isPositionFixed)
+        {
+
         }
         if(Input.GetKeyDown(KeyCode.X))
         {
@@ -61,16 +70,16 @@ public class PlaerController : MonoBehaviour
         }
         else if (Input.GetKey(KeyCode.DownArrow))
         {
-            boxCollider.size = new Vector2(1.3f, 0.9f);
-            boxCollider.offset = new Vector2(0f, -0.7f);
+            boxCollider.size = new Vector2(1.5f, 0.9f);
+            boxCollider.offset = new Vector2(0f, -1.45f);
             isDown = true;
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             isDown = false;
             isDownAndRun = false;
-            boxCollider.size = new Vector2(0.7f, 2.1f);
-            boxCollider.offset = new Vector2(0.385f, -0.2f);
+            boxCollider.size = new Vector2(0.7f, 2f);
+            boxCollider.offset = new Vector2(0.385f, -0.9f);
         }
 
     }
@@ -222,6 +231,12 @@ public class PlaerController : MonoBehaviour
     private void playerJumpAnimation()
     {
 
+    }
+    private IEnumerator ResetPositionFixedStatus(float delay)
+    {
+        yield return new WaitForSeconds(delay); // 1초 대기
+
+        isPositionFixed = false; // 좌표 고정 상태를 false로 변경합니다.
     }
 }
 
