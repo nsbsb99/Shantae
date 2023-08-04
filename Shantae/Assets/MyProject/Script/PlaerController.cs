@@ -6,14 +6,21 @@ public class PlaerController : MonoBehaviour
 {
     public float moveSpeed;
 
-    private Vector3 originalPosition; // 원래 위치를 저장하는 변수
-    private bool isPositionFixed = false;
+    public GameObject ground;
+    public GameObject jump;
+    public GameObject down;
 
-    public float jumpForce = 350f;
+
+    private Vector2 originalPosition; // 원래 위치를 저장하는 변수
+
+    public float jumpForce = 10f;
     private bool isJumping = false;
+    private bool isAir = false;
+    private float jumpStartTime;
 
     private Animator animator = default;
 
+    private bool isAttack = false;
     private bool isRun;
     private bool isDown;
     private bool isDownAndRun;
@@ -37,49 +44,107 @@ public class PlaerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(isDown);
-
+        animator.SetBool("isGround", !isAir);
+        if (Physics2D.Raycast(transform.position, Vector2.down, 2f))        //플레이어가 바닥에 있는지
+        {
+            // 바닥과 충돌한 경우
+            isAir = false;
+        }
+        else
+        {
+            // 바닥과 충돌하지 않은 경우
+            isAir = true;
+        }
         playerAnimation();          // 플레이어가 보여줄 애니메이션
 
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            originalPosition = transform.position;
-            isPositionFixed = true;
 
-            StartCoroutine(ResetPositionFixedStatus(1.0f));         //공격하면 
+        if (Input.GetKeyDown(KeyCode.X) && !isJumping && !isAir && !isDown)      // 점프
+        {
+            isJumping = true;
+            jumpStartTime = Time.time;
+
+            animator.SetBool("Jump", isJumping);
+            if (Input.GetKeyDown(KeyCode.Z))        // 공격
+            {
+                animator.SetBool("Attack", isAttack);
+
+                StartCoroutine(AirAttack(0.15f));
+            }
         }
-        if(isPositionFixed)
+        if (isJumping)
+        {
+            float jumptime = Time.time - jumpStartTime;
+            
+            if(jumptime <= 1)
+            {
+                transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
+                if (Input.GetKeyUp(KeyCode.X))
+                {
+                    isJumping = false;
+                    animator.SetBool("Jump", isJumping);
+                }
+            }
+            else
+            {
+                isJumping = false;
+                animator.SetBool("Jump", isJumping);
+            }
+        }
+
+        if (!isAttack || isJumping)
         {
 
-        }
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            // 점프
-        }
+            if (Input.GetKeyDown(KeyCode.Z))        // 공격
+            {
+                isAttack = true;
 
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
-            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+                if(isDown)
+                {
+                    originalPosition = transform.position;
+                    animator.SetBool("Attack", isAttack);
+                    StartCoroutine(DownAttack(0.15f));         //공격하면 
 
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-            transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            boxCollider.size = new Vector2(1.5f, 0.9f);
-            boxCollider.offset = new Vector2(0f, -1.45f);
-            isDown = true;
-        }
-        if (Input.GetKeyUp(KeyCode.DownArrow))
-        {
-            isDown = false;
-            isDownAndRun = false;
-            boxCollider.size = new Vector2(0.7f, 2f);
-            boxCollider.offset = new Vector2(0.385f, -0.9f);
+                }
+                else if (!isJumping && !isDown)
+                {
+                    originalPosition = transform.position;
+                    animator.SetBool("Attack", isAttack);
+
+                    StartCoroutine(GroundAttack(0.15f));         //공격하면 
+                }
+                else if(isAir)
+                {
+                    animator.SetBool("Attack", isAttack);
+
+                    StartCoroutine(AirAttack(0.15f));
+                }
+            }
+        
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+
+                transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
+                transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
+                transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                boxCollider.size = new Vector2(1.5f, 0.9f);
+                boxCollider.offset = new Vector2(0f, -1.45f);
+                isDown = true;
+            }
+            if (Input.GetKeyUp(KeyCode.DownArrow))
+            {
+                isDown = false;
+                isDownAndRun = false;
+                boxCollider.size = new Vector2(0.7f, 2f);
+                boxCollider.offset = new Vector2(0.385f, -0.9f);
+            }
         }
 
     }
@@ -232,22 +297,51 @@ public class PlaerController : MonoBehaviour
     {
 
     }
-    private IEnumerator ResetPositionFixedStatus(float delay)
+    private IEnumerator DownAttack(float delay)
     {
+        down.SetActive(true);
+
+        originalPosition = transform.position;
         yield return new WaitForSeconds(delay); // 1초 대기
 
-        isPositionFixed = false; // 좌표 고정 상태를 false로 변경합니다.
+        isAttack = false;
+        down.SetActive(false);
+
+        animator.SetBool("Attack", isAttack);
+    }
+    private IEnumerator GroundAttack(float delay)
+    {
+        ground.SetActive(true);
+
+        originalPosition = transform.position;
+        yield return new WaitForSeconds(delay); // 1초 대기
+
+        isAttack = false; 
+        ground.SetActive(false);
+
+        animator.SetBool("Attack", isAttack);
+    }
+    private IEnumerator AirAttack(float delay)
+    {
+        jump.SetActive(true);
+
+        yield return new WaitForSeconds(delay); // 1초 대기
+
+        isAttack = false; 
+        jump.SetActive(false);
+
+        animator.SetBool("Attack", isAttack);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("Ground"))
+        {
+            isAir = false;
+        }
+        else
+        {
+            isAir = true;
+        }
     }
 }
-
-//capsuleCollider = GetComponent<CapsuleCollider>();
-
-//// 크기 변경 예시
-//Vector3 newSize = new Vector3(1.0f, 2.0f, 1.0f);
-//capsuleCollider.radius = newSize.x;
-//capsuleCollider.height = newSize.y;
-//capsuleCollider.direction = 1; // 0: X축, 1: Y축, 2: Z축
-
-//// 위치 변경 예시
-//Vector3 newPosition = new Vector3(0.0f, 1.0f, 0.0f);
-//capsuleCollider.center = newPosition;
