@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 클래스: 게임 오브젝트 충격 시 카메라가 흔들리는 효과
 /// </summary>
-/// 
+
 public class CameraShake : MonoBehaviour
 {
     public static CameraShake instance;
@@ -42,6 +42,10 @@ public class CameraShake : MonoBehaviour
 
     public IEnumerator ShakeThisCam()
     {
+        ///<summary>
+        /// 카메라를 흔드는 코루틴. 
+        ///</summary>
+        
         Vector3 originPosition = transform.position;
 
         float elapsed = 0.0f;

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PlayerAttack
   - Ground
+  - SideWall
+  - Ceiling
   layers:
   - Default
   - TransparentFX
@@ -45,4 +47,7 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 3246550325
+    locked: 0
+  - name: Wall
+    uniqueID: 3006717935
     locked: 0

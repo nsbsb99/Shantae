@@ -27,8 +27,8 @@ public class CloseDoor : MonoBehaviour
         /// </summary>>
         
         // First Background 비활성화 + Second Background로 덮기
-        transform.GetChild(0).gameObject.SetActive(false);
-        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(2).gameObject.SetActive(true);
 
         // Camera Shaker 이동
         StartCoroutine(CameraShake.instance.ShakeThisCam());
