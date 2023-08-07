@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 클래스: 대사 패스 등 조건 충족 시 문이 닫히는 효과
+/// </summary>
+
 public class CloseDoor : MonoBehaviour
 {
-    // 백그라운드가 흔들리는 스피드 
-    private float shakeSpeed = default;
-
-    private void Awake() // 후에 대사 추가 시 대사가 종료되면 코루틴이 시작하도록 조건 걸기 (Update)
+    private void Awake() // 후에 대사 추가 시 대사가 종료되면 코루틴이 시작하도록 조건 걸기 (Update로 변경)
     {
         StartCoroutine(DoorTimer());
     }
@@ -21,11 +22,15 @@ public class CloseDoor : MonoBehaviour
 
     void CloseTwoDoors()
     {
-        //First Background 비활성화 + Second Background로 덮기
+        /// <summary>
+        /// 문이 열려있는 백그라운드에서 문이 닫힌 백그라운드로 교체 
+        /// </summary>>
+        
+        // First Background 비활성화 + Second Background로 덮기
         transform.GetChild(0).gameObject.SetActive(false);
         transform.GetChild(1).gameObject.SetActive(true);
 
-        // 이후 Camera Shaker 추가
+        // Camera Shaker 이동
+        StartCoroutine(CameraShake.instance.ShakeThisCam());
     }
-
 }
