@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public GameObject down;
 
 
-    private Vector2 originalPosition; // 원래 위치를 저장하는 변수
+    private Vector3 originalPosition; // 원래 위치를 저장하는 변수
 
     private int playerHP = 50;
 
@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
                 transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
             }
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.DownArrow) && !isAir)
             {
                 boxCollider.size = new Vector2(1.5f, 0.9f);
                 boxCollider.offset = new Vector2(0f, -1.45f);
@@ -298,14 +298,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void playerAttackAniamtoin()
-    {
-
-    }
-    private void playerJumpAnimation()
-    {
-
-    }
     private IEnumerator DownAttack(float delay)
     {
         down.SetActive(true);
@@ -357,7 +349,8 @@ public class PlayerController : MonoBehaviour
     private IEnumerator HandleInvincibleAndDamage(float invincibleDelay, float damageDelay)
     {
         // Save the original position before any changes
-        originalPosition = transform.position;
+        //originalPosition = new Vector2(transform.position.x, transform.position.y);
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // Start Invincible coroutine
         StartCoroutine(Invincible(invincibleDelay));
@@ -366,7 +359,9 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(Damage(damageDelay));
 
         // Wait for both coroutines to finish
-        yield return new WaitForSeconds(Mathf.Max(invincibleDelay, damageDelay));
+        yield return new WaitForSeconds(invincibleDelay);
+
+        //originalPosition = transform.position;
 
         invincible = false;
     }
