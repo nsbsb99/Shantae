@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaerController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
 
@@ -12,6 +12,8 @@ public class PlaerController : MonoBehaviour
 
 
     private Vector2 originalPosition; // 원래 위치를 저장하는 변수
+
+    private int playerHP = 50;
 
     public float jumpForce = 10f;
     private bool isJumping = false;
@@ -24,6 +26,9 @@ public class PlaerController : MonoBehaviour
     private bool isRun;
     private bool isDown;
     private bool isDownAndRun;
+    private bool isDamage = false;
+    private bool invincible = false;
+    private bool isFlashing = false;
 
     private Rigidbody2D playerRigid = default;
     private AudioSource playerAudio = default;
@@ -38,13 +43,17 @@ public class PlaerController : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
 
         Debug.Assert(playerRigid != null);
-        Debug.Assert(animator != null);         
+        Debug.Assert(animator != null);
     }
 
     // Update is called once per frame
     void Update()
     {
         animator.SetBool("isGround", !isAir);
+        if (invincible && !isFlashing)
+        {
+            StartCoroutine(FlashPlayer(0.1f)); // Adjust the time interval as needed
+        }
         if (Physics2D.Raycast(transform.position, Vector2.down, 2f))        //플레이어가 바닥에 있는지
         {
             // 바닥과 충돌한 경우
@@ -74,8 +83,8 @@ public class PlaerController : MonoBehaviour
         if (isJumping)
         {
             float jumptime = Time.time - jumpStartTime;
-            
-            if(jumptime <= 1)
+
+            if (jumptime <= 1)
             {
                 transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
                 if (Input.GetKeyUp(KeyCode.X))
@@ -91,14 +100,14 @@ public class PlaerController : MonoBehaviour
             }
         }
 
-        if (!isAttack || isJumping)
+        if ((!isAttack || isJumping) && !isDamage)
         {
 
             if (Input.GetKeyDown(KeyCode.Z))        // 공격
             {
                 isAttack = true;
 
-                if(isDown)
+                if (isDown)
                 {
                     originalPosition = transform.position;
                     animator.SetBool("Attack", isAttack);
@@ -112,14 +121,14 @@ public class PlaerController : MonoBehaviour
 
                     StartCoroutine(GroundAttack(0.15f));         //공격하면 
                 }
-                else if(isAir)
+                else if (isAir)
                 {
                     animator.SetBool("Attack", isAttack);
 
                     StartCoroutine(AirAttack(0.15f));
                 }
             }
-        
+
             if (Input.GetKey(KeyCode.RightArrow))
             {
 
@@ -132,7 +141,7 @@ public class PlaerController : MonoBehaviour
                 transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
                 transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(KeyCode.DownArrow))
             {
                 boxCollider.size = new Vector2(1.5f, 0.9f);
                 boxCollider.offset = new Vector2(0f, -1.45f);
@@ -161,7 +170,7 @@ public class PlaerController : MonoBehaviour
 
                 animator.SetBool("Run", isRun);
                 Debug.Assert(animator != null);
-                if (Input.GetKeyDown (KeyCode.DownArrow))
+                if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     boxCollider.size = new Vector2(1.3f, 0.9f);
                     boxCollider.offset = new Vector2(0f, -0.7f);
@@ -287,7 +296,7 @@ public class PlaerController : MonoBehaviour
                 animator.SetBool("DownRun", isDownAndRun);
             }
         }
-    }       
+    }
 
     private void playerAttackAniamtoin()
     {
@@ -316,7 +325,7 @@ public class PlaerController : MonoBehaviour
         originalPosition = transform.position;
         yield return new WaitForSeconds(delay); // 1초 대기
 
-        isAttack = false; 
+        isAttack = false;
         ground.SetActive(false);
 
         animator.SetBool("Attack", isAttack);
@@ -327,21 +336,80 @@ public class PlaerController : MonoBehaviour
 
         yield return new WaitForSeconds(delay); // 1초 대기
 
-        isAttack = false; 
+        isAttack = false;
         jump.SetActive(false);
 
         animator.SetBool("Attack", isAttack);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
+    {        
+        if (collision.tag.Equals("Damage"))
+        {
+            if (!invincible)
+            {
+                invincible = true;
+                StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
+            }
+        }
+    }
+
+    private IEnumerator HandleInvincibleAndDamage(float invincibleDelay, float damageDelay)
     {
-        if (collision.tag.Equals("Ground"))
+        // Save the original position before any changes
+        originalPosition = transform.position;
+
+        // Start Invincible coroutine
+        StartCoroutine(Invincible(invincibleDelay));
+
+        // Start Damage coroutine
+        StartCoroutine(Damage(damageDelay));
+
+        // Wait for both coroutines to finish
+        yield return new WaitForSeconds(Mathf.Max(invincibleDelay, damageDelay));
+
+        invincible = false;
+    }
+
+    private IEnumerator Damage(float delay)
+    {
+        isDamage = true;
+        animator.SetBool("isDamage", isDamage);
+
+        // Save the original position before the delay
+        originalPosition = transform.position;
+
+        yield return new WaitForSeconds(delay);
+
+        isDamage = false;
+        animator.SetBool("isDamage", isDamage);
+    }
+
+    private IEnumerator Invincible(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+    }
+    private IEnumerator FlashPlayer(float interval)
+    {
+        isFlashing = true;
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        Color originalColor = spriteRenderer.color;
+        Color transparentColor = originalColor;
+        transparentColor.a = 0.5f; // Adjust the alpha value to your desired transparency level
+
+        float blinkTime = 0;
+
+        while (invincible)
         {
-            isAir = false;
+            spriteRenderer.color = transparentColor;
+            yield return new WaitForSeconds(interval);
+
+            spriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(interval);
+            blinkTime += interval * 2;
         }
-        else
-        {
-            isAir = true;
-        }
+
+        spriteRenderer.color = originalColor;
+        isFlashing = false;
     }
 }

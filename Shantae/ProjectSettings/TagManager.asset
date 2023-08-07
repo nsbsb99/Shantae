@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerAttack
   - Ground
+  - Damage
   layers:
   - Default
   - TransparentFX
