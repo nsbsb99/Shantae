@@ -35,50 +35,45 @@ public class EmpressMoving : MonoBehaviour
 
     IEnumerator RandomMoving()
     {
+        ///<summary>
+        /// 보스의 랜덤 이동과 그에 맞는 공격을 결정하는 메서드
+        /// </summary>
+        
         // 3.5초 후 보스가 행동을 시작하도록 지정.(후에 컷신 종료 시 시작되도록 변경 필요)
         yield return new WaitForSeconds(3.5f);
 
         // 만약 Empress Siren의 체력이 0보다 크다면 전투 지속 
         while (EmpressController.empressHP > 0)
         {
-            randomValue = Random.Range(0, 3);
+            //randomValue = Random.Range(0, 3);
+            randomValue = 2.0f;
             randomValue_Ground = Random.Range(0, 2);
 
             if (randomValue == 0)
             { 
                 // 왼쪽 벽
                 transform.position = new Vector2(-6.6f, 1.54f);
-                //animator.SetTrigger("Side Wall");
                 animator.Play("Float and Kiss");
-
-                Debug.Log("1. 왼쪽 벽에 붙기");
             }
             else if (randomValue == 1)
             {
                 // 오른쪽 벽
                 transform.position = new Vector2(6.43f, 1.54f);
                 spriteRenderer.flipX = true;
-                //animator.SetTrigger("Side Wall");
                 animator.Play("Float and Kiss");
-
-                Debug.Log("2. 오른쪽 벽에 붙기");
-
             }
             else if (randomValue == 2)
             {
                 // 천장
                 transform.position = new Vector2(-0.29f, 2.18f);
-                //animator.SetTrigger("Ceiling");
                 animator.Play("Ceiling");
 
-                Debug.Log("3. 천장에 붙기");
+                yield return new WaitForSeconds(1.3f);
+                EmpressAttack.instance.CeilingAttack();
             }
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(1.0f);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-            //animator.ResetTrigger("Side Wall");
-            //animator.ResetTrigger("Ceiling");
 
             // x축으로 뒤집힌 보스를 원상태로 되돌리기
             if (spriteRenderer.flipX == true)
@@ -89,34 +84,18 @@ public class EmpressMoving : MonoBehaviour
             if (randomValue_Ground == 0)
             {
                 // 바닥 Surf
-                transform.position = new Vector2(-4.07f, -1.44f);
-                //animator.SetTrigger("Ground_Surf");
+                transform.position = new Vector2(-4.07f, -1.72f);
                 animator.Play("Surf");
-
-                Debug.Log("4. Surf 동작");
             }
             else if (randomValue_Ground == 1)
             {
                 // 바닥 Hop
                 transform.position = new Vector2(-4.07f, -1.44f);
-                //animator.SetTrigger("Ground_Hop");
                 animator.Play("Hopback");
-
-                Debug.Log("5. Hop 동작");
             }
 
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(1.0f);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-            //animator.ResetTrigger("Ground_Surf");
-            //animator.ResetTrigger("Ground_Hop");
-
         }
     }
-
-   
-    /// 게임 시작 시 스탠딩 Vector2(-4.07f, -1.44f)
-    /// 왼쪽 BlowKiss Vector2(-6.6f, 1.54f)
-    /// 트리거 종료 시 ResetTrigger
-
 }

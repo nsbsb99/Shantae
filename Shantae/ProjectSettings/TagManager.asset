@@ -51,3 +51,6 @@ TagManager:
   - name: Wall
     uniqueID: 3006717935
     locked: 0
+  - name: Attack
+    uniqueID: 3118784989
+    locked: 0

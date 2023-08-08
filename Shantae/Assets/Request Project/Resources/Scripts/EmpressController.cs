@@ -20,8 +20,13 @@ public class EmpressController : MonoBehaviour
         // Empress Siren의 패배 확인
         if(empressHP <= 0)
         {
-            NextMegaEmpress();
+            WinPlayer();
         }
+    }
+
+    private void WinPlayer()
+    {
+
     }
 
     private void NextMegaEmpress()

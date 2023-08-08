@@ -11,9 +11,9 @@ public class CameraShake : MonoBehaviour
     public static CameraShake instance;
 
     // Camera 오브젝트에만 달 것
-    private const float shakeTime = 0.15f;
-    private const float shakeSpeed = 5.0f;
-    private const float shakeAmount = 0.3f;
+    private const float shakeTime = 0.3f;
+    private const float shakeSpeed = 10.0f;
+    private const float shakeAmount = 0.15f;
 
     private Vector3 originalPosition;
 
