@@ -1018,8 +1018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c677f1e04b82ba468b743b6f4092040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blowKissCount: 3
-  blowKissSpeed: 11
 --- !u!1 &2142309012
 GameObject:
   m_ObjectHideFlags: 0

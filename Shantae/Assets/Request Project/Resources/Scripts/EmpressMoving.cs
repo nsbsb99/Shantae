@@ -65,8 +65,6 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(2.1f);
 
                 leftWall = true;
-
-                BlowKissAttack.instance.StartRightKisses();
             }
             else if (randomValue == 1)
             {
