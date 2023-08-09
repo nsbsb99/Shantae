@@ -28,9 +28,6 @@ public class EmpressMoving : MonoBehaviour
     public static bool rightWall = false;   
     #endregion
 
-
-
-
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -79,6 +76,7 @@ public class EmpressMoving : MonoBehaviour
             {
                 // √µ¿Â
                 transform.position = new Vector2(-0.29f, 2.18f);
+
                 animator.Play("Ceiling");
 
                 yield return new WaitForSeconds(1.3f);

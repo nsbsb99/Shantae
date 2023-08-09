@@ -11,6 +11,8 @@ TagManager:
   - step
   - top
   - bottom
+  - SideWall
+  - Ceiling
   layers:
   - Default
   - TransparentFX
@@ -47,4 +49,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Character
+    uniqueID: 3595184807
+    locked: 0
+  - name: Attack
+    uniqueID: 1037904575
     locked: 0

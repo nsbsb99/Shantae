@@ -18,7 +18,7 @@ public class CeilingAttack : MonoBehaviour
     private GameObject[] ceilingBalls;
     private Vector2 poolPosition_ceiling = new Vector2(0, -10f);
 
-    // 양쪽 공격의 시작 위치
+    // 양쪽 공격의 시작 위치(Empress Siren의 현 위치)
     Vector2 ceiling_OriginPosition = default;
 
     Transform ceiling_first = default;
@@ -70,8 +70,6 @@ public class CeilingAttack : MonoBehaviour
                 Quaternion.identity);
         }
 
-        ceiling_OriginPosition = new Vector2(0f, 3.35f);
-
         // transform 변수 설정
         ceiling_first = ceilingBalls[0].transform;
         ceiling_second = ceilingBalls[1].transform;
@@ -89,32 +87,36 @@ public class CeilingAttack : MonoBehaviour
 
     private void Update()
     {
+        // 한 번만 실행하도록 하기 위함. (위치 절대로 바꾸지 말 것!!!)
+        if (leftFinish == true && rightFinish == true)
+        {
+            leftFinish = false;
+            rightFinish = false;
+
+            EmpressMoving.ceiling = false;
+        }
+
         if (EmpressMoving.ceiling == true)
         {
             LeftCeilingAttack();
             RightCeilingAttack();
-
-            // 한 번만 실행하도록 하기 위함.
-            if (leftFinish == true && rightFinish == true)
-            {
-                EmpressMoving.ceiling = false;
-                leftFinish = false;
-                rightFinish = false;
-            }
         }
     }
 
     void LeftCeilingAttack()
     {
-        if (ceilingMoveIndex == 0)
+        if (ceilingMoveIndex == 0 && leftFinish == false)
         {
+            // 양쪽 공격이 공유하는 공격 시작 지점
+            ceiling_OriginPosition = new Vector2(transform.position.x, 3.35f);
+
             // 오브젝트 풀에 있던 것을 맵 안으로 이동 
             ceiling_first.position = ceiling_OriginPosition;
 
             ceilingMoveIndex++;
         }
 
-        if (ceilingMoveIndex == 1)
+        else if (ceilingMoveIndex == 1)
         {
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             firstDestination_Left, ceilingBallSpeed * Time.deltaTime);
@@ -125,7 +127,7 @@ public class CeilingAttack : MonoBehaviour
             }
         }
 
-        if (ceilingMoveIndex == 2)
+        else if (ceilingMoveIndex == 2)
         {
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             secondDestination_Left, ceilingBallSpeed * Time.deltaTime);
@@ -136,7 +138,7 @@ public class CeilingAttack : MonoBehaviour
             }
         }
 
-        if (ceilingMoveIndex == 3)
+        else if (ceilingMoveIndex == 3)
         {
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             thirdDestination_Left, ceilingBallSpeed * Time.deltaTime);
@@ -148,11 +150,11 @@ public class CeilingAttack : MonoBehaviour
         }
 
         // 오브젝트 풀로 복귀
-        if (ceilingMoveIndex == 4)
+        else if (ceilingMoveIndex == 4)
         {
             ceiling_first.position = poolPosition_ceiling;
+            
             leftFinish = true;
-
             ceilingMoveIndex = 0;
         }
     }
@@ -167,7 +169,7 @@ public class CeilingAttack : MonoBehaviour
             ceilingMoveIndex_Right++;
         }
 
-        if (ceilingMoveIndex_Right == 1)
+        else if (ceilingMoveIndex_Right == 1)
         {
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             firstDestination_Right, ceilingBallSpeed * Time.deltaTime);
@@ -178,7 +180,7 @@ public class CeilingAttack : MonoBehaviour
             }
         }
 
-        if (ceilingMoveIndex_Right == 2)
+        else if (ceilingMoveIndex_Right == 2)
         {
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             secondDestination_Right, ceilingBallSpeed * Time.deltaTime);
@@ -189,7 +191,7 @@ public class CeilingAttack : MonoBehaviour
             }
         }
 
-        if (ceilingMoveIndex_Right == 3)
+        else if (ceilingMoveIndex_Right == 3)
         {
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             thirdDestination_Right, ceilingBallSpeed * Time.deltaTime);
@@ -201,11 +203,11 @@ public class CeilingAttack : MonoBehaviour
         }
 
         // 오브젝트 풀로 복귀
-        if (ceilingMoveIndex_Right == 4)
+        else if (ceilingMoveIndex_Right == 4)
         {
             ceiling_second.position = poolPosition_ceiling;
+            
             rightFinish = true;
-
             ceilingMoveIndex_Right = 0;
         }
     }
