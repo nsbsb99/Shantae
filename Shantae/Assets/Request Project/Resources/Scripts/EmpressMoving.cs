@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class EmpressMoving : MonoBehaviour
 {
-    #region
+    #region 움직임 패턴 결정
     // 보스의 패턴 결정_벽 or 천장
     private float randomValue = default;
     // 보스 패턴 결정_바닥에서
@@ -21,6 +21,15 @@ public class EmpressMoving : MonoBehaviour
     // 플립을 위한 Sprite Renderer
     private SpriteRenderer spriteRenderer;
     #endregion
+
+    #region 공격 패턴 결정
+    public static bool ceiling = false;
+    public static bool leftWall = false;
+    public static bool rightWall = false;   
+    #endregion
+
+
+
 
     private void Awake()
     {
@@ -54,6 +63,8 @@ public class EmpressMoving : MonoBehaviour
                 // 왼쪽 벽
                 transform.position = new Vector2(-6.6f, 1.54f);
                 animator.Play("Float and Kiss");
+
+                leftWall = true;
             }
             else if (randomValue == 1)
             {
@@ -61,6 +72,8 @@ public class EmpressMoving : MonoBehaviour
                 transform.position = new Vector2(6.43f, 1.54f);
                 spriteRenderer.flipX = true;
                 animator.Play("Float and Kiss");
+
+                rightWall = true;
             }
             else if (randomValue == 2)
             {
@@ -69,11 +82,13 @@ public class EmpressMoving : MonoBehaviour
                 animator.Play("Ceiling");
 
                 yield return new WaitForSeconds(1.3f);
-                EmpressAttack.instance.CeilingAttack();
+
+                ceiling = true;
             }
 
             yield return new WaitForSeconds(1.0f);
             yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
 
             // x축으로 뒤집힌 보스를 원상태로 되돌리기
             if (spriteRenderer.flipX == true)

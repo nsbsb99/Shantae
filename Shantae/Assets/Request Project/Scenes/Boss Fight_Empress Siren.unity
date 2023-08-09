@@ -953,6 +953,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1583790310}
   - component: {fileID: 1583790309}
+  - component: {fileID: 1583790311}
   m_Layer: 0
   m_Name: Attack Spawner
   m_TagString: Untagged
@@ -972,7 +973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44049f2e94993f642aa07f131983c865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ceilingBallSpeed: 1
+  ceilingBallSpeed: 11
 --- !u!4 &1583790310
 Transform:
   m_ObjectHideFlags: 0
@@ -988,6 +989,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1583790311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583790308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c677f1e04b82ba468b743b6f4092040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blowKissSpeed: 11
 --- !u!1 &1785603568 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3553193836850371004, guid: 0b8a81191aa2c114a891aed1aa684850, type: 3}
