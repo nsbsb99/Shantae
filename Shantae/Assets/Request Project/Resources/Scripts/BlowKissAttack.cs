@@ -46,9 +46,9 @@ public class BlowKissAttack : MonoBehaviour
         blowKissPrefab = Resources.Load<GameObject>("Prefabs/BlowKiss Attack");
         Debug.Assert(blowKissPrefab != null);
 
-        blowKisses = new GameObject[blowKissCount]; 
-        
-        for(int i = 0; i < blowKissCount; i++)
+        blowKisses = new GameObject[blowKissCount];
+
+        for (int i = 0; i < blowKissCount; i++)
         {
             blowKisses[i] = Instantiate(blowKissPrefab, poolPosition_blowKiss,
                 Quaternion.identity);
@@ -59,6 +59,7 @@ public class BlowKissAttack : MonoBehaviour
     {
         if (EmpressMoving.leftWall == true)
         {
+            // runCheck는 발사가 전부 끝났는지 알아보기 위한 변수
             if (runCheck == false)
             {
                 for (int i = 0; i < blowKissCount; i++)
@@ -69,20 +70,23 @@ public class BlowKissAttack : MonoBehaviour
 
                     blowKisses[i].transform.position = firePosition;
                 }
-                    runCheck = true;
+               
+                runCheck = true;
             }
-
-            StartCoroutine(StartRightAttack());
+            else if (runCheck == true)
+            {
+                 StartCoroutine(StartRightAttack());
+            }
         }
 
-        else if(EmpressMoving.leftWall == false)
+        else if (EmpressMoving.leftWall == false)
         {
-            if (runCheck == false)
+            runCheck = false;
+
+            // 애니메이션이 끝나면 풀로 복귀 
+            for (int i = 0; i < blowKissCount; i++)
             {
-                for (int i = 0; i < blowKissCount; i++)
-                {
-                    blowKisses[i].transform.position = poolPosition_blowKiss;
-                }
+                blowKisses[i].transform.position = poolPosition_blowKiss;
             }
         }
     }
@@ -101,7 +105,5 @@ public class BlowKissAttack : MonoBehaviour
                 Time.deltaTime * blowKissSpeed);
             yield return new WaitForSeconds(0.1f);
         }
-
-        runCheck = false;
     }
 }
