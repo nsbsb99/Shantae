@@ -4,13 +4,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// 보스 Empress Siren의 공격을 위한 클래스
+/// 보스 Empress Siren의 천장 공격을 위한 클래스
 /// </summary>
 
 public class CeilingAttack : MonoBehaviour
 {
-    public static CeilingAttack instance;
-
     #region 천장 공격 마법구
     private GameObject ceilingBallPrefab;
     private int ceilingCount = 2;
@@ -40,21 +38,6 @@ public class CeilingAttack : MonoBehaviour
     private bool leftFinish = false;
     private bool rightFinish = false;
     #endregion
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            if (instance != this)
-            {
-                Destroy(this);
-            }
-        }
-    }
 
     private void Start()
     {

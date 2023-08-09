@@ -730,8 +730,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1288249361
-  m_SortingLayer: 0
+  m_SortingLayerID: 2071932051
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7796e1b8071af7a43915d415866391d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1006,6 +1006,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ceilingBallSpeed: 11
+--- !u!114 &1785603580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1785603568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c677f1e04b82ba468b743b6f4092040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blowKissCount: 3
+  blowKissSpeed: 11
 --- !u!1 &2142309012
 GameObject:
   m_ObjectHideFlags: 0

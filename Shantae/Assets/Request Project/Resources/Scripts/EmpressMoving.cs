@@ -5,7 +5,8 @@ using UnityEngine;
 
 /// <summary>
 /// 클래스: 보스 Empress Siren의 움직임을 구현 
-/// 분석: 보스는 양쪽 벽, 천장, 바닥에서의 네 가지 패턴을 가짐. 바닥을 제외한 한 가지 패턴을 실행했다면
+/// 분석: 보스는 양쪽 벽, 천장, 바닥에서의 네 가지 패턴을 가짐. 
+/// 바닥을 제외한 한 가지 패턴을 실행했다면
 /// 다음 패턴은 무조건 바닥에서 진행함.
 /// </summary>
 
@@ -52,7 +53,7 @@ public class EmpressMoving : MonoBehaviour
         while (EmpressController.empressHP > 0)
         {
             //randomValue = Random.Range(0, 3);
-            randomValue = 2.0f;
+            randomValue = 0f;
             randomValue_Ground = Random.Range(0, 2);
 
             if (randomValue == 0)
@@ -61,7 +62,11 @@ public class EmpressMoving : MonoBehaviour
                 transform.position = new Vector2(-6.6f, 1.54f);
                 animator.Play("Float and Kiss");
 
+                yield return new WaitForSeconds(2.1f);
+
                 leftWall = true;
+
+                BlowKissAttack.instance.StartRightKisses();
             }
             else if (randomValue == 1)
             {
@@ -85,8 +90,11 @@ public class EmpressMoving : MonoBehaviour
             }
 
             yield return new WaitForSeconds(1.0f);
-            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+            yield return new WaitForSeconds
+                (animator.GetCurrentAnimatorStateInfo(0).length);
 
+            leftWall = false;
+            rightWall = false;
 
             // x축으로 뒤집힌 보스를 원상태로 되돌리기
             if (spriteRenderer.flipX == true)
@@ -108,7 +116,8 @@ public class EmpressMoving : MonoBehaviour
             }
 
             yield return new WaitForSeconds(1.0f);
-            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+            yield return new WaitForSeconds
+                (animator.GetCurrentAnimatorStateInfo(0).length);
         }
     }
 }

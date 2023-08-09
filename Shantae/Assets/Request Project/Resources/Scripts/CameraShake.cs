@@ -53,7 +53,8 @@ public class CameraShake : MonoBehaviour
         while (elapsed < shakeTime)
         {
             float yOffset = Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
-            transform.position = new Vector3(originPosition.x, originPosition.y + yOffset, -10f);
+            transform.position = new Vector3
+                (originPosition.x, originPosition.y + yOffset, -10f);
 
             elapsed += Time.deltaTime;
             yield return null;

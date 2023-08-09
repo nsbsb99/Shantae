@@ -53,6 +53,9 @@ TagManager:
   - name: Character
     uniqueID: 3595184807
     locked: 0
+  - name: Wall
+    uniqueID: 2071932051
+    locked: 0
   - name: Attack
     uniqueID: 1037904575
     locked: 0
