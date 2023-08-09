@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private int playerHP = 50;
 
-    public float jumpForce = 10f;
+    public float jumpForce = 20f;
     private bool isJumping = false;
     private bool isAir = false;
     private float jumpStartTime;
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGround", !isAir);
         if (invincible && !isFlashing)
         {
-            StartCoroutine(FlashPlayer(0.1f)); // Adjust the time interval as needed
+            StartCoroutine(FlashPlayer(0.1f)); 
         }
         if (Physics2D.Raycast(transform.position, Vector2.down, 2f))        //플레이어가 바닥에 있는지
         {
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         {
             float jumptime = Time.time - jumpStartTime;
 
-            if (jumptime <= 1)
+            if (jumptime <= 0.5)
             {
                 transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
                 if (Input.GetKeyUp(KeyCode.X))
@@ -348,9 +348,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator HandleInvincibleAndDamage(float invincibleDelay, float damageDelay)
     {
-        // Save the original position before any changes
-        //originalPosition = new Vector2(transform.position.x, transform.position.y);
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         // Start Invincible coroutine
         StartCoroutine(Invincible(invincibleDelay));
@@ -390,7 +388,7 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         Color originalColor = spriteRenderer.color;
         Color transparentColor = originalColor;
-        transparentColor.a = 0.5f; // Adjust the alpha value to your desired transparency level
+        transparentColor.a = 0.5f; 
 
         float blinkTime = 0;
 
