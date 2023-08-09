@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D playerRigid = default;
     private AudioSource playerAudio = default;
     private BoxCollider2D boxCollider;
+    public float bottomY;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,15 +52,28 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float playerHeight = GetComponent<Renderer>().bounds.extents.y;
+        bottomY = transform.position.y - playerHeight;
+
         animator.SetBool("isGround", !isAir);
         if (invincible && !isFlashing)
         {
             StartCoroutine(FlashPlayer(0.1f)); 
         }
-        if (Physics2D.Raycast(transform.position, Vector2.down, 2f))        //플레이어가 바닥에 있는지
+
+
+        Vector2 raycastOrigin = new Vector2(transform.position.x,
+            transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
+
+        if (Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f))        //플레이어가 바닥에 있는지
         {
-            // 바닥과 충돌한 경우
-            isAir = false;
+            RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
+
+            if (hit.collider.CompareTag("Ground"))
+            {
+                // 바닥과 충돌한 경우
+                isAir = false;
+            }
         }
         else
         {
@@ -84,7 +100,7 @@ public class PlayerController : MonoBehaviour
         {
             float jumptime = Time.time - jumpStartTime;
 
-            if (jumptime <= 0.5)
+            if (jumptime <= 0.3)
             {
                 transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
                 if (Input.GetKeyUp(KeyCode.X))
@@ -297,7 +313,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
+    #region   //공격 모션
     private IEnumerator DownAttack(float delay)
     {
         down.SetActive(true);
@@ -333,6 +349,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("Attack", isAttack);
     }
+    #endregion
 
     private void OnTriggerEnter2D(Collider2D collision)
     {        
@@ -342,6 +359,7 @@ public class PlayerController : MonoBehaviour
             {
                 invincible = true;
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
+                //Debug.Log("123");
             }
         }
     }
