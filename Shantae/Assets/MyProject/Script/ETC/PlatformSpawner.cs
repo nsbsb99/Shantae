@@ -10,6 +10,9 @@ public class PlatformSpawner : MonoBehaviour
     private float selectSpeed;
 
     private GameObject[] platforms;
+    private int poolSize = 30;
+    private int currentPlatformIndex = 0;
+
     private float spawnMax = 2f;
     private float spawnMin = 1f;
     private float lastSpawnTime = 0f;
@@ -21,6 +24,15 @@ public class PlatformSpawner : MonoBehaviour
     private float xPoint;
     public Vector2 movementDirection;
 
+    private void Start()
+    {
+        platforms = new GameObject[poolSize];
+        for ( int i = 0; i < poolSize; i++ )
+        {
+            platforms[i] = Instantiate(platformPrefab, Vector3.zero, Quaternion.identity);
+            platforms[i].SetActive(false);
+        }
+    }
 
     private void Update()
     {
@@ -39,14 +51,23 @@ public class PlatformSpawner : MonoBehaviour
     {
         xPoint = Random.Range(xPointMin, xPointMax);
         Vector2 spawnPosition = new Vector2(xPoint, yPoint);
-        GameObject newPlatform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
+
+        //GameObject newPlatform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
+        GameObject newPlatform = platforms[currentPlatformIndex];
+        currentPlatformIndex = (currentPlatformIndex + 1) % poolSize;
+
+        newPlatform.transform.position = spawnPosition;
+        newPlatform.SetActive(true);
+
+
+
 
         Rigidbody2D rb = newPlatform.GetComponent<Rigidbody2D>();
         if(rb != null )
         {
             rb.velocity = movementDirection * selectSpeed;
             rb.gravityScale = 0f;
-             rb.isKinematic = true;
+            rb.isKinematic = true;
         }
     }
 }

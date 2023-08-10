@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Gem : MonoBehaviour
 {
+    //public bool startTimer = false;
+    public GameObject gemBreakPrefab;
     private int gemHP = 1;
     // Start is called before the first frame update
     void Start()
@@ -16,6 +18,14 @@ public class Gem : MonoBehaviour
     {
         if (gemHP <= 0)
         {
+            //startTimer = true;
+            //gemBreakPrefab.SetActive(true);
+            Vector3 spawnPosition = transform.position;
+            Quaternion spawnRotation = transform.rotation;
+
+            // 프리팹을 소환
+            Instantiate(gemBreakPrefab, spawnPosition, spawnRotation);
+
             Destroy(gameObject);
         }
     }
