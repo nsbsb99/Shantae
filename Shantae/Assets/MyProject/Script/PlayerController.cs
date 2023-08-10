@@ -178,7 +178,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isDown)
         {
-            moveSpeed = 5f;
+            moveSpeed = 10f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 isRun = true;
@@ -236,7 +236,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            moveSpeed = 2f;
+            moveSpeed = 5f;
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 isDownAndRun = true;

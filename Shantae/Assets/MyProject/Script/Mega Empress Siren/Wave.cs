@@ -36,8 +36,8 @@ public class Wave : MonoBehaviour
             if (rotationTime > rotating)
             {
                 rotationSpeed = 0;
-                yield return new WaitForSeconds(wait);
-                rotationSpeed = speed;
+                yield return new WaitForSeconds(wait);         
+                    rotationSpeed = speed;
                 rotationTime = 0f;
                 isClockwise = false;
             }
