@@ -12,6 +12,8 @@ TagManager:
   - top
   - bottom
   - end
+  - SideWall
+  - Ceiling
   layers:
   - Default
   - TransparentFX

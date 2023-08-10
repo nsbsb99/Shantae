@@ -26,7 +26,9 @@ public class EmpressMoving : MonoBehaviour
     #region 공격 패턴 결정
     public static bool ceiling = false;
     public static bool leftWall = false;
-    public static bool rightWall = false;   
+    public static bool rightWall = false;
+    public static bool surf = false;
+    public static bool hopBack = false;
     #endregion
 
     private void Awake()
@@ -52,9 +54,9 @@ public class EmpressMoving : MonoBehaviour
         // 만약 Empress Siren의 체력이 0보다 크다면 전투 지속 
         while (EmpressController.empressHP > 0)
         {
-            //randomValue = Random.Range(0, 3);
-            randomValue = 0f;
-            randomValue_Ground = Random.Range(0, 2);
+            randomValue = Random.Range(0, 3);
+            //randomValue_Ground = Random.Range(0, 2);
+            randomValue_Ground = 0f; // 공격 모션을 위한 임시 변수 
 
             if (randomValue == 0)
             { 
@@ -72,6 +74,8 @@ public class EmpressMoving : MonoBehaviour
                 transform.position = new Vector2(6.43f, 1.54f);
                 spriteRenderer.flipX = true;
                 animator.Play("Float and Kiss");
+
+                yield return new WaitForSeconds(2.1f);
 
                 rightWall = true;
             }
@@ -105,12 +109,18 @@ public class EmpressMoving : MonoBehaviour
                 // 바닥 Surf
                 transform.position = new Vector2(-4.07f, -1.72f);
                 animator.Play("Surf");
+
+                yield return new WaitForSeconds(0.6f);
+
+                surf = true;
             }
             else if (randomValue_Ground == 1)
             {
                 // 바닥 Hop
                 transform.position = new Vector2(-4.07f, -1.44f);
                 animator.Play("Hopback");
+
+                hopBack = true;
             }
 
             yield return new WaitForSeconds(1.0f);

@@ -23,6 +23,7 @@ public class BlowKissAttack : MonoBehaviour
     private Vector2 poolPosition_blowKiss = new Vector2(-2.0f, -10.0f);
 
     private bool runCheck = false;
+    private bool runCheck_right = false;
     #endregion
 
     private void Awake()
@@ -57,7 +58,8 @@ public class BlowKissAttack : MonoBehaviour
 
     private void Update()
     {
-        if (EmpressMoving.leftWall == true)
+        #region 좌측 벽에서 공격
+        if (EmpressMoving.leftWall == true && EmpressMoving.rightWall == false)
         {
             // runCheck는 발사가 전부 끝났는지 알아보기 위한 변수
             if (runCheck == false)
@@ -79,7 +81,7 @@ public class BlowKissAttack : MonoBehaviour
             }
         }
 
-        else if (EmpressMoving.leftWall == false)
+        else if (EmpressMoving.leftWall == false && EmpressMoving.rightWall == false)
         {
             runCheck = false;
 
@@ -89,6 +91,42 @@ public class BlowKissAttack : MonoBehaviour
                 blowKisses[i].transform.position = poolPosition_blowKiss;
             }
         }
+        #endregion
+
+        #region 우측 벽에서 공격
+        if (EmpressMoving.rightWall == true && EmpressMoving.leftWall == false)
+        {
+            // runCheck는 발사가 전부 끝났는지 알아보기 위한 변수
+            if (runCheck_right == false)
+            {
+                for (int i = 0; i < blowKissCount; i++)
+                {
+                    // 발사를 위한 위치 재정렬 
+                    firePosition = new Vector2
+                    (transform.position.x - 1.2f, transform.position.y + 0.6f);
+
+                    blowKisses[i].transform.position = firePosition;
+                }
+
+                runCheck_right = true;
+            }
+            else if (runCheck_right == true)
+            {
+                StartCoroutine(StartLeftAttack());
+            }
+        }
+
+        else if (EmpressMoving.rightWall == false && EmpressMoving.leftWall == false)
+        {
+            runCheck_right = false;
+
+            // 애니메이션이 끝나면 풀로 복귀 
+            for (int i = 0; i < blowKissCount; i++)
+            {
+                blowKisses[i].transform.position = poolPosition_blowKiss;
+            }
+        }
+        #endregion
     }
 
     IEnumerator StartRightAttack()
@@ -106,4 +144,21 @@ public class BlowKissAttack : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
     }
+
+    IEnumerator StartLeftAttack()
+    {
+        for (int i = 0; i < blowKissCount; i++)
+        {
+            float gap = 2.5f;
+
+            blowKisses[i].GetComponent<Renderer>().enabled = true;
+
+            blowKisses[i].transform.position =
+                Vector2.MoveTowards
+                (blowKisses[i].transform.position, new Vector2(-10f, 10f - (gap * i)),
+                Time.deltaTime * blowKissSpeed);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
 }
