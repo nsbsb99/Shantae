@@ -26,12 +26,12 @@ public class SurfAttack : MonoBehaviour
     private GameObject backScimatar;
 
     // 오브젝트 풀 좌표
-    private Vector2 poolPosition_scimartar = new Vector2(-2.0f, 10.0f);
+    private Vector2 poolPosition_scimartar = new Vector2(0f, 10.0f);
 
     // 던져진 것을 체크
     private bool runCheck = false;
 
-    [SerializeField] private float bladeSpeed = 30f;
+    private float bladeSpeed = 5f;
     private Vector2 nowPlayerPosition;
     #endregion
 
@@ -61,13 +61,14 @@ public class SurfAttack : MonoBehaviour
         }
         else if (EmpressMoving.surf == false)
         {
+            StopCoroutine(FireBlades());
+
             // 애니메이션이 끝나면 풀로 복귀 (던진 후 특정한 시간이 지나는 조건 충족 시로 수정)
             frontScimatar.transform.position = poolPosition_scimartar;
             backScimatar.transform.position = poolPosition_scimartar;
 
             runCheck = false;
         }
-
     }
 
     IEnumerator FireBlades()

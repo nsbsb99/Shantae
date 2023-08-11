@@ -12,6 +12,8 @@ using UnityEngine;
 
 public class EmpressMoving : MonoBehaviour
 {
+    public static EmpressMoving instance;
+
     #region 움직임 패턴 결정
     // 보스의 패턴 결정_벽 or 천장
     private float randomValue = default;
@@ -33,6 +35,15 @@ public class EmpressMoving : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -42,7 +53,7 @@ public class EmpressMoving : MonoBehaviour
         StartCoroutine(RandomMoving());
     }
 
-    IEnumerator RandomMoving()
+    public IEnumerator RandomMoving()
     {
         ///<summary>
         /// 보스의 랜덤 이동과 그에 맞는 공격을 결정하는 메서드
@@ -55,8 +66,8 @@ public class EmpressMoving : MonoBehaviour
         while (EmpressController.empressHP > 0)
         {
             randomValue = Random.Range(0, 3);
-            //randomValue_Ground = Random.Range(0, 2);
-            randomValue_Ground = 0f; // 공격 모션을 위한 임시 변수 
+            randomValue_Ground = Random.Range(0, 2);
+            randomValue_Ground = 1f; // 공격 모션을 위한 임시 변수 
 
             if (randomValue == 0)
             { 
@@ -120,12 +131,17 @@ public class EmpressMoving : MonoBehaviour
                 transform.position = new Vector2(-4.07f, -1.44f);
                 animator.Play("Hopback");
 
+                yield return new WaitForSeconds(1.0f);
+
                 hopBack = true;
             }
 
             yield return new WaitForSeconds(1.0f);
             yield return new WaitForSeconds
                 (animator.GetCurrentAnimatorStateInfo(0).length);
+
+            surf = false;
+            hopBack = false;
         }
     }
 }

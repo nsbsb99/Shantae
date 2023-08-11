@@ -20,6 +20,9 @@ public class EmpressController : MonoBehaviour
         // Empress Siren의 패배 확인
         if(empressHP <= 0)
         {
+            // EmpressMoving 코루틴 종료 메서드 추가
+            StopCoroutine(EmpressMoving.instance.RandomMoving());
+
             WinPlayer();
         }
     }

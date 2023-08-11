@@ -9,8 +9,6 @@ using UnityEngine;
 public class BlowKissAttack : MonoBehaviour
 {
     #region 양쪽 벽에서의 BlowKiss 공격
-    public static BlowKissAttack instance;
-
     private GameObject blowKissPrefab;
     // 발사되는 수
     private int blowKissCount = 15;
@@ -25,21 +23,6 @@ public class BlowKissAttack : MonoBehaviour
     private bool runCheck = false;
     private bool runCheck_right = false;
     #endregion
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            if (instance != this)
-            {
-                Destroy(this);
-            }
-        }
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +39,7 @@ public class BlowKissAttack : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         #region 좌측 벽에서 공격
         if (EmpressMoving.leftWall == true && EmpressMoving.rightWall == false)
@@ -83,6 +66,7 @@ public class BlowKissAttack : MonoBehaviour
 
         else if (EmpressMoving.leftWall == false && EmpressMoving.rightWall == false)
         {
+            StopCoroutine(StartRightAttack());
             runCheck = false;
 
             // 애니메이션이 끝나면 풀로 복귀 
@@ -118,6 +102,7 @@ public class BlowKissAttack : MonoBehaviour
 
         else if (EmpressMoving.rightWall == false && EmpressMoving.leftWall == false)
         {
+            StopCoroutine(StartLeftAttack());
             runCheck_right = false;
 
             // 애니메이션이 끝나면 풀로 복귀 
