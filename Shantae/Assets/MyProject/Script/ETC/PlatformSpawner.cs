@@ -10,7 +10,7 @@ public class PlatformSpawner : MonoBehaviour
     private float selectSpeed;
 
     private GameObject[] platforms;
-    private int poolSize = 30;
+    private int poolSize = 50;
     private int currentPlatformIndex = 0;
 
     private float spawnMax = 2f;
@@ -52,7 +52,6 @@ public class PlatformSpawner : MonoBehaviour
         xPoint = Random.Range(xPointMin, xPointMax);
         Vector2 spawnPosition = new Vector2(xPoint, yPoint);
 
-        //GameObject newPlatform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
         GameObject newPlatform = platforms[currentPlatformIndex];
         currentPlatformIndex = (currentPlatformIndex + 1) % poolSize;
 
