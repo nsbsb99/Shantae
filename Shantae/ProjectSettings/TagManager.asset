@@ -14,6 +14,7 @@ TagManager:
   - end
   - SideWall
   - Ceiling
+  - Sand
   layers:
   - Default
   - TransparentFX
