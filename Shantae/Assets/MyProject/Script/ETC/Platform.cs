@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Platform : MonoBehaviour
 {
     private Collider2D platform;
     private PlayerController playerController;
+    private ObjectPool<GameObject> pool;
+
+   public void Initialize(ObjectPool<GameObject> objectPool)
+    {
+        pool = objectPool;
+    }
     private void Start()
     {
         platform = GetComponent<Collider2D>(); 
@@ -28,11 +35,14 @@ public class Platform : MonoBehaviour
         }
 
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag.Equals("end"))
-        {
-            Destroy(gameObject);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("end"))
+    //    {
+    //        if (pool  != null)
+    //        {
+    //            pool.Release(gameObject);
+    //        }
+    //    }
+    //}
 }

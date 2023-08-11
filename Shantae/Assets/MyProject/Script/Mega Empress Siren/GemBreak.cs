@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Acceesorybreak : MonoBehaviour
+public class GemBreak : MonoBehaviour
 {
     public UnityEngine.Transform centerPoint; // 회전 중심점
     public float rotationSpeed; // 회전 속도 
@@ -15,7 +15,7 @@ public class Acceesorybreak : MonoBehaviour
     private bool isTimerStarted = false;
     private float startTime;
     private float elapsedTime;
-    public GameObject unBreak;
+    //private GameObject unBreak;
     //private Acceesory acceesory;
     private void Start()
     {
@@ -23,13 +23,13 @@ public class Acceesorybreak : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, 7.0f);
-        
-       
+
+        //unBreak = GameObject.Find("");
     }
 
     private void Update()
     {
-        if (unBreak == null && !isTimerStarted)
+        if (!isTimerStarted)
         {
             isTimerStarted = true;
             startTime = Time.time;
@@ -61,6 +61,6 @@ public class Acceesorybreak : MonoBehaviour
         {
             transform.RotateAround(centerPoint.position, Vector3.back, rotationSpeed * Time.deltaTime);
         }
-        
-    }   
+
+    }
 }
