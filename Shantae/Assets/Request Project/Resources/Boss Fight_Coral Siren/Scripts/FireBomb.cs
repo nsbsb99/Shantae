@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FireBomb : MonoBehaviour
@@ -46,13 +47,12 @@ public class FireBomb : MonoBehaviour
             StartCoroutine(BombsFire());
         }
 
-        // y = 6.5f에 도달하면 Scale 확대 + 밑으로 떨어짐 + 만약 바닥의 Collider와 충돌하면
-        // Animation 재생과 함께 풀로 복귀
-
-        // 발사가 끝나면 코루틴 종료 
-        if (doneFire == false)
+        // 발사가 끝나면 코루틴 종료 (수정 필요)
+        if (doneFire == true && CoralSirenMoving.fireBomb == false)
         {
             StopCoroutine(BombsFire());
+
+            // readyFire = false;
         }
     }
 
@@ -68,12 +68,15 @@ public class FireBomb : MonoBehaviour
             firePosition = new Vector2
                 (transform.position.x, transform.position.y + 1.5f);
             bombs[i].transform.position = firePosition;
+
+            Debug.Log("발사 시작");
+
             // 발사 시작
             bombs[i].GetComponent<BombUpDown>().enabled = true;
 
             yield return new WaitForSeconds(0.5f);
         }
 
-        doneFire = false;
+        doneFire = true;
     }
 }
