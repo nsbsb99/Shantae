@@ -22,7 +22,7 @@ public class Acceesorybreak : MonoBehaviour
         //acceesory = FindObjectOfType<Acceesory>();
 
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, 7.0f);
+        Destroy(gameObject, 5.0f);
         
        
     }
@@ -33,13 +33,11 @@ public class Acceesorybreak : MonoBehaviour
         {
             isTimerStarted = true;
             startTime = Time.time;
-            Debug.Log("Timer started!");
         }
 
         if (isTimerStarted)
         {
             elapsedTime = Time.time - startTime;
-            Debug.Log("Elapsed time: " + elapsedTime.ToString("F2") + " seconds");
         }
         if (elapsedTime < 0.1f)
         {
