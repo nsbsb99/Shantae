@@ -32,6 +32,5 @@ public class BigOrbAttack : MonoBehaviour
     {
         Vector3 spawnPosition = new Vector3(witchHand, transform.position.y, transform.position.z);
         Instantiate(bigOrnPrefab, spawnPosition, Quaternion.identity);
-        Debug.Log("1");
     }
 }

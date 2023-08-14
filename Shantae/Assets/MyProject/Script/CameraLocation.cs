@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraLocation : MonoBehaviour
 {
+    public GameObject body;
     public Transform player;
     public float minY;
     public float maxY;
@@ -11,11 +12,20 @@ public class CameraLocation : MonoBehaviour
     // Update is called once per frame
     private void LateUpdate()
     {
-        if (player != null )
+        if (body != null)
         {
-            Vector3 newPosition = transform.position;
-            newPosition.y = Mathf.Clamp(player.position.y, minY, maxY);
+            if (player != null)
+            {                
+                Vector3 newPosition = transform.position;
+                newPosition.y = Mathf.Clamp(player.position.y, minY, maxY);
+                transform.position = newPosition;
+            }
+        }
+        else
+        {
+            Vector3 newPosition = new Vector3(0f, 15f, -1f); // 새로운 위치 설정
             transform.position = newPosition;
         }
+
     }
 }
