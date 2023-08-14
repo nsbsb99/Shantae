@@ -69,7 +69,7 @@ public class RequestPlayerController : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
 
-            if (hit.collider.CompareTag("Ground") || hit.collider.CompareTag("Sand"))
+            if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
                 isAir = false;
