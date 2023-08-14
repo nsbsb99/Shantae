@@ -6,6 +6,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    // ±è°ÇÈÖ ÀÛ¼º
+    public GameObject body;
+    public Transform player;
+    public Transform spawner;
+    private bool move = false;
+    public bool pase2Camera = false;
+    // ±è°ÇÈÖ
+
     private void Awake()
     {
         if(instance == null)
@@ -30,7 +38,35 @@ public class GameManager : MonoBehaviour
         {
             Application.Quit();
         }
+
+
+        if(body == null)
+        {
+            pase2_5();
+        }
     }
 
    
+    // ±è°ÇÈÖ ÀÛ¼º
+    private void  pase2_5()
+    {        
+
+        if (player != null)
+        {
+            if (!move)
+            {
+                Vector3 newPosition = new Vector3(0f, 15f, 0f); // »õ·Î¿î À§Ä¡ ¼³Á¤
+                player.position = newPosition;
+                move = true;
+            }
+        }
+        if (spawner != null)
+        {
+            Vector3 newPosition = new Vector3(10f, 0f, 0f); // »õ·Î¿î À§Ä¡ ¼³Á¤
+            spawner.position = newPosition;
+        }
+    }
+
+    // ±è°ÇÈÖ ÀÛ¼º
+
 }

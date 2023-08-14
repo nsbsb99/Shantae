@@ -77,9 +77,15 @@ public class LittleOrb : MonoBehaviour
 
             Vector3 direction = finalRotation * Vector3.right;
             rb.velocity = direction * littleOrbSpeed;
+
+            StartCoroutine(DeactivateAfterDelay(littleOrb, 5.0f));
         }
     }
-
+    private IEnumerator DeactivateAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        obj.SetActive(false);
+    }
     private GameObject GetPooledOrb()
     {
         for (int i = 0; i < littleOrbs.Length; i++)

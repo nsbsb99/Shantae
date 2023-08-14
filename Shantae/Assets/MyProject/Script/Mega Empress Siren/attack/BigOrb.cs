@@ -29,9 +29,6 @@ public class BigOrb : MonoBehaviour
             // Empress의 Transform 컴포넌트를 사용하여 x값 가져오기
             float empressX = empress.transform.position.x;
 
-            // 가져온 값들을 사용하여 원하는 작업 수행
-            Debug.Log("Player Position: " + playerPosition);
-            Debug.Log("Empress X Position: " + empressX);
         }
 
         if (!isTimerStarted)
