@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// 보스 Coral Siren의 공격 패턴을 정하는 클래스
+/// </summary>
+
 public class CoralSirenMoving : MonoBehaviour
 {
     public static CoralSirenMoving instance;
@@ -32,14 +36,37 @@ public class CoralSirenMoving : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        StartCoroutine(RandomMoving());
+        //StartCoroutine(RandomMoving());
+    }
+
+    private void Update()
+    {
+        // 불 뿌리기가 끝나면 초기화 신호 뿌리기
+        if (FireSpread.allStop == true)
+        {
+            fireSpread = false;
+        }
+
+        // 폭탄 발사 끝나면 초기화 신호 뿌리기
+        if (FireBomb.doneFire == true)
+        {
+            animator.SetBool("Fire Bomb", false);
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.W)) // 연속 작동 테스트용 임시 메서드
+        {
+            // 폭탄 발사
+            animator.SetBool("Fire Bomb", true);
+
+            fireBomb = true;
+        }
     }
 
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
         //randomAttack = Random.Range(0, 3);
-        randomAttack = 2; // 임시
 
         if (randomAttack == 0)
         {
@@ -52,10 +79,11 @@ public class CoralSirenMoving : MonoBehaviour
             // 폭탄 발사 완료
             if (FireBomb.doneFire == true)
             {
+                animator.SetBool("Fire Bomb", false);
+
                 randomAttack = 1; // 임시
                 fireBomb = false;
             }
-
         }
 
         else if (randomAttack == 1)
