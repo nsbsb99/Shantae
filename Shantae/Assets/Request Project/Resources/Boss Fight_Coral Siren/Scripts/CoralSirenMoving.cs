@@ -47,13 +47,6 @@ public class CoralSirenMoving : MonoBehaviour
             fireSpread = false;
         }
 
-        // 폭탄 발사 끝나면 초기화 신호 뿌리기
-        if (FireBomb.doneFire == true)
-        {
-            animator.SetBool("Fire Bomb", false);
-
-        }
-
         if (Input.GetKeyDown(KeyCode.W)) // 연속 작동 테스트용 임시 메서드
         {
             // 폭탄 발사

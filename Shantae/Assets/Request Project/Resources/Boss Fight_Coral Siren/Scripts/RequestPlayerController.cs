@@ -11,7 +11,6 @@ public class RequestPlayerController : MonoBehaviour
     public GameObject jump;
     public GameObject down;
 
-
     private Vector3 originalPosition; // 원래 위치를 저장하는 변수
 
     private int playerHP = 50;
@@ -36,6 +35,8 @@ public class RequestPlayerController : MonoBehaviour
     private BoxCollider2D boxCollider;
     public float bottomY;
 
+    public static Vector2 playerPosition = default;
+
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +53,9 @@ public class RequestPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 플레이어의 좌표를 실시간으로 뿌림.
+        playerPosition = transform.position;
+
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
         bottomY = transform.position.y - playerHeight;
 
@@ -60,7 +64,6 @@ public class RequestPlayerController : MonoBehaviour
         {
             StartCoroutine(FlashPlayer(0.1f));
         }
-
 
         Vector2 raycastOrigin = new Vector2(transform.position.x,
             transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
