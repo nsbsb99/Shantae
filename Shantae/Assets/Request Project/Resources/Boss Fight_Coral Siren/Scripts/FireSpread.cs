@@ -163,6 +163,7 @@ public class FireSpread : MonoBehaviour
                 fallSpeed * Time.deltaTime);
         }
 
+        /// <point> 여기에 sand = null일 때 체크.
         // 앞의 Coral Siren이 땅과 충돌하면 
         if (CoralSirenMoving.fireSpread == true &&
             FrontGrounded.coralSiren_Front_Grounded == true)
@@ -170,6 +171,13 @@ public class FireSpread : MonoBehaviour
             StartCoroutine(Grounded());
 
             FrontGrounded.coralSiren_Front_Grounded = false;
+        }
+        else if (CoralSirenMoving.fireSpread == true &&
+            FrontGrounded.coralSiren_Front_Sanded == true)
+        {
+            StartCoroutine(Sanded());
+
+            FrontGrounded.coralSiren_Front_Sanded = false;
         }
 
         // 앞의 Coral Siren이 위로 올라가라는 신호를 받았다면
@@ -213,6 +221,7 @@ public class FireSpread : MonoBehaviour
             CoralSirenMoving.thirdPatternDone = true;
 
             StopCoroutine(Grounded());
+            StopCoroutine(Sanded());
             StopCoroutine(NextGrounded());
 
             moveDone = false;
@@ -233,6 +242,22 @@ public class FireSpread : MonoBehaviour
 
         // 앞의 Coral Siren을 위로 올려보내기
         coralSiren_Front_Animator.SetBool("Fire", false);
+        coralSiren_Front_Animator.SetBool("Go Back", true);
+
+        secondDestination = true;
+    }
+
+    IEnumerator Sanded()
+    {
+        coralSiren_Front_Animator.SetBool("Fire_Frail", true);
+        // 3초간 버둥거림
+        yield return new WaitForSeconds(3.0f);
+
+        coralSiren_Front_Animator.SetBool("Fire_Frail", false);
+        // 탈출 모션 동안 대기
+        yield return new WaitForSeconds
+            (coralSiren_Front_Animator.GetCurrentAnimatorStateInfo(0).length);
+
         coralSiren_Front_Animator.SetBool("Go Back", true);
 
         secondDestination = true;

@@ -75,7 +75,8 @@ public class CoralSirenMoving : MonoBehaviour
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
-        randomAttack = Random.Range(0, 3);
+        //randomAttack = Random.Range(0, 3);
+        randomAttack = 2; // юс╫ц
 
         yield return new WaitForSeconds(3f);
 
