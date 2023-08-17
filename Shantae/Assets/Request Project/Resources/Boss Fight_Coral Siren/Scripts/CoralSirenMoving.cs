@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// 보스 Coral Siren의 공격 패턴을 정하는 클래스
+/// 보스 Coral Siren의 공격 패턴을 정하는 클래스. 
 /// </summary>
 
 public class CoralSirenMoving : MonoBehaviour
@@ -18,6 +18,10 @@ public class CoralSirenMoving : MonoBehaviour
     private Animator animator;
     public static Vector2 newBossPosition;
 
+    public static bool firstPatternDone = false;
+    public static bool secondPatternDone = false;
+    public static bool thirdPatternDone = false;
+    private bool patternFinished = false;
 
     private void Awake()
     {
@@ -36,7 +40,8 @@ public class CoralSirenMoving : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        //StartCoroutine(RandomMoving());
+        // 패턴 시작
+        StartCoroutine(RandomMoving());
     }
 
     private void Update()
@@ -47,23 +52,35 @@ public class CoralSirenMoving : MonoBehaviour
             fireSpread = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.W)) // 연속 작동 테스트용 임시 메서드
+        /// <problem> 폭탄 패턴의 초기화가 이루어지지 않는다. allBack 변수의 문제
+        // 패턴 연속 실행 코드
+        if (firstPatternDone == true || secondPatternDone == true 
+            || thirdPatternDone == true)
         {
-            // 폭탄 발사
-            animator.SetBool("Fire Bomb", true);
+            if (patternFinished == false)
+            {
+                StopCoroutine(RandomMoving());
+                StartCoroutine(RandomMoving());
+                patternFinished = true;
+            }
 
-            fireBomb = true;
+            firstPatternDone = false;
+            secondPatternDone = false;
+            thirdPatternDone = false;
+
+            patternFinished = false;
         }
     }
 
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
-        //randomAttack = Random.Range(0, 3);
+        randomAttack = Random.Range(0, 3);
+
+        yield return new WaitForSeconds(3f);
 
         if (randomAttack == 0)
         {
-            Debug.Log("폭탄 발사 시작");
             // 폭탄 발사
             animator.SetBool("Fire Bomb", true);
 
@@ -74,34 +91,20 @@ public class CoralSirenMoving : MonoBehaviour
             {
                 animator.SetBool("Fire Bomb", false);
 
-                randomAttack = 1; // 임시
                 fireBomb = false;
             }
         }
 
         else if (randomAttack == 1)
         {
-            Debug.Log("대시 시작");
             // 대시 준비 (DashCharging)
-            animator.SetBool("Ready Dash", true);
-            yield return new WaitForSeconds(1.7f);
-            animator.SetBool("Ready Dash", false);
-
-            animator.SetBool("Go Dash", true);
             dash = true;
-            
-            //yield return new WaitForSeconds(3f);
-            // 뒤 coralSiren이 위에 다시 도착한 후
-            //animator.SetBool("Go Dash", false);
-
+           
         }
 
         else if (randomAttack == 2)
         {
-            Debug.Log("불 뿌리기 시작");
             // 불 뿌리기 준비 (FireSpread)
-            animator.SetBool("Spread Fire Charge", true);
-            
             fireSpread = true;
         }
     }

@@ -18,14 +18,27 @@ public class FireSpread : MonoBehaviour
     Vector2 coralSiren_Back_OriginPosition = default;
     Vector2 coralSiren_Front_OriginPosition = default;
 
+    float moveSpeed = 5f;
     float upSpeed = 13f;
     float fallSpeed = 16f;
 
-    private bool firstDestination = default;
-    private bool secondDestination = default;
-    private bool thirdDestination = default;
+    private bool moveDone = false;
+    private bool firstDestination = false;
+    private bool secondDestination = false;
+    private bool thirdDestination = false;
+    private bool alreadyChoice = false;
 
     public static bool allStop = false;
+
+    private float firstFirePosition = default;
+    private float secondFirePosition = default;
+    private float thirdFirePosition = default;
+    private float fourthFirePosition = default;
+    private float whatFirePosition = default;
+
+    private int selectedRandom = default;
+    private float coralPositionX = default;
+    private float coralPositionY = default;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +61,11 @@ public class FireSpread : MonoBehaviour
         coralSiren_Back_OriginPosition = coralSiren_Back.position;
         // 앞 Coral Siren의 Origin Position
         coralSiren_Front_OriginPosition = coralSiren_Front.position;
+
+        firstFirePosition = -5.8f;
+        secondFirePosition = -1.91f;
+        thirdFirePosition = 1.88f;
+        fourthFirePosition = 5.79f;
     }
 
     // Update is called once per frame
@@ -55,12 +73,74 @@ public class FireSpread : MonoBehaviour
     {
         if (CoralSirenMoving.fireSpread == true && firstDestination == false)
         {
-            // 뒤 Coral Siren의 상승
-            coralSiren_Back.position = 
-                Vector2.MoveTowards(coralSiren_Back.position, 
-                new Vector2(coralSiren_Back.position.x, 7f), upSpeed * Time.deltaTime);
+            if (moveDone == false)
+            {
+                if (alreadyChoice == false)
+                {
+                    selectedRandom = Random.Range(0, 4);
+                    alreadyChoice = true;
+                }
 
-            if(coralSiren_Back.position.y >= 7f)
+                if (selectedRandom == 0)
+                {
+                    whatFirePosition = firstFirePosition;
+                }
+                else if (selectedRandom == 1)
+                {
+                    whatFirePosition = secondFirePosition;
+                }
+                else if (selectedRandom == 2)
+                {
+                    whatFirePosition = thirdFirePosition;
+                }
+                else if (selectedRandom == 3)
+                {
+                    whatFirePosition = fourthFirePosition;
+                }
+
+                coralSiren_Back_Animator.SetBool("Fire Bomb", true);
+
+                if(whatFirePosition < coralSiren_Back.position.x)
+                {
+                    coralSiren_Back.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else if (whatFirePosition > coralSiren_Back.position.x)
+                {
+                    coralSiren_Back.GetComponent<SpriteRenderer>().flipX = false;
+                }
+
+                // 발사 위치로 이동
+                coralSiren_Back.position =
+                Vector2.MoveTowards(coralSiren_Back.position,
+                new Vector2(whatFirePosition, coralSiren_Back.position.y),
+                moveSpeed * Time.deltaTime);
+
+                coralPositionX = coralSiren_Back.position.x;
+                coralPositionY = coralSiren_Back.position.y;
+
+                // 발사 위치에 도달하면
+                if (Mathf.Abs(whatFirePosition - coralPositionX) <= 0.1f)
+                {
+                    coralSiren_Back_Animator.SetBool("Spread Fire Charge", true);
+                    coralSiren_Back_Animator.SetBool("Fire Bomb", false);
+
+                    // 고정
+                    coralSiren_Back.position =
+                        new Vector2(whatFirePosition, coralSiren_Back.position.y);
+
+                    moveDone = true;
+                }
+            }
+
+            if (moveDone == true)
+            {
+                // 뒤 Coral Siren의 상승
+                coralSiren_Back.position =
+                    Vector2.MoveTowards(coralSiren_Back.position,
+                    new Vector2(coralSiren_Back.position.x, 7f), upSpeed * Time.deltaTime);
+            }
+
+            if (coralSiren_Back.position.y >= 7f && firstDestination == false)
             {
                 // 뒤 Coral Siren이 일정 고도에 도달하면
                 coralSiren_Back_Animator.SetBool("Spread Fire Charge", false);
@@ -84,7 +164,7 @@ public class FireSpread : MonoBehaviour
         }
 
         // 앞의 Coral Siren이 땅과 충돌하면 
-        if (CoralSirenMoving.fireSpread == true && 
+        if (CoralSirenMoving.fireSpread == true &&
             FrontGrounded.coralSiren_Front_Grounded == true)
         {
             StartCoroutine(Grounded());
@@ -101,7 +181,7 @@ public class FireSpread : MonoBehaviour
                 fallSpeed * Time.deltaTime);
 
             // 만약 앞의 Coral Siren이 일정 고도에 도달했다면
-            if(coralSiren_Front.position.y >= 13f)
+            if (coralSiren_Front.position.y >= 13f)
             {
                 coralSiren_Front_Animator.SetBool("Go Back", false);
 
@@ -116,27 +196,30 @@ public class FireSpread : MonoBehaviour
         {
             // 뒤의 Coral Siren이 땅으로 착륙
             coralSiren_Back.position = Vector2.MoveTowards(coralSiren_Back.position,
-                    coralSiren_Back_OriginPosition, fallSpeed * Time.deltaTime);
+                    new Vector2(coralPositionX, coralPositionY),
+                    fallSpeed * Time.deltaTime);
 
             // 착륙 성공
-            if(Vector2.Distance
-                (coralSiren_Back.position, coralSiren_Back_OriginPosition) <= 0.1f)
+            if (Mathf.Abs(coralSiren_Back.position.y - coralPositionY) <= 0.1f)
             {
                 coralSiren_Back_Animator.SetBool("Fire Spread", true);
                 StartCoroutine(NextGrounded());
             }
         }
 
-        if(allStop == true)
+        if (allStop == true)
         {
             CoralSirenMoving.fireSpread = false;
+            CoralSirenMoving.thirdPatternDone = true;
 
             StopCoroutine(Grounded());
             StopCoroutine(NextGrounded());
 
+            moveDone = false;
             firstDestination = false;
             secondDestination = false;
             thirdDestination = false;
+            alreadyChoice = false;
 
             allStop = false;
         }

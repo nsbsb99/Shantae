@@ -22,7 +22,9 @@ public class FireBomb : MonoBehaviour
     private float secondInterval = 0.3f;
     private float thirdInterval = 0.1f;
 
-    private float bossSpeed = 10f;
+    private float firstBossSpeed = 3f;
+    private float secondBossSpeed = 4.5f;
+    private float thirdBossSpeed = 5.5f;
 
     private int whatBombPattern = default;
 
@@ -53,8 +55,8 @@ public class FireBomb : MonoBehaviour
         bombPrefab = Resources.Load<GameObject>
             ("Boss Fight_Coral Siren/Prefabs/Bomb");
 
-        // 풀에 생성할 폭탄의 수 (41개)
-        maxBombCount = firstBombCount + secondBombCount + thirdBombCount;
+        // 풀에 생성할 폭탄의 수 (44개의 폭탄만 쓰인다.)
+        maxBombCount = thirdBombCount;
 
         bombs = new GameObject[maxBombCount];
 
@@ -70,6 +72,8 @@ public class FireBomb : MonoBehaviour
 
         // 마지막 폭탄이 풀에 도착한 것이 확인된다면
         lastBombUpDown = bombs[maxBombCount - 1].GetComponent<BombUpDown>();
+        Debug.Assert(lastBombUpDown != null);
+
         animator = transform.GetComponent<Animator>();
 
         // 발사 패턴 순서
@@ -109,43 +113,88 @@ public class FireBomb : MonoBehaviour
         // 발사하는 동안 보스는 플레이어를 쫓음.
         if (bossNowMove == true && animator.GetBool("Fire Bomb") == true)
         {
-            Debug.Log("보스 이동 중");
+            whereBossX = transform.position.x;
 
-            if (RequestPlayerController.playerPosition.x < transform.position.x)
+            if (Mathf.Abs(whereBossX - RequestPlayerController.playerPosition.x) >= 0.5f)
             {
-                // 보스 좌측 이동
-                transform.Translate(Vector2.left * bossSpeed * Time.deltaTime);
-            }
-            else if (RequestPlayerController.playerPosition.x > transform.position.x)
-            {
-                // 보스 우측 이동
-                transform.Translate(Vector2.right * bossSpeed * Time.deltaTime);
-            }
+                if (RequestPlayerController.playerPosition.x < transform.position.x)
+                {
+                    // 보스 좌측 이동
+                    if (firstCoroutineDone == true)
+                    {
+                        transform.GetComponent<SpriteRenderer>().flipX = true;
 
-            // 보스와 플레이어 사이의 x값이 근사치에 다다르면
-            if (Mathf.Abs(whereBossX - RequestPlayerController.playerPosition.x) <= 0.1f)
-            {
-                Debug.Log("정지시도");
-                whereBossX = transform.position.x;
+                        transform.Translate(Vector2.left * firstBossSpeed * Time.deltaTime);
+                    }
+
+                    if (secondCoroutineDone == true)
+                    {
+
+                        transform.GetComponent<SpriteRenderer>().flipX = true;
+
+                        transform.Translate(Vector2.left * secondBossSpeed * Time.deltaTime);
+                    }
+
+                    if (thirdCoroutineDone == true)
+                    {
+
+                        transform.GetComponent<SpriteRenderer>().flipX = true;
+
+                        transform.Translate(Vector2.left * thirdBossSpeed * Time.deltaTime);
+                    }
+                }
+                else if (RequestPlayerController.playerPosition.x > transform.position.x)
+                {
+                    // 보스 우측 이동
+                    if (firstCoroutineDone == true)
+                    {
+
+                        transform.GetComponent<SpriteRenderer>().flipX = false;
+
+                        transform.Translate(Vector2.right * firstBossSpeed * Time.deltaTime);
+                    }
+
+                    if (secondCoroutineDone == true)
+                    {
+
+                        transform.GetComponent<SpriteRenderer>().flipX = false;
+
+                        transform.Translate(Vector2.right * secondBossSpeed * Time.deltaTime);
+                    }
+
+                    if (thirdCoroutineDone == true)
+                    {
+
+                        transform.GetComponent<SpriteRenderer>().flipX = false;
+
+                        transform.Translate(Vector2.right * thirdBossSpeed * Time.deltaTime);
+                    }
+                }
             }
-        }
-        else if (bossNowMove == false && animator.GetBool("Fire Bomb") == false)
-        {
-            Debug.Log("보스 정지 중");
-            transform.position = new Vector2(transform.position.x, transform.position.y);
         }
 
         // 전부 발사하면 발사 코루틴 종료 && 다음 공격 패턴 준비
         if (CoralSirenMoving.fireBomb == true && doneFire == true)
         {
-            doneFire = false;
-
             StopCoroutine(ThirdBombsFire());
+
+            doneFire = false;
         }
 
         // 마지막 폭탄이 풀에 도착한 것이 확인되면
         if (lastBombUpDown.allBack == true)
         {
+            // 시작 키워드 끄기
+            CoralSirenMoving.fireBomb = false;
+            CoralSirenMoving.firstPatternDone = true;
+
+            // 모든 체크 요소 초기화
+            readyFire = false;
+            whatBombPattern = 0;
+            firstCoroutineDone = false;
+            secondCoroutineDone = false;
+            thirdCoroutineDone = false;
+
             for (int i = 0; i < maxBombCount; i++)
             {
                 // 폭탄 발사에 쓰인 모든 bool 변수 초기화
@@ -158,16 +207,6 @@ public class FireBomb : MonoBehaviour
                 // 모든 폭탄 이동 스크립트 끄기
                 bombs[i].GetComponent<BombUpDown>().enabled = false;
             }
-
-            // 시작 키워드 끄기
-            CoralSirenMoving.fireBomb = false;
-
-            // 모든 체크 요소 초기화
-            readyFire = false;
-            whatBombPattern = 0;
-            firstCoroutineDone = false;
-            secondCoroutineDone = false;
-            thirdCoroutineDone = false;
         }
     }
 
@@ -181,6 +220,9 @@ public class FireBomb : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         bossNowMove = true;
+
+        /// <caution> 폭탄을 74개 생성해 아래와 같이 지정해봤지만 정작 쓰이는 것은 세번째 발사에 
+        /// 쓰이는 폭탄 최댓값인 45개 뿐이다.
 
         for (int i = 0; i < firstBombCount; i++)
         {

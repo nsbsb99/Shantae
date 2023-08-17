@@ -16,9 +16,12 @@ public class RequestPlayerController : MonoBehaviour
     private int playerHP = 50;
 
     public float jumpForce = 20f;
+    public float fallForce = 10f;
     private bool isJumping = false;
+    private bool octoJump = false;
     private bool isAir = false;
     private float jumpStartTime;
+    private int jumpCount = 0;
 
     private Animator animator = default;
 
@@ -35,8 +38,8 @@ public class RequestPlayerController : MonoBehaviour
     private BoxCollider2D boxCollider;
     public float bottomY;
 
+    // (Change)
     public static Vector2 playerPosition = default;
-
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +56,7 @@ public class RequestPlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 플레이어의 좌표를 실시간으로 뿌림.
+        // (Change)플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
 
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
@@ -71,27 +74,43 @@ public class RequestPlayerController : MonoBehaviour
         if (Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f))        //플레이어가 바닥에 있는지
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
-
+            jumpCount = 0;
             if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
                 isAir = false;
             }
+
         }
         else
         {
             // 바닥과 충돌하지 않은 경우
             isAir = true;
+            if (!isJumping)
+            {
+                transform.Translate(Vector3.down * fallForce * Time.deltaTime);
+            }
         }
         playerAnimation();          // 플레이어가 보여줄 애니메이션
 
 
-        if (Input.GetKeyDown(KeyCode.X) && !isJumping && !isAir && !isDown)      // 점프
+        //if (Input.GetKeyDown(KeyCode.X) && !isJumping && !isAir && !isDown)      // 점프
+        if (Input.GetKeyDown(KeyCode.X) && jumpCount < 3 && !isDown)      // 점프
         {
             isJumping = true;
             jumpStartTime = Time.time;
+            jumpCount += 1;
+            if (jumpCount == 1)
+            {
+                animator.SetBool("Jump", isJumping);
 
-            animator.SetBool("Jump", isJumping);
+            }
+            else if (jumpCount >= 2)
+            {
+                octoJump = true;
+                animator.SetBool("OctoJump", octoJump);
+            }
+            //animator.SetBool("Jump", isJumping);
             if (Input.GetKeyDown(KeyCode.Z))        // 공격
             {
                 animator.SetBool("Attack", isAttack);
@@ -99,6 +118,7 @@ public class RequestPlayerController : MonoBehaviour
                 StartCoroutine(AirAttack(0.15f));
             }
         }
+
         if (isJumping)
         {
             float jumptime = Time.time - jumpStartTime;
@@ -109,13 +129,36 @@ public class RequestPlayerController : MonoBehaviour
                 if (Input.GetKeyUp(KeyCode.X))
                 {
                     isJumping = false;
-                    animator.SetBool("Jump", isJumping);
+                    if (jumpCount == 1)
+                    {
+                        animator.SetBool("Jump", isJumping);
+                    }
+                    else if (jumpCount >= 2)
+                    {
+                        octoJump = false;
+                        animator.SetBool("OctoJump", octoJump);
+                    }
                 }
             }
             else
             {
                 isJumping = false;
                 animator.SetBool("Jump", isJumping);
+                if (jumpCount == 1)
+                {
+                }
+                else
+                {
+                    octoJump = false;
+                    animator.SetBool("OctoJump", octoJump);
+                }
+            }
+        }
+        else
+        {
+            if (jumpCount > 0)
+            {
+                transform.Translate(Vector3.down * fallForce * Time.deltaTime);
             }
         }
 
@@ -340,6 +383,13 @@ public class RequestPlayerController : MonoBehaviour
         ground.SetActive(false);
 
         animator.SetBool("Attack", isAttack);
+        if (Input.GetKeyUp(KeyCode.DownArrow))
+        {
+            isDown = false;
+            isDownAndRun = false;
+            boxCollider.size = new Vector2(0.7f, 2f);
+            boxCollider.offset = new Vector2(0.385f, -0.9f);
+        }
     }
     private IEnumerator AirAttack(float delay)
     {
@@ -427,3 +477,4 @@ public class RequestPlayerController : MonoBehaviour
         isFlashing = false;
     }
 }
+

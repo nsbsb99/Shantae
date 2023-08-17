@@ -76,7 +76,7 @@ public class BombUpDown : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // 만약 바닥 콜라이더와 충돌하면
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Sand"))
         {
             // 추락을 멈춤
             falling = false;
