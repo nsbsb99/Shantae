@@ -11,9 +11,12 @@ public class BlowKissAttack : MonoBehaviour
     #region 양쪽 벽에서의 BlowKiss 공격
     private GameObject blowKissPrefab;
     // 발사되는 수
+    //private int blowKissCount = 15;
     private int blowKissCount = 15;
+
     // 날아가는 속도
     private float blowKissSpeed = 15.0f;
+    private float gap = 2.5f;
 
     private Vector2 firePosition = default;
 
@@ -22,6 +25,7 @@ public class BlowKissAttack : MonoBehaviour
 
     private bool runCheck = false;
     private bool runCheck_right = false;
+    private bool blowNow = false;
     #endregion
 
     // Start is called before the first frame update
@@ -42,6 +46,7 @@ public class BlowKissAttack : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         #region 좌측 벽에서 공격
         if (EmpressMoving.leftWall == true && EmpressMoving.rightWall == false)
         {
@@ -56,24 +61,25 @@ public class BlowKissAttack : MonoBehaviour
 
                     blowKisses[i].transform.position = firePosition;
                 }
-               
+
                 runCheck = true;
             }
             else if (runCheck == true)
             {
-                 StartCoroutine(StartRightAttack());
-            }
-        }
+                // 재정렬이 끝났다면
+                for (int i = 0; i < blowKissCount; i++)
+                {
+                    // 각 공격구마다 목적지 지정
+                    blowKisses[i].GetComponent<BlowKissMoving>().blowKissDestination
+                        = new Vector2(10f, 10f - (gap * i));
 
-        else if (EmpressMoving.leftWall == false && EmpressMoving.rightWall == false)
-        {
-            StopCoroutine(StartRightAttack());
-            runCheck = false;
+                    blowKisses[i].GetComponent<SpriteRenderer>().enabled = false;
 
-            // 애니메이션이 끝나면 풀로 복귀 
-            for (int i = 0; i < blowKissCount; i++)
-            {
-                blowKisses[i].transform.position = poolPosition_blowKiss;
+                    if (blowNow == false)
+                    {
+                        StartCoroutine(StartAttack());
+                    }
+                }
             }
         }
         #endregion
@@ -97,14 +103,28 @@ public class BlowKissAttack : MonoBehaviour
             }
             else if (runCheck_right == true)
             {
-                StartCoroutine(StartLeftAttack());
+                // 재정렬이 끝났다면
+                for (int i = 0; i < blowKissCount; i++)
+                {
+                    // 각 공격구마다 목적지 지정
+                    blowKisses[i].GetComponent<BlowKissMoving>().blowKissDestination
+                        = new Vector2(-10f, 10f - (gap * i));
+
+                    blowKisses[i].GetComponent<SpriteRenderer>().enabled = false;
+
+                    StartCoroutine(StartAttack());
+                }
             }
         }
-
-        else if (EmpressMoving.rightWall == false && EmpressMoving.leftWall == false)
+        #endregion
+        
+        // 동작이 끝나면 풀로 복귀
+        if (EmpressMoving.rightWall == false && EmpressMoving.leftWall == false)
         {
-            StopCoroutine(StartLeftAttack());
+            StopCoroutine(StartAttack());
+            runCheck = false;
             runCheck_right = false;
+            blowNow = false;
 
             // 애니메이션이 끝나면 풀로 복귀 
             for (int i = 0; i < blowKissCount; i++)
@@ -112,39 +132,18 @@ public class BlowKissAttack : MonoBehaviour
                 blowKisses[i].transform.position = poolPosition_blowKiss;
             }
         }
-        #endregion
     }
 
-    IEnumerator StartRightAttack()
+    IEnumerator StartAttack()
     {
         for (int i = 0; i < blowKissCount; i++)
         {
-            float gap = 2.5f;
+            blowNow = true;
 
-            blowKisses[i].GetComponent<Renderer>().enabled = true;
+            // 각 공격구마다 발사
+            blowKisses[i].GetComponent<BlowKissMoving>().enabled = true;
 
-            blowKisses[i].transform.position =
-                Vector2.MoveTowards
-                (blowKisses[i].transform.position, new Vector2(10f, 10f - (gap * i)),
-                Time.deltaTime * blowKissSpeed);
             yield return new WaitForSeconds(0.1f);
         }
     }
-
-    IEnumerator StartLeftAttack()
-    {
-        for (int i = 0; i < blowKissCount; i++)
-        {
-            float gap = 2.5f;
-
-            blowKisses[i].GetComponent<Renderer>().enabled = true;
-
-            blowKisses[i].transform.position =
-                Vector2.MoveTowards
-                (blowKisses[i].transform.position, new Vector2(-10f, 10f - (gap * i)),
-                Time.deltaTime * blowKissSpeed);
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-
 }

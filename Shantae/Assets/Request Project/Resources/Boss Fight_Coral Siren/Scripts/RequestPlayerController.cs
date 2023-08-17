@@ -39,7 +39,7 @@ public class RequestPlayerController : MonoBehaviour
     public float bottomY;
 
     // (Change)
-    public static Vector2 playerPosition = default;
+    //public static Vector2 playerPosition = default;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +57,7 @@ public class RequestPlayerController : MonoBehaviour
     void Update()
     {
         // (Change)플레이어의 좌표를 실시간으로 뿌림.
-        playerPosition = transform.position;
+        //playerPosition = transform.position;
 
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
         bottomY = transform.position.y - playerHeight;

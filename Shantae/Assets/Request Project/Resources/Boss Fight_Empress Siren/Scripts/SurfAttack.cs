@@ -31,7 +31,7 @@ public class SurfAttack : MonoBehaviour
     // 던져진 것을 체크
     private bool runCheck = false;
 
-    private float bladeSpeed = 5f;
+    private float bladeSpeed = 3f;
     private Vector2 nowPlayerPosition;
     #endregion
 

@@ -54,12 +54,10 @@ public class GrabLever : MonoBehaviour
         animator.SetBool("Fire Bomb", false);
         if (Mathf.Abs(lever.eulerAngles.z - originLever) > 3f)
         {
-            Debug.Log("레버 계속 오른쪽으로");
             lever.Rotate(-(Vector3.forward) * Time.deltaTime * degreePerSecond_Return);
         }
         else if (Mathf.Abs(lever.eulerAngles.z - originLever) <= 3f)
         {
-            Debug.Log("레버 정지");
             lever.eulerAngles = Vector3.zero;
         }
 

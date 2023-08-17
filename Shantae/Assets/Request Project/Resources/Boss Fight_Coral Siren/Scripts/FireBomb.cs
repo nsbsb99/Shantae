@@ -115,9 +115,9 @@ public class FireBomb : MonoBehaviour
         {
             whereBossX = transform.position.x;
 
-            if (Mathf.Abs(whereBossX - RequestPlayerController.playerPosition.x) >= 0.5f)
+            if (Mathf.Abs(whereBossX - PlayerController.playerPosition.x) >= 0.5f)
             {
-                if (RequestPlayerController.playerPosition.x < transform.position.x)
+                if (PlayerController.playerPosition.x < transform.position.x)
                 {
                     // 보스 좌측 이동
                     if (firstCoroutineDone == true)
@@ -143,7 +143,7 @@ public class FireBomb : MonoBehaviour
                         transform.Translate(Vector2.left * thirdBossSpeed * Time.deltaTime);
                     }
                 }
-                else if (RequestPlayerController.playerPosition.x > transform.position.x)
+                else if (PlayerController.playerPosition.x > transform.position.x)
                 {
                     // 보스 우측 이동
                     if (firstCoroutineDone == true)

@@ -146,7 +146,6 @@ public class CoralSirenMoving : MonoBehaviour
         }
         else if (randomAttack == 3)
         {
-            Debug.Log("모래 채우기");
             // 모래 채우기 준비
            grabLever = true;
         }

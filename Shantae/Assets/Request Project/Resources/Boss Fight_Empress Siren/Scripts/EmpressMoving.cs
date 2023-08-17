@@ -67,7 +67,8 @@ public class EmpressMoving : MonoBehaviour
         {
             randomValue = Random.Range(0, 3);
             randomValue_Ground = Random.Range(0, 2);
-            randomValue_Ground = 1f; // 공격 모션을 위한 임시 변수 
+
+            randomValue_Ground = 0; // 임시
 
             if (randomValue == 0)
             { 
