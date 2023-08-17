@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,13 +16,21 @@ public class CoralSirenMoving : MonoBehaviour
     public static bool fireBomb = false;
     public static bool dash = false;
     public static bool fireSpread = false;
+    public static bool grabLever = false;
     private Animator animator;
     public static Vector2 newBossPosition;
 
     public static bool firstPatternDone = false;
     public static bool secondPatternDone = false;
     public static bool thirdPatternDone = false;
+    public static bool fourthPatternDone = false;
     private bool patternFinished = false;
+
+    private GameObject sandGroup;
+    private GameObject firstSand;
+    private GameObject secondSand;
+    private GameObject thirdSand;
+    private GameObject fourthSand;
 
     private void Awake()
     {
@@ -40,6 +49,14 @@ public class CoralSirenMoving : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
+        sandGroup = GameObject.Find("Sands");
+        Debug.Assert(sandGroup != null);
+
+        firstSand = sandGroup.transform.GetChild(0).gameObject;
+        secondSand = sandGroup.transform.GetChild(1).gameObject;
+        thirdSand = sandGroup.transform.GetChild(2).gameObject;
+        fourthSand = sandGroup.transform.GetChild(3).gameObject;
+
         // 패턴 시작
         StartCoroutine(RandomMoving());
     }
@@ -52,10 +69,21 @@ public class CoralSirenMoving : MonoBehaviour
             fireSpread = false;
         }
 
-        /// <problem> 폭탄 패턴의 초기화가 이루어지지 않는다. allBack 변수의 문제
+        // 레버를 당기는 액션을 취했다면 모래를 채우고 초기화 신호 뿌리기
+        if (GrabLever.sandActive == true)
+        {
+            firstSand.SetActive(true);
+            secondSand.SetActive(true);
+            thirdSand.SetActive(true);
+            fourthSand.SetActive(true);
+
+            grabLever = false;
+            GrabLever.sandActive = false;
+        }
+
         // 패턴 연속 실행 코드
         if (firstPatternDone == true || secondPatternDone == true 
-            || thirdPatternDone == true)
+            || thirdPatternDone == true || fourthPatternDone == true)
         {
             if (patternFinished == false)
             {
@@ -67,6 +95,7 @@ public class CoralSirenMoving : MonoBehaviour
             firstPatternDone = false;
             secondPatternDone = false;
             thirdPatternDone = false;
+            fourthPatternDone = false;
 
             patternFinished = false;
         }
@@ -75,8 +104,17 @@ public class CoralSirenMoving : MonoBehaviour
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
-        //randomAttack = Random.Range(0, 3);
-        randomAttack = 2; // 임시
+        // 발동 조건 체크
+        if (firstSand.activeSelf == false || secondSand.activeSelf == false
+                || thirdSand == false || fourthSand == false)
+        {
+            // 모래 중 하나라도 비어있다면 바로 모래 채우는 패턴 실행
+            randomAttack = 3;
+        }
+        else
+        {
+            randomAttack = Random.Range(0, 3);
+        }
 
         yield return new WaitForSeconds(3f);
 
@@ -95,18 +133,22 @@ public class CoralSirenMoving : MonoBehaviour
                 fireBomb = false;
             }
         }
-
         else if (randomAttack == 1)
         {
             // 대시 준비 (DashCharging)
             dash = true;
            
         }
-
         else if (randomAttack == 2)
         {
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
+        }
+        else if (randomAttack == 3)
+        {
+            Debug.Log("모래 채우기");
+            // 모래 채우기 준비
+           grabLever = true;
         }
     }
 }
