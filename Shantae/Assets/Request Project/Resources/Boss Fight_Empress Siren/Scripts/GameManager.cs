@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     // 김건휘 작성
     public GameObject body;
+    public Transform platform;
     public Transform player;
     public Transform spawner;
     private bool move = false;
@@ -60,10 +61,19 @@ public class GameManager : MonoBehaviour
                 move = true;
             }
         }
-        if (spawner != null)
+        //if (spawner != null)                                                    /// 떨어졌을때 넣을 코드
+        //{
+        //    Vector3 newPosition = new Vector3(10f, 0f, 0f); // 새로운 위치 설정
+        //    spawner.position = newPosition;
+        //}
+        if(platform != null)
         {
-            Vector3 newPosition = new Vector3(10f, 0f, 0f); // 새로운 위치 설정
-            spawner.position = newPosition;
+            if (!move)
+            {
+                Vector3 newPosition = new Vector3(0f, 11f, 0f); // 새로운 위치 설정
+                platform.position = newPosition;
+                move = true;
+            }
         }
     }
 

@@ -10,7 +10,7 @@ public class PlatformSpawner : MonoBehaviour
     private float selectSpeed;
 
     private GameObject[] platforms;
-    private int poolSize = 50;
+    private int poolSize = 80;
     private int currentPlatformIndex = 0;
 
     private float spawnMax = 2f;

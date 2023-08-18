@@ -19,12 +19,8 @@ public class GemBreak : MonoBehaviour
     //private Acceesory acceesory;
     private void Start()
     {
-        //acceesory = FindObjectOfType<Acceesory>();
-
         rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, 7.0f);
-
-        //unBreak = GameObject.Find("");
     }
 
     private void Update()
@@ -33,13 +29,11 @@ public class GemBreak : MonoBehaviour
         {
             isTimerStarted = true;
             startTime = Time.time;
-            Debug.Log("Timer started!");
         }
 
         if (isTimerStarted)
         {
             elapsedTime = Time.time - startTime;
-            Debug.Log("Elapsed time: " + elapsedTime.ToString("F2") + " seconds");
         }
         if (elapsedTime < 0.1f)
         {
