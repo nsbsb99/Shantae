@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public GameObject ground;
     public GameObject jump;
     public GameObject down;
-
+    public GameObject sandCollider;
 
     private Vector3 originalPosition; // 원래 위치를 저장하는 변수
 
@@ -25,6 +25,14 @@ public class PlayerController : MonoBehaviour
     private int jumpCount = 0;
 
     private Animator animator = default;
+
+    public GameObject stepSand;
+    private bool overSand = false;
+    private bool inSand = false;
+    private bool drillOn = false;
+    private bool drillJump = false;
+    private List<GameObject> breakSand = new List<GameObject>();            // 부숴진 모래들의 리스트 (레버 당기면 활성화)
+    public List<GameObject> deactivatedParents = new List<GameObject>();
 
     private bool isAttack = false;
     private bool isRun;
@@ -41,6 +49,8 @@ public class PlayerController : MonoBehaviour
 
     // (노솔빈 수정)
     public static Vector2 playerPosition = default;
+
+    private bool trigger = false;
 
     // Start is called before the first frame update
     void Start()
@@ -60,9 +70,15 @@ public class PlayerController : MonoBehaviour
         // (노솔빈 수정)플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
 
-        Debug.Log(isJumping);
-        Debug.Log(jumpCount);
+        Debug.Log(overSand);
+        //Debug.Log("");
 
+        //if(!isAir && !drillOn)
+        //{
+        //    isJumping = false;
+        //    animator.SetBool("Jump", isJumping);
+
+        //}
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
         bottomY = transform.position.y - playerHeight;
 
@@ -76,6 +92,8 @@ public class PlayerController : MonoBehaviour
         Vector2 raycastOrigin = new Vector2(transform.position.x,
             transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
 
+        Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스 레이저 가시광선
+
         if (Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f))        //플레이어가 바닥에 있는지
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
@@ -83,15 +101,26 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
-                isAir = false;
+                isAir = false; 
+                overSand = false;
             }
-            
+            if (hit.collider.CompareTag("SandStep"))
+            {
+                //Debug.Log(stepSand);
+                isAir = false;
+                overSand = true;
+                stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
+            }
+            else
+            {
+                overSand = false;
+            }
         }
         else
         {
             // 바닥과 충돌하지 않은 경우
             isAir = true;
-            if (!isJumping)
+            if (!isJumping && !drillOn)
             {
                 transform.Translate(Vector3.down * fallForce * Time.deltaTime);
             }
@@ -210,11 +239,22 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKey(KeyCode.DownArrow) && !isAir)
             {
-                boxCollider.size = new Vector2(1.5f, 0.9f);
-                boxCollider.offset = new Vector2(0f, -1.45f);
-                isDown = true;
+                if (!overSand && !drillOn)
+                {
+                    boxCollider.size = new Vector2(1.5f, 0.9f);
+                    boxCollider.offset = new Vector2(0f, -1.45f);
+                    isDown = true;
+                }
+                else if (overSand)
+                {
+                    stepSand.SetActive(false);      //저장한(밟고있던)모래를 비활성화
+                    boxCollider.size = new Vector2(0.7f, 0.7f);
+                    boxCollider.offset = new Vector2(0f, 0f);
+                    drillOn = true;
+                    animator.SetBool("Drill", drillOn);
+                }
             }
-            if (Input.GetKeyUp(KeyCode.DownArrow))
+            if (Input.GetKeyUp(KeyCode.DownArrow) && !drillOn)
             {
                 isDown = false;
                 isDownAndRun = false;
@@ -350,10 +390,11 @@ public class PlayerController : MonoBehaviour
                 isDownAndRun = false;
                 animator.SetBool("Down", isDown);
                 animator.SetBool("DownRun", isDownAndRun);
-
-                boxCollider.size = new Vector2(0.7f, 2.1f);
-                boxCollider.offset = new Vector2(0.385f, -0.2f);
-
+                if (!drillOn)
+                {
+                    boxCollider.size = new Vector2(0.7f, 2.1f);
+                    boxCollider.offset = new Vector2(0.385f, -0.9f);
+                }
             }
             else if (!Input.anyKey)
             {
@@ -410,7 +451,8 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {        
+    {
+
         if (collision.tag.Equals("Damage"))
         {
             if (!invincible)
@@ -419,6 +461,60 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
                 //Debug.Log("123");
             }
+        }
+        if (collision.tag.Equals("Sand"))
+        {
+            inSand = true;
+            trigger = true;
+        }
+        
+        if (collision.tag.Equals("SandPiece") && drillOn)
+        {
+            Transform parentTransform = collision.transform.parent;
+
+            if (parentTransform != null)
+            {
+                GameObject sandPiece = collision.gameObject;
+                sandPiece.SetActive(false); // 부모 오브젝트 비활성화
+
+                deactivatedParents.Add(sandPiece); // 비활성화된 부모 오브젝트를 리스트에 추가
+
+            }
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag.Equals("Sand"))
+        { 
+            inSand = false;
+            if (trigger)
+            {
+                if (stepSand != null)
+                {
+                    stepSand.SetActive(true);
+                }
+                trigger = false;
+            }
+
+            //float jumptime = Time.time - jumpStartTime;
+
+            //if (jumptime <= 0.3)
+            //{
+            //    isJumping = false;
+            //    animator.SetBool("Jump", isJumping);
+            //    transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
+
+            //}
+            //else
+            //{
+            //    isJumping = false;
+            //    animator.SetBool("Jump", isJumping);
+            boxCollider.size = new Vector2(0.7f, 2.1f);
+            boxCollider.offset = new Vector2(0.385f, -0.9f);
+            drillOn = false;
+            animator.SetBool("Drill", drillOn);
+
+            //}
         }
     }
 

@@ -15,6 +15,9 @@ TagManager:
   - SideWall
   - Ceiling
   - Sand
+  - SandStep
+  - SandPiece
+  - Air
   layers:
   - Default
   - TransparentFX
