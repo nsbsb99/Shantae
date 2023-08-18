@@ -49,7 +49,7 @@ public class CoralSirenMoving : MonoBehaviour
     {
         animator = GetComponent<Animator>();
 
-        sandGroup = GameObject.Find("Sands");
+        sandGroup = GameObject.Find("Sand");
         Debug.Assert(sandGroup != null);
 
         firstSand = sandGroup.transform.GetChild(0).gameObject;
