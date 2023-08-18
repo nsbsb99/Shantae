@@ -114,7 +114,10 @@ public class BlowKissAttack : MonoBehaviour
 
                     blowKisses[i].GetComponent<SpriteRenderer>().enabled = false;
 
-                    StartCoroutine(StartAttack());
+                    if (blowNow == false)
+                    {
+                        StartCoroutine(StartAttack());
+                    }
                 }
             }
         }
