@@ -68,7 +68,7 @@ public class EmpressMoving : MonoBehaviour
             randomValue = Random.Range(0, 3);
             randomValue_Ground = Random.Range(0, 2);
 
-            randomValue_Ground = 0; // 임시
+            randomValue = 0; // 임시
 
             if (randomValue == 0)
             { 

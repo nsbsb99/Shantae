@@ -11,12 +11,11 @@ public class BlowKissAttack : MonoBehaviour
     #region 양쪽 벽에서의 BlowKiss 공격
     private GameObject blowKissPrefab;
     // 발사되는 수
-    //private int blowKissCount = 15;
-    private int blowKissCount = 15;
+    private int blowKissCount = 25;
 
     // 날아가는 속도
     private float blowKissSpeed = 15.0f;
-    private float gap = 2.5f;
+    private float gap = 0.8f;
 
     private Vector2 firePosition = default;
 
@@ -26,6 +25,9 @@ public class BlowKissAttack : MonoBehaviour
     private bool runCheck = false;
     private bool runCheck_right = false;
     private bool blowNow = false;
+
+    private bool blowWait = false;
+    private int nowBlowNumber = 0;
     #endregion
 
     // Start is called before the first frame update
@@ -130,20 +132,25 @@ public class BlowKissAttack : MonoBehaviour
             for (int i = 0; i < blowKissCount; i++)
             {
                 blowKisses[i].transform.position = poolPosition_blowKiss;
+                blowKisses[i].GetComponent<BlowKissMoving>().enabled = false;
             }
         }
     }
 
     IEnumerator StartAttack()
     {
-        for (int i = 0; i < blowKissCount; i++)
+        blowNow = true;
+
+        nowBlowNumber = 0;
+
+        while (nowBlowNumber < blowKissCount)
         {
-            blowNow = true;
-
             // 각 공격구마다 발사
-            blowKisses[i].GetComponent<BlowKissMoving>().enabled = true;
+            blowKisses[nowBlowNumber].GetComponent<BlowKissMoving>().enabled = true;
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSecondsRealtime(0.1f);
+
+            nowBlowNumber++;
         }
     }
 }

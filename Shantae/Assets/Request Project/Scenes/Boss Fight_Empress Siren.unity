@@ -1263,8 +1263,11 @@ MonoBehaviour:
   ground: {fileID: 3091331555304341540}
   jump: {fileID: 3091331556183676203}
   down: {fileID: 3091331554359870770}
+  sandCollider: {fileID: 0}
   jumpForce: 20
   fallForce: 10
+  stepSand: {fileID: 0}
+  deactivatedParents: []
   bottomY: 0
 --- !u!1 &3091331554341269103
 GameObject:

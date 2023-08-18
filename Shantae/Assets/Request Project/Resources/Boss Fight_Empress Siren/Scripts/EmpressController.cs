@@ -23,17 +23,19 @@ public class EmpressController : MonoBehaviour
             // EmpressMoving 코루틴 종료 메서드 추가
             StopCoroutine(EmpressMoving.instance.RandomMoving());
 
-            WinPlayer();
+            PlayerWin();
         }
     }
 
-    private void WinPlayer()
+    private void PlayerWin()
     {
+        
 
     }
 
     private void NextMegaEmpress()
     {
         Debug.Log("Empress Siren과의 2차전으로 이동");
+        // 로딩씬 이후 다음 보스전인 MegaEmpress Siren 로드하기. 
     }
 }
