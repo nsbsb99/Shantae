@@ -36,6 +36,11 @@ public class Dash : MonoBehaviour
 
     private bool bossGetGoal = false;
 
+    private ParticleSystem leftDashParticle;
+    private ParticleSystem rightDashParticle;
+    private ParticleSystem leftDashParticle_Front;
+    private ParticleSystem rightDashParticle_Front;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +74,20 @@ public class Dash : MonoBehaviour
             GameObject.Find("Coral Siren_Front").GetComponent<Animator>();
 
         player = GameObject.FindWithTag("Player").transform;
+
+        // 좌측으로 대시할 때 파티클 시스템_뒤
+        leftDashParticle = coralSiren_Back.GetChild(2).GetComponent<ParticleSystem>();
+        Debug.Assert(leftDashParticle != null);
+        // 우측으로 대시할 때 파티클 시스템_뒤
+        rightDashParticle = coralSiren_Back.GetChild(3).GetComponent<ParticleSystem>();
+        Debug.Assert(rightDashParticle != null);
+        // 좌측으로 대시할 때 파티클 시스템_앞
+        leftDashParticle_Front = 
+            coralSiren_Front.GetChild(0).GetComponent<ParticleSystem>();
+        // 우측으로 대시할 때 파티클 시스템_앞
+        rightDashParticle_Front =
+            coralSiren_Front.GetChild(1).GetComponent<ParticleSystem>();
+
     }
 
     // Update is called once per frame
@@ -120,6 +139,8 @@ public class Dash : MonoBehaviour
             if (CoralSirenMoving.dash == true && getSecondDestination == true)
             {
                 // 앞에 위치한 보스가 왼쪽으로 이동
+                leftDashParticle_Front.Play();
+
                 coralSiren_Front.position = Vector2.MoveTowards
                     (coralSiren_Front.position, coralSiren_Front_LeftDestination,
                     moveSpeed * Time.deltaTime);
@@ -128,6 +149,8 @@ public class Dash : MonoBehaviour
                 if (Vector2.Distance
                     (coralSiren_Front.position, coralSiren_Front_LeftDestination) <= 0.1f)
                 {
+                    leftDashParticle_Front.Stop();
+
                     getSecondDestination = false;
                     getThirdDestination = true;
                 }
@@ -160,6 +183,11 @@ public class Dash : MonoBehaviour
             // 마지막으로 뒤의 Coral Siren이 도착하면
             if (CoralSirenMoving.dash == true && bossGetGoal == true)
             {
+                // FX Off
+                coralSiren_Back.transform.GetChild(1).gameObject.SetActive(false);
+                // 파티클 Off
+                rightDashParticle.Stop();
+
                 bossGetGoal = false;
 
                 directionCheck = false;
@@ -203,10 +231,10 @@ public class Dash : MonoBehaviour
                         coralSiren_Back.position =
                             new Vector2(12f, coralSiren_Back.transform.position.y);
 
-                        // 뒤의 보스는 이동 전 준비
+                        // 앞의 보스는 이동 전 준비
                         coralSiren_Front_Animator.SetBool("Front Dash", true);
 
-                        // 뒤의 보스는 첫번째 출발지로 이동
+                        // 앞의 보스는 첫번째 출발지로 이동
                         coralSiren_Front.position =
                             new Vector2(-12f, coralSiren_Front.transform.position.y);
 
@@ -216,16 +244,20 @@ public class Dash : MonoBehaviour
 
                 if (CoralSirenMoving.dash == true && getSecondDestination == true)
                 {
-                    // 뒤에 위치한 보스가 오른쪽으로 이동
+                    // 앞에 위치한 보스가 오른쪽으로 이동
                     coralSiren_Front.position = Vector2.MoveTowards
                         (coralSiren_Front.position, coralSiren_Front_LeftDestination_LeftVer,
                         moveSpeed * Time.deltaTime);
 
-                    // 뒤에 위치한 보스가 이동을 완료하면
+                    rightDashParticle_Front.Play();
+
+                    // 앞에 위치한 보스가 이동을 완료하면
                     if (Vector2.Distance
                         (coralSiren_Front.position, coralSiren_Front_LeftDestination_LeftVer)
                         <= 0.1f)
                     {
+                        rightDashParticle_Front.Stop();
+
                         getSecondDestination = false;
                         getThirdDestination = true;
                     }
@@ -252,7 +284,10 @@ public class Dash : MonoBehaviour
                 // 마지막으로 뒤의 Coral Siren이 도착하면
                 if (CoralSirenMoving.dash == true && bossGetGoal == true)
                 {
+                    // FX Off
                     coralSiren_Back.transform.GetChild(0).gameObject.SetActive(false);
+                    // 파티클 Off
+                    leftDashParticle.Stop();
 
                     bossGetGoal = false;
 
@@ -267,20 +302,27 @@ public class Dash : MonoBehaviour
             }
         }
 
+        // Coral Siren이 좌측으로 향함
         IEnumerator RightAnimation()
         {
             coralSiren_Back.GetComponent<SpriteRenderer>().flipX = false;
 
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", true);
 
+            // 뒤 FX 효과 ON
+            coralSiren_Back.transform.GetChild(1).gameObject.SetActive(true);
+
             yield return new WaitForSeconds(1.7f);
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", false);
 
             coralSiren_Back.GetComponent<Animator>().SetBool("Go Dash", true);
+            // 파티클 Play
+            rightDashParticle.Play();
 
             animationFinish = true;
         }
 
+        // Coral Siren이 우측으로 향함
         IEnumerator LeftAnimation()
         {
             coralSiren_Back.GetComponent<SpriteRenderer>().flipX = true;
@@ -294,6 +336,8 @@ public class Dash : MonoBehaviour
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", false);
 
             coralSiren_Back.GetComponent<Animator>().SetBool("Go Dash", true);
+            // 파티클 Play
+            leftDashParticle.Play();
 
             animationFinish = true;
         }
