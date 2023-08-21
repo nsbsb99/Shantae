@@ -81,7 +81,7 @@ public class EmpressMoving : MonoBehaviour
             rightWall = false;
 
             randomValue = Random.Range(0, 3);
-            randomValue = 0; // 임시
+            randomValue = 2; // 임시
 
             if (randomValue == 0)
             {
@@ -141,6 +141,7 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(1.3f);
 
                 ceiling = true;
+                CameraShake.instance.StartCoroutine(CameraShake.instance.CeilingShake());
 
                 yield return new WaitForSeconds
                     (animator.GetCurrentAnimatorStateInfo(0).length - 1.3f);
