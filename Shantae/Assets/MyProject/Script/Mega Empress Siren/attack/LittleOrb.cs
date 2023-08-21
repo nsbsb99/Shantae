@@ -5,11 +5,6 @@ using UnityEngine;
 public class LittleOrb : MonoBehaviour
 {
     public Transform player;
-
-    private bool isTimerStarted = false;
-    private float startTime;
-    private float elapsedTime;
-
     private float spawnMax = 18f;
     private float spawnMin = 12f;
     private float lastSpawnTime = 0f;
@@ -21,7 +16,6 @@ public class LittleOrb : MonoBehaviour
     private float littleOrbSpeed = 11.0f;
     private GameObject[] littleOrbs;
     private int poolSize = 15;
-    private Vector2 poolPosition_littleOrb = new Vector2(-2.0f, -10.0f);
 
     // Start is called before the first frame update
     void Start()

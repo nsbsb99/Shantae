@@ -93,10 +93,27 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
             jumpCount = 0;
+            if (hit.collider.CompareTag("Air"))
+            {
+                if(isJumping)
+                {
+                    isAir = false;
+                    animator.SetBool("isGround", !isAir);
+
+                    isJumping = true;
+                    animator.SetBool("Jump", isJumping);
+                }
+                if (!isJumping && !drillOn)
+                {
+                    isAir = true;
+                    animator.SetBool("isGround", !isAir);
+                    transform.Translate(Vector3.down * fallForce * Time.deltaTime);
+                }
+            }
             if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
-                // octoJump = false;
+                 octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
@@ -106,6 +123,8 @@ public class PlayerController : MonoBehaviour
             {
                 //Debug.Log(stepSand);
                 isAir = false;
+                animator.SetBool("isGround", !isAir);
+
                 overSand = true;
                 stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
             }
@@ -455,7 +474,12 @@ public class PlayerController : MonoBehaviour
 
         if (collision.tag.Equals("Damage"))
         {
-            if (!invincible)
+            if (collision.CompareTag("Damage"))
+            {
+                //ObjectPoolManager.Instance.FindObjectPoolWithTag(collision.tag)?.ReturnToPool(collision.gameObject);
+            }
+
+            if (!invincible)        // 무적시간
             {
                 invincible = true;
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
@@ -478,9 +502,16 @@ public class PlayerController : MonoBehaviour
                 sandPiece.SetActive(false); // 부모 오브젝트 비활성화
 
                 deactivatedParents.Add(sandPiece); // 비활성화된 부모 오브젝트를 리스트에 추가
-
             }
         }
+        //if (collision.tag.Equals("Air"))
+        //{
+        //    isAir = true;
+        //    if (!isJumping && !drillOn)
+        //    {
+        //        transform.Translate(Vector3.down * fallForce * Time.deltaTime);
+        //    }
+        //}
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
