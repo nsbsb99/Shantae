@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class BigOrb : MonoBehaviour
 {
-    private float moveSpeed = 5f;   
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
+    private float moveSpeed = 5f;
 
     private bool isTimerStarted = false;
     private float startTime;
@@ -14,7 +17,18 @@ public class BigOrb : MonoBehaviour
     private void Start()
     {
         originalPositionX = transform.position.x;
-        
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
+
+        // Set the initial transparency
+        Color transparentColor = originalColor;
+        transparentColor.a = 0.0f; // 0.0f means fully transparent
+        spriteRenderer.color = transparentColor;
+
+        // Start the coroutine to restore the original color
+        StartCoroutine(RestoreOriginalColorAfterDelay(3.0f));
+
     }
     private void Update()
     {
@@ -41,13 +55,13 @@ public class BigOrb : MonoBehaviour
         {
             elapsedTime = Time.time - startTime;
         }
-        if(elapsedTime<= 2f)
+        if(elapsedTime<= 5f)
         {
             Vector3 newPosition = transform.position;
             newPosition.x = empress.transform.position.x + originalPositionX;
             transform.position = newPosition;
         }
-        else if (elapsedTime > 2f && elapsedTime < 10f)
+        else if (elapsedTime > 5f && elapsedTime < 13f)
         {
             bool move = false;
             if (!move)
@@ -68,14 +82,14 @@ public class BigOrb : MonoBehaviour
                 // 플레이어 방향 회전
                 float targetAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
                 Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 0.3f);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 0.00001f);
 
                 // 플레이어에게 이동
                 Vector3 forwardDirection = transform.right;
                 transform.position += forwardDirection * moveSpeed * Time.deltaTime;
             
         }
-        else if (elapsedTime >= 10f && elapsedTime <= 17f)
+        else if (elapsedTime >= 13f && elapsedTime <= 20f)
         {
 
             bool move = false;
@@ -101,10 +115,24 @@ public class BigOrb : MonoBehaviour
                 }
             }
         }
-        else if(elapsedTime >17f)
+        else if(elapsedTime >20f)
         {
             Destroy(gameObject);
         }
        
+    }
+    private IEnumerator RestoreOriginalColorAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Restore the original color
+        spriteRenderer.color = originalColor;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag.Equals("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
