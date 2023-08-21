@@ -37,6 +37,7 @@ public class CeilingAttack : MonoBehaviour
 
     private bool leftFinish = false;
     private bool rightFinish = false;
+    private bool fixRotation = false;
     #endregion
 
     private void Start()
@@ -89,6 +90,7 @@ public class CeilingAttack : MonoBehaviour
 
     void LeftCeilingAttack()
     {
+
         if (ceilingMoveIndex == 0 && leftFinish == false)
         {
             // 양쪽 공격이 공유하는 공격 시작 지점
@@ -102,8 +104,12 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex == 1)
         {
+            ceiling_first.rotation = Quaternion.Euler(0, 0, -90);
+
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             firstDestination_Left, ceilingBallSpeed * Time.deltaTime);
+
+            Debug.Log(ceiling_first.eulerAngles);
 
             if (Vector2.Distance(ceiling_first.position, firstDestination_Left) < 0.01f)
             {
@@ -113,6 +119,8 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex == 2)
         {
+            ceiling_first.eulerAngles = new Vector3(0, 0, 0);
+
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             secondDestination_Left, ceilingBallSpeed * Time.deltaTime);
 
@@ -124,6 +132,8 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex == 3)
         {
+            ceiling_first.eulerAngles = new Vector3(0, 0, 90);
+
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             thirdDestination_Left, ceilingBallSpeed * Time.deltaTime);
 
@@ -155,6 +165,8 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex_Right == 1)
         {
+            ceiling_second.eulerAngles = new Vector3(0, 0, 90);
+
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             firstDestination_Right, ceilingBallSpeed * Time.deltaTime);
 
@@ -166,6 +178,8 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex_Right == 2)
         {
+            ceiling_second.eulerAngles = new Vector3(0, 0, 0);
+
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             secondDestination_Right, ceilingBallSpeed * Time.deltaTime);
 
@@ -177,6 +191,8 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex_Right == 3)
         {
+            ceiling_second.eulerAngles = new Vector3(0, 0, -90);
+
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             thirdDestination_Right, ceilingBallSpeed * Time.deltaTime);
 
