@@ -86,7 +86,7 @@ public class SurfAttack : MonoBehaviour
 
         nowPlayerPosition =
         new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 1f,
-        GameObject.FindGameObjectWithTag("Player").transform.position.y);
+        GameObject.FindGameObjectWithTag("Player").transform.position.y + 1f);
 
         yield return new WaitForSeconds(2.0f);
 

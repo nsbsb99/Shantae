@@ -23,6 +23,11 @@ public class EmpressMoving : MonoBehaviour
     private Animator animator;
     // 플립을 위한 Sprite Renderer
     private SpriteRenderer spriteRenderer;
+    // 텔레포트 효과를 위한 게임오브젝트 (애니메이션)
+    private GameObject teleportAni;
+    private Animator teleportAniTime = default;
+    // 텔레포트 효과를 위한 파티클
+    private ParticleSystem teleportParticle;
     #endregion
 
     #region 공격 패턴 결정
@@ -46,6 +51,13 @@ public class EmpressMoving : MonoBehaviour
 
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        teleportAni = transform.GetChild(0).gameObject;
+        Debug.Assert(teleportAni!= null);
+        teleportAniTime = teleportAni.GetComponent<Animator>();
+
+        teleportParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
+        Debug.Assert(teleportParticle != null);
     }
 
     private void Start()
@@ -59,19 +71,25 @@ public class EmpressMoving : MonoBehaviour
         /// 보스의 랜덤 이동과 그에 맞는 공격을 결정하는 메서드
         /// </summary>
         
-        // 3.5초 후 보스가 행동을 시작하도록 지정.(후에 컷신 종료 시 시작되도록 변경 필요)
-        yield return new WaitForSeconds(3.5f);
+        // 1.5초 후 보스가 행동을 시작하도록 지정.(후에 컷신 종료 시 시작되도록 변경 필요)
+        yield return new WaitForSeconds(1.5f);
 
         // 만약 Empress Siren의 체력이 0보다 크다면 전투 지속 
         while (EmpressController.empressHP > 0)
         {
-            randomValue = Random.Range(0, 3);
-            randomValue_Ground = Random.Range(0, 2);
+            leftWall = false;
+            rightWall = false;
 
-            randomValue = 2; // 임시
+            randomValue = Random.Range(0, 3);
+            randomValue = 0; // 임시
 
             if (randomValue == 0)
-            { 
+            {
+                // 텔레포트 애니메이션 재생시간 동안 대기
+                yield return new WaitForSeconds
+                    (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
+                teleportAni.SetActive(false);
+
                 // 왼쪽 벽
                 transform.position = new Vector2(-6.6f, 1.54f);
                 animator.Play("Float and Kiss");
@@ -79,9 +97,20 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(2.1f);
 
                 leftWall = true;
+
+                yield return new WaitForSeconds
+                    (animator.GetCurrentAnimatorStateInfo(0).length - 2.1f);
+
+                teleportAni.SetActive(true);
+                teleportParticle.Play();
             }
             else if (randomValue == 1)
             {
+                // 텔레포트 애니메이션 재생시간 동안 대기
+                yield return new WaitForSeconds
+                    (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
+                teleportAni.SetActive(false);
+
                 // 오른쪽 벽
                 transform.position = new Vector2(6.43f, 1.54f);
                 spriteRenderer.flipX = true;
@@ -90,9 +119,20 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(2.1f);
 
                 rightWall = true;
+
+                yield return new WaitForSeconds
+                    (animator.GetCurrentAnimatorStateInfo(0).length - 2.1f);
+
+                teleportAni.SetActive(true);
+                teleportParticle.Play();
             }
             else if (randomValue == 2)
             {
+                // 텔레포트 애니메이션 재생시간 동안 대기
+                yield return new WaitForSeconds
+                    (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
+                teleportAni.SetActive(false);
+
                 // 천장
                 transform.position = new Vector2(-0.29f, 2.18f);
 
@@ -101,14 +141,15 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(1.3f);
 
                 ceiling = true;
+
+                yield return new WaitForSeconds
+                    (animator.GetCurrentAnimatorStateInfo(0).length - 1.3f);
+
+                teleportAni.SetActive(true);
+                teleportParticle.Play();
             }
 
-            yield return new WaitForSeconds(1.0f);
-            yield return new WaitForSeconds
-                (animator.GetCurrentAnimatorStateInfo(0).length);
-
-            leftWall = false;
-            rightWall = false;
+            randomValue_Ground = Random.Range(0, 2);
 
             // x축으로 뒤집힌 보스를 원상태로 되돌리기
             if (spriteRenderer.flipX == true)
@@ -118,6 +159,11 @@ public class EmpressMoving : MonoBehaviour
 
             if (randomValue_Ground == 0)
             {
+                // 텔레포트 애니메이션 재생시간 동안 대기
+                yield return new WaitForSeconds
+                    (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
+                teleportAni.SetActive(false);
+
                 // 바닥 Surf
                 transform.position = new Vector2(-4.07f, -1.72f);
                 animator.Play("Surf");
@@ -125,9 +171,20 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(0.6f);
 
                 surf = true;
+                    
+                yield return new WaitForSeconds
+                    (animator.GetCurrentAnimatorStateInfo(0).length - 0.6f);
+
+                teleportAni.SetActive(true);
+                teleportParticle.Play();
             }
             else if (randomValue_Ground == 1)
             {
+                // 텔레포트 애니메이션 재생시간 동안 대기
+                yield return new WaitForSeconds
+                    (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
+                teleportAni.SetActive(false);
+
                 // 바닥 Hop
                 transform.position = new Vector2(-4.07f, -1.44f);
                 animator.Play("Hopback");
@@ -135,11 +192,13 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds(1.0f);
 
                 hopBack = true;
-            }
 
-            yield return new WaitForSeconds(1.0f);
-            yield return new WaitForSeconds
-                (animator.GetCurrentAnimatorStateInfo(0).length);
+                yield return new WaitForSeconds
+                    (animator.GetCurrentAnimatorStateInfo(0).length - 1.0f);
+
+                teleportAni.SetActive(true);
+                teleportParticle.Play();
+            }
 
             surf = false;
             hopBack = false;

@@ -48,7 +48,6 @@ public class BlowKissAttack : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         #region 좌측 벽에서 공격
         if (EmpressMoving.leftWall == true && EmpressMoving.rightWall == false)
         {
@@ -73,7 +72,7 @@ public class BlowKissAttack : MonoBehaviour
                 {
                     // 각 공격구마다 목적지 지정
                     blowKisses[i].GetComponent<BlowKissMoving>().blowKissDestination
-                        = new Vector2(10f, 10f - (gap * i));
+                        = new Vector2(10.5f, 10f - (gap * i));
 
                     blowKisses[i].GetComponent<SpriteRenderer>().enabled = false;
 
@@ -110,7 +109,7 @@ public class BlowKissAttack : MonoBehaviour
                 {
                     // 각 공격구마다 목적지 지정
                     blowKisses[i].GetComponent<BlowKissMoving>().blowKissDestination
-                        = new Vector2(-10f, 10f - (gap * i));
+                        = new Vector2(-10.5f, 10f - (gap * i));
 
                     blowKisses[i].GetComponent<SpriteRenderer>().enabled = false;
 
@@ -155,5 +154,10 @@ public class BlowKissAttack : MonoBehaviour
 
             nowBlowNumber++;
         }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        EmpressMoving.leftWall = false;
+        EmpressMoving.rightWall = false;
     }
 }
