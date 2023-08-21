@@ -7,7 +7,6 @@ using UnityEngine;
 /// 좌측으로 공격을 시작한다.
 /// </summary>
 
-
 public class Dash : MonoBehaviour
 {
     Transform coralSiren_Back;
@@ -253,6 +252,8 @@ public class Dash : MonoBehaviour
                 // 마지막으로 뒤의 Coral Siren이 도착하면
                 if (CoralSirenMoving.dash == true && bossGetGoal == true)
                 {
+                    coralSiren_Back.transform.GetChild(0).gameObject.SetActive(false);
+
                     bossGetGoal = false;
 
                     directionCheck = false;
@@ -271,6 +272,7 @@ public class Dash : MonoBehaviour
             coralSiren_Back.GetComponent<SpriteRenderer>().flipX = false;
 
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", true);
+
             yield return new WaitForSeconds(1.7f);
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", false);
 
@@ -284,6 +286,10 @@ public class Dash : MonoBehaviour
             coralSiren_Back.GetComponent<SpriteRenderer>().flipX = true;
 
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", true);
+
+            // 뒤 FX 효과 ON
+            coralSiren_Back.transform.GetChild(0).gameObject.SetActive(true);
+
             yield return new WaitForSeconds(1.7f);
             coralSiren_Back.GetComponent<Animator>().SetBool("Ready Dash", false);
 

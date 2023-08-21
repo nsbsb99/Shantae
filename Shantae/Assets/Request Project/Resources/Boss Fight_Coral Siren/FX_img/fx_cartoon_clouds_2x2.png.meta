@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 286d6a2a7dae5f64880df4b28b71af5c
+guid: ae00f614f3845cb40983025fd5b90bbc
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: fx_electricity_thin_yellow_0
+      name: fx_cartoon_clouds_2x2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 256
-        width: 256
-        height: 256
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +143,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3817e94ba88c8754484dc313f38c49c4
-      internalID: -410599978
+      spriteID: ca64951b72c06c641a2603261db21e1d
+      internalID: 1693748279
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fx_electricity_thin_yellow_1
+      name: fx_cartoon_clouds_2x2_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
-        width: 256
-        height: 256
+        x: 512
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,20 +164,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b804abe76e72ac846acd1d71665209f1
-      internalID: -1023537871
+      spriteID: 1108c8c32a5cb4249af8b180f93c4e76
+      internalID: 1852583053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fx_electricity_thin_yellow_2
+      name: fx_cartoon_clouds_2x2_2
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
-        height: 256
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -185,20 +185,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 477413cef126c9845a0f8621599100e6
-      internalID: 1577480775
+      spriteID: d6ad7532fbb41ad4a8dd833bbf607b31
+      internalID: -1555610401
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fx_electricity_thin_yellow_3
+      name: fx_cartoon_clouds_2x2_3
       rect:
         serializedVersion: 2
-        x: 256
+        x: 512
         y: 0
-        width: 256
-        height: 256
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,8 +206,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55e53ee00dffa434d9fdef097066a399
-      internalID: 478420695
+      spriteID: 1c38e3c16a4a30a479d3274393bc313d
+      internalID: 2089820321
       vertices: []
       indices: 
       edges: []
@@ -223,10 +223,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      fx_electricity_thin_yellow_0: -410599978
-      fx_electricity_thin_yellow_1: -1023537871
-      fx_electricity_thin_yellow_2: 1577480775
-      fx_electricity_thin_yellow_3: 478420695
+      fx_cartoon_clouds_2x2_0: 1693748279
+      fx_cartoon_clouds_2x2_1: 1852583053
+      fx_cartoon_clouds_2x2_2: -1555610401
+      fx_cartoon_clouds_2x2_3: 2089820321
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -64,3 +64,6 @@ TagManager:
   - name: Attack
     uniqueID: 3199951125
     locked: 0
+  - name: Effect
+    uniqueID: 2703677415
+    locked: 0

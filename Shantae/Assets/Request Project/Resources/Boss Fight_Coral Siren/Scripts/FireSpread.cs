@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,6 +11,7 @@ using UnityEngine;
 
 public class FireSpread : MonoBehaviour
 {
+    #region Coral Siren의 움직임 변수
     Transform coralSiren_Back;
     Transform coralSiren_Front;
     Animator coralSiren_Back_Animator;
@@ -39,6 +41,17 @@ public class FireSpread : MonoBehaviour
     private int selectedRandom = default;
     private float coralPositionX = default;
     private float coralPositionY = default;
+    #endregion
+
+    private GameObject fireBallPrefab;
+    private GameObject[] fireBalls;
+    private GameObject fireBall_Left;
+    private GameObject fireBall_Right;
+
+    private Vector2 poolPosition_fireBalls = new Vector2(-2, 10f);
+
+    private bool launchFireBalls = false;
+    private float fireBallSpeed = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +79,26 @@ public class FireSpread : MonoBehaviour
         secondFirePosition = -1.91f;
         thirdFirePosition = 1.88f;
         fourthFirePosition = 5.79f;
+
+
+        // 불꽃 공격구
+        fireBalls = new GameObject[2];
+
+        fireBallPrefab = Resources.Load<GameObject>
+            ("Boss Fight_Coral Siren/Prefabs/Fire Spread Attacks");
+        Debug.Assert(fireBallPrefab != null);
+
+        for(int i = 0; i < 2; i++)
+        {
+            fireBalls[i] = Instantiate(fireBallPrefab, poolPosition_fireBalls, 
+                Quaternion.identity);
+            Debug.Assert(fireBalls[i] != null);
+        }
+
+        fireBalls[1].transform.GetChild(0).GetComponent<SpriteRenderer>().flipX = true;
+
+        fireBall_Right = fireBalls[0];
+        fireBall_Left = fireBalls[1];
     }
 
     // Update is called once per frame
@@ -163,7 +196,6 @@ public class FireSpread : MonoBehaviour
                 fallSpeed * Time.deltaTime);
         }
 
-        /// <point> 여기에 sand = null일 때 체크.
         // 앞의 Coral Siren이 땅과 충돌하면 
         if (CoralSirenMoving.fireSpread == true &&
             FrontGrounded.coralSiren_Front_Grounded == true)
@@ -178,6 +210,15 @@ public class FireSpread : MonoBehaviour
             StartCoroutine(Sanded());
 
             FrontGrounded.coralSiren_Front_Sanded = false;
+        }
+
+        // 불 공격 이동
+        if (launchFireBalls == true)
+        {
+            fireBall_Left.transform.Translate
+                (Vector2.left * Time.deltaTime * fireBallSpeed);
+            fireBall_Right.transform.Translate
+                (Vector2.right * Time.deltaTime * fireBallSpeed);
         }
 
         // 앞의 Coral Siren이 위로 올라가라는 신호를 받았다면
@@ -238,6 +279,13 @@ public class FireSpread : MonoBehaviour
     {
         // 불 공격 진입 
         coralSiren_Front_Animator.SetBool("Fire", true);
+        fireBall_Right.transform.position = new Vector2
+            (coralSiren_Front.position.x + 3f, coralSiren_Front.position.y - 1.45f);
+        fireBall_Left.transform.position = new Vector2
+            (coralSiren_Front.position.x - 3f, coralSiren_Front.position.y - 1.45f);
+
+        launchFireBalls = true;
+
         yield return new WaitForSeconds(4.0f);
 
         // 앞의 Coral Siren을 위로 올려보내기

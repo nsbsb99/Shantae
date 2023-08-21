@@ -16,6 +16,8 @@ public class GrabLever : MonoBehaviour
     public static bool sandActive = false;
     private Transform lever;
 
+    private GameObject sandCloud;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,14 @@ public class GrabLever : MonoBehaviour
 
         // 레버를 잡아당길 위치
         leverPosition = new Vector2(5.58f, transform.position.y);
+
+        sandCloud = GameObject.Find("FX_Full Sand Effects");
+        
+        // 모래구름
+        for(int i = 0; i < 8; i++)
+        {
+            sandCloud.transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -42,6 +52,11 @@ public class GrabLever : MonoBehaviour
                 StartCoroutine(PullLever());
             }
         }
+
+        if (sandActive == true)
+        {
+            StartCoroutine(RemoveSandCloud());
+        }
     }
 
     IEnumerator PullLever()
@@ -50,8 +65,17 @@ public class GrabLever : MonoBehaviour
         //레버 rotation 삽입
         lever.Rotate(Vector3.forward * Time.deltaTime * degreePerSecond);
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
+        // 모래 채우기 이펙트 재생
+        for (int i = 0; i < 8; i++)
+        {
+            sandCloud.transform.GetChild(i).gameObject.SetActive(true);
+        }
+
         animator.SetBool("Grab Lever", false);
         animator.SetBool("Fire Bomb", false);
+
+        // 레버가 돌아갈 각도 결정
         if (Mathf.Abs(lever.eulerAngles.z - originLever) > 3f)
         {
             lever.Rotate(-(Vector3.forward) * Time.deltaTime * degreePerSecond_Return);
@@ -62,5 +86,20 @@ public class GrabLever : MonoBehaviour
         }
 
         sandActive = true;
+
+        StopCoroutine(PullLever());
+    }
+
+    private IEnumerator RemoveSandCloud()
+    {
+        yield return new WaitForSeconds(3);
+        
+        // 모래 채우기 이펙트 초기화
+        for (int i = 0; i < 8; i++)
+        {
+            sandCloud.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        StopCoroutine(RemoveSandCloud());
     }
 }

@@ -79,6 +79,8 @@ public class CoralSirenMoving : MonoBehaviour
 
             grabLever = false;
             GrabLever.sandActive = false;
+
+            thirdPatternDone = true;
         }
 
         // 패턴 연속 실행 코드
@@ -104,9 +106,11 @@ public class CoralSirenMoving : MonoBehaviour
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
+        Debug.Log("행동 코루틴 진입");
+
         // 발동 조건 체크
         if (firstSand.activeSelf == false || secondSand.activeSelf == false
-                || thirdSand == false || fourthSand == false)
+                || thirdSand.activeSelf == false || fourthSand.activeSelf == false)
         {
             // 모래 중 하나라도 비어있다면 바로 모래 채우는 패턴 실행
             randomAttack = 3;
@@ -114,6 +118,7 @@ public class CoralSirenMoving : MonoBehaviour
         else
         {
             randomAttack = Random.Range(0, 3);
+            randomAttack = 1; // 임시
         }
 
         yield return new WaitForSeconds(3f);
@@ -147,7 +152,7 @@ public class CoralSirenMoving : MonoBehaviour
         else if (randomAttack == 3)
         {
             // 모래 채우기 준비
-           grabLever = true;
+            grabLever = true;
         }
     }
 }
