@@ -10394,6 +10394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 932201aa353d9fd4baa9b465537c5f45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 1181935908}
   bigOrnPrefab: {fileID: 1672567450739356660, guid: a889181111b26f740b1976393dd45522, type: 3}
   hand: 15
 --- !u!1 &1465365351

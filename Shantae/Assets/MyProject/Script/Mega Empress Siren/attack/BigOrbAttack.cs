@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BigOrbAttack : MonoBehaviour
 {
+    public GameObject body;
     public GameObject bigOrnPrefab;
     public float hand;
 
@@ -17,16 +18,18 @@ public class BigOrbAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lastSpawnTime += Time.deltaTime;
-        witchHand = (Random.Range(0, 2) == 0) ? hand : -hand;
-        if (lastSpawnTime >= timeBetSpawn)
+        if (body != null)
         {
-            Attack();
-            timeBetSpawn = Random.Range(spawnMin, spawnMax);
-            lastSpawnTime = 0f;
+            lastSpawnTime += Time.deltaTime;
+            witchHand = (Random.Range(0, 2) == 0) ? hand : -hand;
+            if (lastSpawnTime >= timeBetSpawn)
+            {
+                Attack();
+                timeBetSpawn = Random.Range(spawnMin, spawnMax);
+                lastSpawnTime = 0f;
 
+            }
         }
-
     }
     private void Attack()
     {

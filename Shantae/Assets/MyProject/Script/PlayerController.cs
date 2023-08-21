@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
+                    jumpCount += 1;
                     isAir = true;
                     animator.SetBool("isGround", !isAir);
                     isJumping = true;
