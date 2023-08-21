@@ -47,8 +47,10 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D boxCollider;
     public float bottomY;
 
-    private bool trigger = false;
+    // (노솔빈 수정)
+    public static Vector2 playerPosition = default;
 
+    private bool trigger = false;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +67,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // (노솔빈 수정)플레이어의 좌표를 실시간으로 뿌림.
+        playerPosition = transform.position;
 
         //Debug.Log("");
 

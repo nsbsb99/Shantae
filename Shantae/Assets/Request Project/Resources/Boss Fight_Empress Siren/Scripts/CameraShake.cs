@@ -10,10 +10,17 @@ public class CameraShake : MonoBehaviour
 {
     public static CameraShake instance;
 
-    // Camera 오브젝트에만 달 것
-    private const float shakeTime = 0.3f;
+    // ShakeThisCam
+    private const float firstShakeTime = 0.15f;
+    private const float secondShakeTime = 0.1f;
     private const float shakeSpeed = 10.0f;
-    private const float shakeAmount = 0.15f;
+    private const float firstShakeAmount = 0.1f;
+    private const float secondShakeAmount = 0.05f;
+
+    // CeilingShake
+    private float ceilingShakeAmount = 0.07f;
+    private float ceilingShakeTime = 0.5f;
+    private float ceilingShakeSpeed = 20.0f;
 
     private Vector3 originalPosition;
 
@@ -43,24 +50,83 @@ public class CameraShake : MonoBehaviour
     public IEnumerator ShakeThisCam()
     {
         ///<summary>
-        /// 카메라를 흔드는 코루틴. 
+        /// 처음 백그라운드 전환 시 카메라를 흔드는 코루틴. 
         ///</summary>
-        
+
         Vector3 originPosition = transform.position;
 
         float elapsed = 0.0f;
 
-        while (elapsed < shakeTime)
+        while (elapsed < firstShakeTime)
         {
-            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * shakeAmount;
+            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * firstShakeAmount;
             transform.position = new Vector3
-                (originPosition.x, originPosition.y + yOffset, -10f);
+                (originPosition.x, originPosition.y - yOffset, -10f);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        // 카메라 흔들기 코루틴이 끝나면 본래 좌표로 복귀
+        // 본래 좌표로 복귀
         transform.position = originalPosition;
+
+        elapsed = 0.0f;
+
+        while (elapsed < secondShakeTime)
+        {
+            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * secondShakeAmount;
+            transform.position = new Vector3
+                (originPosition.x, originPosition.y - yOffset, -10f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 본래 좌표로 복귀
+        transform.position = originalPosition;
+
+        StopCoroutine(ShakeThisCam());
+    }
+
+    public IEnumerator CeilingShake()
+    {
+        ///<summary>
+        /// Empress Siren이 천장에서 공격 시 카메라를 흔드는 코루틴. (상하좌우)
+        ///</summary>
+
+        Vector3 originPosition = transform.position;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < ceilingShakeTime)
+        {
+            elapsed += Time.deltaTime;
+
+            float xOffset = Mathf.Sin(Time.time * shakeSpeed) * ceilingShakeAmount;
+            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * ceilingShakeAmount;
+            transform.position = new Vector3
+                (originPosition.x - xOffset, originPosition.y + yOffset, -10f);
+
+            yield return null;
+        }
+
+        elapsed = 0.0f;
+
+        while (elapsed < ceilingShakeTime)
+        {
+            elapsed += Time.deltaTime;
+
+            float xOffset = Mathf.Sin(Time.time * ceilingShakeSpeed) * ceilingShakeAmount;
+            float yOffset = Mathf.Sin(Time.time * ceilingShakeSpeed) * ceilingShakeAmount;
+            transform.position = new Vector3
+                (originPosition.x + xOffset, originPosition.y - yOffset, -10f);
+
+            yield return null;
+        }
+
+        // 본래 좌표로 복귀
+        transform.position = originalPosition;
+
+        StopCoroutine(CeilingShake());
     }
 }

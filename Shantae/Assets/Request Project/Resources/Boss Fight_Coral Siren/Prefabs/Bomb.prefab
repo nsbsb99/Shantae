@@ -221,6 +221,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7fe3ee080d75f489b3a58bc6d7a3f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upDone: 0
+  falling: 0
+  alreadyRun: 0
+  backThePool: 0
+  allBack: 0
 --- !u!50 &6707424779461303962
 Rigidbody2D:
   serializedVersion: 4
