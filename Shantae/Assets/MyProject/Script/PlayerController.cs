@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     private int playerHP = 50;
 
     public float jumpForce = 20f;
-    public float fallForce = 10f;
+    public float fallForce;
     private bool isJumping = false;
     private bool octoJump = false;
     private bool isAir = false;
@@ -70,7 +70,6 @@ public class PlayerController : MonoBehaviour
         // (노솔빈 수정)플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
 
-        Debug.Log(overSand);
         //Debug.Log("");
 
         //if(!isAir && !drillOn)
@@ -101,7 +100,10 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
-                isAir = false; 
+                // octoJump = false;
+                animator.SetBool("OctoJump", octoJump);
+                isAir = false;
+                animator.SetBool("isGround", !isAir);
                 overSand = false;
             }
             if (hit.collider.CompareTag("SandStep"))
@@ -116,7 +118,7 @@ public class PlayerController : MonoBehaviour
                 overSand = false;
             }
         }
-        else
+        else if (!Physics2D.Raycast(raycastOrigin, Vector2.down, 0.005f))
         {
             // 바닥과 충돌하지 않은 경우
             isAir = true;
@@ -445,7 +447,9 @@ public class PlayerController : MonoBehaviour
 
         isAttack = false;
         jump.SetActive(false);
+        octoJump = false;
 
+        animator.SetBool("OctoJump", octoJump);
         animator.SetBool("Attack", isAttack);
     }
     #endregion

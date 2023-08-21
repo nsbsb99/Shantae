@@ -25,6 +25,10 @@ public class CameraLocation : MonoBehaviour
         {
             Vector3 newPosition = new Vector3(0f, 15f, -1f); // 새로운 위치 설정
             transform.position = newPosition;
+            Camera camera = GetComponent<Camera>();
+
+            // 카메라 크기 설정
+            camera.orthographicSize = 12f;
         }
 
     }
