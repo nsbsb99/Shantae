@@ -82,7 +82,7 @@ public class BigOrb : MonoBehaviour
                 // 플레이어 방향 회전
                 float targetAngle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
                 Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 0.3f);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 0.00001f);
 
                 // 플레이어에게 이동
                 Vector3 forwardDirection = transform.right;
@@ -127,5 +127,12 @@ public class BigOrb : MonoBehaviour
 
         // Restore the original color
         spriteRenderer.color = originalColor;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag.Equals("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

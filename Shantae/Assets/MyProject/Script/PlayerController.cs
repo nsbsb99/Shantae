@@ -93,22 +93,23 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
             jumpCount = 0;
-            if (hit.collider.CompareTag("Air"))
+            if (hit.collider.CompareTag("Air") || hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
             {
-                if(isJumping)
+                if (hit.collider.CompareTag("Ground"))
                 {
                     isAir = false;
                     animator.SetBool("isGround", !isAir);
 
-                    isJumping = true;
-                    animator.SetBool("Jump", isJumping);
                 }
-                if (!isJumping && !drillOn)
+                else
                 {
                     isAir = true;
                     animator.SetBool("isGround", !isAir);
+                    isJumping = true;
+                    animator.SetBool("Jump", isJumping);
                     transform.Translate(Vector3.down * fallForce * Time.deltaTime);
                 }
+                
             }
             if (hit.collider.CompareTag("Ground"))
             {
@@ -473,11 +474,7 @@ public class PlayerController : MonoBehaviour
     {
 
         if (collision.tag.Equals("Damage"))
-        {
-            if (collision.CompareTag("Damage"))
-            {
-                //ObjectPoolManager.Instance.FindObjectPoolWithTag(collision.tag)?.ReturnToPool(collision.gameObject);
-            }
+        {           
 
             if (!invincible)        // 무적시간
             {
