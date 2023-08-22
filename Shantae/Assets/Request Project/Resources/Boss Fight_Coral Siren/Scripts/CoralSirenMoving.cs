@@ -118,7 +118,6 @@ public class CoralSirenMoving : MonoBehaviour
         else
         {
             randomAttack = Random.Range(0, 3);
-            randomAttack = 1; // 임시
         }
 
         yield return new WaitForSeconds(3f);
@@ -146,6 +145,7 @@ public class CoralSirenMoving : MonoBehaviour
         }
         else if (randomAttack == 2)
         {
+            /// <problem> 불뿌리기 자세로 전환되지 않고 오른쪽 대시 애니메이션으로 전환되는 문제
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
         }

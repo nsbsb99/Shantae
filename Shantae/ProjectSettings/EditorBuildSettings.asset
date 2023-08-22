@@ -5,19 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Request Project/Scenes/Start Scene.unity
+    guid: f0bfc00d35c840643af7954b746c12db
   - enabled: 1
     path: Assets/Request Project/Scenes/Boss Fight_Empress Siren.unity
     guid: df34ba4f9aebebc4da66a69a5e707e56
-  - enabled: 1
+  - enabled: 0
     path: Assets/Request Project/Scenes/Boss Fight_Coral Siren.unity
     guid: 7dccde69865d3fa4bb0ae629185a41e3
   - enabled: 1
-    path: Assets/MyProject/Scenes/Lobby.unity
-    guid: 28bdf1ac1003bc847be34f4dc581ec37
-  - enabled: 1
-    path: Assets/MyProject/Scenes/Boss Fight Mega_Empress Siren.unity
-    guid: d4c7c2070217e37489ba01813cc2ad8c
+    path: Assets/Request Project/Scenes/Loading Scene.unity
+    guid: ae16c9239cd528f43b065b69d676752f
   m_configObjects: {}
