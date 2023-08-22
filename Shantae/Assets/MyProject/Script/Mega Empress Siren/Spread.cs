@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+// === (노솔빈 수정) 빌드 테스트 중 오류 발생으로 삭제.
+//using Unity.VisualScripting;
+// ===
 using UnityEngine;
-using static Unity.VisualScripting.Metadata;
+// === (노솔빈 수정) 빌드 테스트 중 오류 발생으로 삭제.
+//using static Unity.VisualScripting.Metadata;
+// ===
 
 public class Spread : MonoBehaviour
 {

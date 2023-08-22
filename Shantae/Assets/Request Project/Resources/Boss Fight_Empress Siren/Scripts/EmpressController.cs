@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Empress Siren의 패배 조건을 다루는 스크립트. "PlayerAttack" 태그에 충돌하면 
+/// Empress Siren의 HP가 감소.
+/// </summary>
+/// 
 public class EmpressController : MonoBehaviour
 {
     // Empress Siren의 HP

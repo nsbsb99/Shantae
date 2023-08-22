@@ -71,8 +71,10 @@ public class EmpressMoving : MonoBehaviour
         /// 보스의 랜덤 이동과 그에 맞는 공격을 결정하는 메서드
         /// </summary>
         
-        // 1.5초 후 보스가 행동을 시작하도록 지정.(후에 컷신 종료 시 시작되도록 변경 필요)
-        yield return new WaitForSeconds(1.5f);
+        /// <point> Empress Siren의 시작 유예 시간. CameraShake와 같음. (컷신 종료 후 실행)
+        yield return new WaitForSeconds(3f);
+
+        spriteRenderer.flipX = false;
 
         // 만약 Empress Siren의 체력이 0보다 크다면 전투 지속 
         while (EmpressController.empressHP > 0)
@@ -81,7 +83,6 @@ public class EmpressMoving : MonoBehaviour
             rightWall = false;
 
             randomValue = Random.Range(0, 3);
-            randomValue = 2; // 임시
 
             if (randomValue == 0)
             {

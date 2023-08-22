@@ -29,8 +29,6 @@ public class CameraShake : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            // 메인카메라 파괴 방지
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -45,6 +43,7 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         originalPosition = transform.position;
+        StartCoroutine(ShakeThisCam());
     }
 
     public IEnumerator ShakeThisCam()
@@ -56,6 +55,9 @@ public class CameraShake : MonoBehaviour
         Vector3 originPosition = transform.position;
 
         float elapsed = 0.0f;
+
+        /// <point> Empress Siren의 시작 유예 시간. (컷신 종료 후 실행되도록 수정 필요)
+        yield return new WaitForSeconds(3f);
 
         while (elapsed < firstShakeTime)
         {

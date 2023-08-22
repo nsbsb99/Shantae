@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 게임 전체 UI와 ESC 반응 등을 총괄. 이후 Lobby로 이동. 
+/// </summary>
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -11,9 +15,6 @@ public class GameManager : MonoBehaviour
     private Transform secondHeart_UI;
     private Transform thirdHeart_UI;
     private Transform fourthHeart_UI;
-
-    // 메인 카메라 파괴 방지
-    private GameObject mainCamera;
 
     // 플레이어 허용 피격 횟수
     private int fullLife = 16;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         if(instance == null)
         {
+            /// <point> GameManager는 이후 Lobby로 옮기도록 함. 
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -45,10 +47,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // 메인 카메라 파괴 방지
-        mainCamera = GameObject.FindWithTag("MainCamera");
-        DontDestroyOnLoad (mainCamera);
-
         // UI 캔버스
         canvas_UI = GameObject.Find("UI Canvas");
         DontDestroyOnLoad(canvas_UI);
@@ -82,21 +80,29 @@ public class GameManager : MonoBehaviour
             {
                 if (fullLife == 16)
                 {
+                    PlayerController.gotDamage = false;
+
                     fourthHeart_UI.GetChild(4).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 15)
                 {
+                    PlayerController.gotDamage = false;
+
                     fourthHeart_UI.GetChild(3).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 14)
                 {
+                    PlayerController.gotDamage = false;
+
                     fourthHeart_UI.GetChild(2).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 13)
                 {
+                    PlayerController.gotDamage = false;
+
                     fourthHeart_UI.GetChild(1).gameObject.SetActive(false);
                     fullLife--;
 
@@ -108,21 +114,29 @@ public class GameManager : MonoBehaviour
             {
                 if (fullLife == 12)
                 {
+                    PlayerController.gotDamage = false;
+
                     thirdHeart_UI.GetChild(4).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 11)
                 {
+                    PlayerController.gotDamage = false;
+
                     thirdHeart_UI.GetChild(3).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 10)
                 {
+                    PlayerController.gotDamage = false;
+
                     thirdHeart_UI.GetChild(2).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 9)
                 {
+                    PlayerController.gotDamage = false;
+
                     thirdHeart_UI.GetChild(1).gameObject.SetActive(false);
                     fullLife--;
                 }
@@ -132,21 +146,29 @@ public class GameManager : MonoBehaviour
             {
                 if (fullLife == 8)
                 {
+                    PlayerController.gotDamage = false;
+
                     secondHeart_UI.GetChild(4).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 7)
                 {
+                    PlayerController.gotDamage = false;
+
                     secondHeart_UI.GetChild(3).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 6)
                 {
+                    PlayerController.gotDamage = false;
+
                     secondHeart_UI.GetChild(2).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 5)
                 {
+                    PlayerController.gotDamage = false;
+
                     secondHeart_UI.GetChild(1).gameObject.SetActive(false);
                     fullLife--;
                 }
@@ -156,21 +178,29 @@ public class GameManager : MonoBehaviour
             {
                 if (fullLife == 4)
                 {
+                    PlayerController.gotDamage = false;
+
                     firstHeart_UI.GetChild(4).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 3)
                 {
+                    PlayerController.gotDamage = false;
+
                     firstHeart_UI.GetChild(3).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 2)
                 {
+                    PlayerController.gotDamage = false;
+
                     firstHeart_UI.GetChild(2).gameObject.SetActive(false);
                     fullLife--;
                 }
                 else if (fullLife == 1)
                 {
+                    PlayerController.gotDamage = false;
+
                     firstHeart_UI.GetChild(1).gameObject.SetActive(false);
                     fullLife--;
                 }
@@ -183,7 +213,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
     // 김건휘 작성
     private void  pase2_5()
     {        

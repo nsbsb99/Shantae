@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartSelect : MonoBehaviour
+public class ChoiceTriangle : MonoBehaviour
 {
     // 선택 삼각형에 접근하기 위한 UI Canvas
     private GameObject canvas_UI;
@@ -45,7 +45,8 @@ public class StartSelect : MonoBehaviour
             // Enter 입력 시 다음 씬으로.
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+                SceneManager.instance.StartCoroutine
+                    (SceneManager.instance.OpenLoadingScene());
             }
         }    
         else if (wantStart == false)
