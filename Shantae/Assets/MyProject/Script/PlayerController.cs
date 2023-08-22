@@ -100,16 +100,16 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
             jumpCount = 0;
-            if (hit.collider.CompareTag("Air") || hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
+            if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
             {
                 if (hit.collider.CompareTag("Ground"))
                 {
                     isAir = false;
                     animator.SetBool("isGround", !isAir);
-
                 }
                 else
                 {
+                    jumpCount += 1;
                     isAir = true;
                     animator.SetBool("isGround", !isAir);
                     isJumping = true;
@@ -126,8 +126,9 @@ public class PlayerController : MonoBehaviour
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
                 overSand = false;
+                playerRigid.gravityScale = 1;
             }
-            if (hit.collider.CompareTag("SandStep"))
+            else if (hit.collider.CompareTag("SandStep"))
             {
                 //Debug.Log(stepSand);
                 isAir = false;
@@ -135,18 +136,30 @@ public class PlayerController : MonoBehaviour
 
                 overSand = true;
                 stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
+                playerRigid.gravityScale = 1;
+
             }
             else
             {
+
                 overSand = false;
+                transform.Translate(Vector3.down * fallForce * Time.deltaTime);
+
             }
         }
         else if (!Physics2D.Raycast(raycastOrigin, Vector2.down, 0.005f))
         {
             // 바닥과 충돌하지 않은 경우
+            playerRigid.gravityScale = 0;
+
             isAir = true;
             if (!isJumping && !drillOn)
             {
+                if(jumpCount == 0)
+                {
+                jumpCount += 1;
+                }
+
                 transform.Translate(Vector3.down * fallForce * Time.deltaTime);
             }
         }
