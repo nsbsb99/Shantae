@@ -55,7 +55,6 @@ public class LittleOrb : MonoBehaviour
             {
                 elecObject.SetActive(true);
 
-                // Update elecObject's position to match the transform's position
                 StartCoroutine(FollowTransformPosition(elecObject));
 
             }
@@ -157,7 +156,6 @@ public class LittleOrb : MonoBehaviour
 
     private void OnDestroy()
     {
-        // This method is called when the component is disabled or the object is returned to the pool
         ReturnAllToPool();
     }
 }
