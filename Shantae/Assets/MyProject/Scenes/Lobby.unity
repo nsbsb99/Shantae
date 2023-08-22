@@ -704,6 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftD: {fileID: 974832046}
   RightD: {fileID: 413440597}
+  isEmpress: 0
 --- !u!61 &868725615
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1259,6 +1260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LeftD: {fileID: 1800509619}
   RightD: {fileID: 811071459}
+  isEmpress: 1
 --- !u!61 &1571494538
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -39,7 +39,7 @@ public class Acceesorybreak : MonoBehaviour
         {
             elapsedTime = Time.time - startTime;
         }
-        if (elapsedTime < 0.1f)
+        if (elapsedTime < 0.9f)
         {
             Vector2 newPosition = rb.position + Vector2.up * floatSpeed * Time.deltaTime;
             rb.MovePosition(newPosition);
