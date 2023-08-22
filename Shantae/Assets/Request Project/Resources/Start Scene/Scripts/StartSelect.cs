@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StartSelect : MonoBehaviour
 {
@@ -40,6 +41,12 @@ public class StartSelect : MonoBehaviour
             {
                 wantStart = false;
             }
+
+            // Enter 입력 시 다음 씬으로.
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+            }
         }    
         else if (wantStart == false)
         {
@@ -51,6 +58,12 @@ public class StartSelect : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 wantStart = true;
+            }
+
+            // Enter 입력 시 게임 종료
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                Application.Quit();
             }
         }
     }
