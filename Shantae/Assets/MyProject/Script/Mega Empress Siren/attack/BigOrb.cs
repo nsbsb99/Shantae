@@ -41,7 +41,7 @@ public class BigOrb : MonoBehaviour
             Vector3 playerPosition = player.transform.position;
 
             // Empress의 Transform 컴포넌트를 사용하여 x값 가져오기
-            float empressX = empress.transform.position.x;
+            //float empressX = empress.transform.position.x;
 
         }
 

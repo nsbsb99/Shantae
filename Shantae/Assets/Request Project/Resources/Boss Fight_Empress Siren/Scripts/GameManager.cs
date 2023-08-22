@@ -5,14 +5,15 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    public bool mageSiren;
 
     // 김건휘 작성
     public GameObject body;
+    public Transform particle;
     public Transform platform;
     public Transform player;
     public Transform spawner;
     private bool move = false;
-    public bool pase2Camera = false;
     // 김건휘
 
     private void Awake()
@@ -40,10 +41,12 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
 
-
-        if(body == null)
+        if (mageSiren)
         {
-            pase2_5();
+            if (body == null)
+            {
+                pase2_5();
+            }
         }
     }
 
@@ -61,12 +64,12 @@ public class GameManager : MonoBehaviour
                 move = true;
             }
         }
-        //if (spawner != null)                                                    /// 떨어졌을때 넣을 코드
-        //{
-        //    Vector3 newPosition = new Vector3(10f, 0f, 0f); // 새로운 위치 설정
-        //    spawner.position = newPosition;
-        //}
-        if(platform != null)
+        if (particle != null)                                                    /// 떨어졌을때 넣을 코드
+        {
+            Vector3 newPosition = new Vector3(0f, -9f, 0f); // 새로운 위치 설정
+            particle.position = newPosition;
+        }
+        if (platform != null)
         {
             if (!move)
             {

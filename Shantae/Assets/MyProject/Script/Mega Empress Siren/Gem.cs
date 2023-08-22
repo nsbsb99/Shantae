@@ -7,12 +7,10 @@ public class Gem : MonoBehaviour
     //public bool startTimer = false;
     public GameObject gemBreakPrefab;
     private int gemHP = 1;
-    private EmpressAnimation empressAnimation;
     private EmpressAnimation[] empressAnimations;
     // Start is called before the first frame update
     void Start()
     {
-        empressAnimation = FindObjectOfType<EmpressAnimation>();
         empressAnimations = FindObjectsOfType<EmpressAnimation>();
 
         
@@ -23,8 +21,6 @@ public class Gem : MonoBehaviour
     {
         if (gemHP <= 0)
         {
-            //startTimer = true;
-            //gemBreakPrefab.SetActive(true);
             Vector3 spawnPosition = transform.position;
             Quaternion spawnRotation = transform.rotation; 
             foreach (EmpressAnimation empressAnimation in empressAnimations)

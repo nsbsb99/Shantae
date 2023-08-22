@@ -117,6 +117,7 @@ public class PlayerController : MonoBehaviour
             }
             if (hit.collider.CompareTag("Ground"))
             {
+                Debug.Log("땅");
                 // 바닥과 충돌한 경우
                  octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
@@ -127,7 +128,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("SandStep"))
             {
-                //Debug.Log(stepSand);
+                Debug.Log("모래");
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
 
@@ -147,7 +148,10 @@ public class PlayerController : MonoBehaviour
         else if (!Physics2D.Raycast(raycastOrigin, Vector2.down, 0.005f))
         {
             // 바닥과 충돌하지 않은 경우
+            if(!drillOn)
+            {
             playerRigid.gravityScale = 0;
+            }
 
             isAir = true;
             if (!isJumping && !drillOn)
@@ -233,7 +237,6 @@ public class PlayerController : MonoBehaviour
 
         if ((!isAttack || isJumping) && !isDamage)
         {
-
             if (Input.GetKeyDown(KeyCode.Z))        // 공격
             {
                 isAttack = true;
@@ -282,15 +285,18 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (overSand)
                 {
+                    playerRigid.gravityScale = 1;
                     stepSand.SetActive(false);      //저장한(밟고있던)모래를 비활성화
                     boxCollider.size = new Vector2(0.7f, 0.7f);
                     boxCollider.offset = new Vector2(0f, 0f);
                     drillOn = true;
                     animator.SetBool("Drill", drillOn);
+
                 }
             }
             if (Input.GetKeyUp(KeyCode.DownArrow) && !drillOn)
             {
+
                 isDown = false;
                 isDownAndRun = false;
                 boxCollider.size = new Vector2(0.7f, 2f);
@@ -357,7 +363,9 @@ public class PlayerController : MonoBehaviour
             {
                 isRun = false;
                 isDown = false;
-                animator.SetBool("Run", isRun);
+                animator.SetBool("Run", isRun); 
+                animator.SetBool("Down", isDown);
+
             }
         }
         else

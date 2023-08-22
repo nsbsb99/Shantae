@@ -27,7 +27,6 @@ public class BigOrbAttack : MonoBehaviour
                 Attack();
                 timeBetSpawn = Random.Range(spawnMin, spawnMax);
                 lastSpawnTime = 0f;
-
             }
         }
     }
