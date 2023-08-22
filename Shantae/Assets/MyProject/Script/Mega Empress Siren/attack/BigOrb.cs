@@ -97,7 +97,7 @@ public class BigOrb : MonoBehaviour
             {
                 if (transform.position.x > 0f)
                 {
-                    Vector3 newPosition = transform.position + new Vector3(moveSpeed/100, 0, 0);
+                    Vector3 newPosition = transform.position + new Vector3(moveSpeed/500, 0, 0);
 
                     // 새로운 위치로 오브젝트 이동
                     transform.position = newPosition;
@@ -106,7 +106,7 @@ public class BigOrb : MonoBehaviour
                 }
                 else if (transform.position.x <= 0f)
                 {
-                    Vector3 newPosition = transform.position + new Vector3(- moveSpeed/100, 0, 0);
+                    Vector3 newPosition = transform.position + new Vector3(- moveSpeed/500, 0, 0);
 
                     // 새로운 위치로 오브젝트 이동
                     transform.position = newPosition;

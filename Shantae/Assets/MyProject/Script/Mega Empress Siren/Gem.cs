@@ -7,10 +7,15 @@ public class Gem : MonoBehaviour
     //public bool startTimer = false;
     public GameObject gemBreakPrefab;
     private int gemHP = 1;
+    private EmpressAnimation empressAnimation;
+    private EmpressAnimation[] empressAnimations;
     // Start is called before the first frame update
     void Start()
     {
-       
+        empressAnimation = FindObjectOfType<EmpressAnimation>();
+        empressAnimations = FindObjectsOfType<EmpressAnimation>();
+
+        
     }
 
     // Update is called once per frame
@@ -21,8 +26,11 @@ public class Gem : MonoBehaviour
             //startTimer = true;
             //gemBreakPrefab.SetActive(true);
             Vector3 spawnPosition = transform.position;
-            Quaternion spawnRotation = transform.rotation;
-
+            Quaternion spawnRotation = transform.rotation; 
+            foreach (EmpressAnimation empressAnimation in empressAnimations)
+            {
+                empressAnimation.EmpressDamage();
+            }
             // 프리팹을 소환
             Instantiate(gemBreakPrefab, spawnPosition, spawnRotation);
 

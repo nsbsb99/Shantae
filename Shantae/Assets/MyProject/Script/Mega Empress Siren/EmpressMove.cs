@@ -25,4 +25,6 @@ public class EmpressMove : MonoBehaviour
         else if(!moveLeft)
         { transform.Translate(Vector3.right * moveSpeed * Time.deltaTime); }
     }
+
+    
 }
