@@ -47,8 +47,10 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D boxCollider;
     public float bottomY;
 
-    // (노솔빈 수정)
+    // === (노솔빈 수정)
     public static Vector2 playerPosition = default;
+    public static bool gotDamage = false;
+    // ===
 
     private bool trigger = false;
 
@@ -67,8 +69,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // (노솔빈 수정)플레이어의 좌표를 실시간으로 뿌림.
+        // === (노솔빈 수정) 플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
+        // ===
 
         //Debug.Log("");
 
@@ -478,13 +481,17 @@ public class PlayerController : MonoBehaviour
     {
 
         if (collision.tag.Equals("Damage"))
-        {           
-
+        {
             if (!invincible)        // 무적시간
             {
                 invincible = true;
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
                 //Debug.Log("123");
+
+                // === (노솔빈 수정) 플레이어의 데미지를 게임매니저에 전달
+                // 무적시간 동안 추가 피격 없도록 수정이 필요. 
+                gotDamage = true;
+                // ===
             }
         }
         if (collision.tag.Equals("Sand"))

@@ -38,6 +38,8 @@ public class CeilingAttack : MonoBehaviour
     private bool leftFinish = false;
     private bool rightFinish = false;
     private bool fixRotation = false;
+
+    private GameObject playerPosition = default;
     #endregion
 
     private void Start()
@@ -68,6 +70,8 @@ public class CeilingAttack : MonoBehaviour
         firstDestination_Right = new Vector2(7.0f, 3.35f);
         secondDestination_Right = new Vector2(7.0f, -3.0f);
         thirdDestination_Right = new Vector2(0.6f, -3.0f);
+
+        playerPosition = GameObject.FindWithTag("Player");
     }
 
     private void Update()
@@ -126,6 +130,9 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_first.position, secondDestination_Left) < 0.01f)
             {
+                thirdDestination_Left = new Vector2
+                (playerPosition.transform.position.x, thirdDestination_Left.y);
+
                 ceilingMoveIndex++;
             }
         }
@@ -139,6 +146,7 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_first.position, thirdDestination_Left) < 0.01f)
             {
+                ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Play();
                 ceilingMoveIndex++;
             }
         }
@@ -185,6 +193,9 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_second.position, secondDestination_Right) < 0.01f)
             {
+                thirdDestination_Right = new Vector2
+                (playerPosition.transform.position.x, thirdDestination_Right.y);
+
                 ceilingMoveIndex_Right++;
             }
         }
