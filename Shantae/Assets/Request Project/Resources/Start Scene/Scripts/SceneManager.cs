@@ -43,4 +43,16 @@ public class SceneManager : MonoBehaviour
         UnityEngine.SceneManagement.
             SceneManager.LoadScene("Boss Fight_Empress Siren", LoadSceneMode.Single);
     }
+
+    public IEnumerator OpenLoadingScene_Second()
+    {
+        UnityEngine.SceneManagement.
+            SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+
+        yield return new WaitForSeconds(3);
+
+        /// <point> 추후 완성 시 'Mega Empress Siren'으로 교체
+        UnityEngine.SceneManagement.
+            SceneManager.LoadScene("Boss Fight_Coral Siren", LoadSceneMode.Single);
+    }
 }
