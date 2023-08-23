@@ -27,7 +27,10 @@ public class GameManager : MonoBehaviour
     public Transform platform;
     public Transform player;
     public Transform spawner;
+    public Transform end;
     private bool move = false;
+    private bool move2 = false;
+
     // 김건휘
 
     private void Awake()
@@ -237,13 +240,19 @@ public class GameManager : MonoBehaviour
         }
         if (platform != null)
         {
-            if (!move)
+            if (!move2)
             {
                 Vector3 newPosition = new Vector3(0f, 11f, 0f); // 새로운 위치 설정
                 platform.position = newPosition;
-                move = true;
+                move2 = true;
             }
         }
+        if(end != null)
+        {
+            Vector3 newPosition = new Vector3(0f, 0f, 0f); // 새로운 위치 설정
+            platform.position = newPosition;
+        }
+
     }
 
     // 김건휘 작성
