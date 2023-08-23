@@ -73,14 +73,14 @@ public class PlayerController : MonoBehaviour
         // === (노솔빈 수정) 플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
         // ===
-        
+
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
         bottomY = transform.position.y - playerHeight;
 
         animator.SetBool("isGround", !isAir);
         if (invincible && !isFlashing)
         {
-            StartCoroutine(FlashPlayer(0.1f)); 
+            StartCoroutine(FlashPlayer(0.1f));
         }
 
         if (Input.GetKeyUp(KeyCode.X))
@@ -91,8 +91,8 @@ public class PlayerController : MonoBehaviour
         }
 
 
-            Vector2 raycastOrigin = new Vector2(transform.position.x,
-            transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
+        Vector2 raycastOrigin = new Vector2(transform.position.x,
+        transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
 
         Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스 레이저 가시광선
 
@@ -118,12 +118,12 @@ public class PlayerController : MonoBehaviour
                     animator.SetBool("Jump", isJumping);
                     transform.Translate(Vector3.down * fallForce * Time.deltaTime);
                 }
-                
+
             }
             if (hit.collider.CompareTag("Ground"))
             {
                 // 바닥과 충돌한 경우
-                 octoJump = false;
+                octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
@@ -151,17 +151,17 @@ public class PlayerController : MonoBehaviour
         else if (!Physics2D.Raycast(raycastOrigin, Vector2.down, 0.005f))
         {
             // 바닥과 충돌하지 않은 경우
-            if(!drillOn)
+            if (!drillOn)
             {
-            playerRigid.gravityScale = 0;
+                playerRigid.gravityScale = 0;
             }
 
             isAir = true;
             if (!isJumping && !drillOn)
             {
-                if(jumpCount == 0)
+                if (jumpCount == 0)
                 {
-                jumpCount += 1;
+                    jumpCount += 1;
                 }
 
                 transform.Translate(Vector3.down * fallForce * Time.deltaTime);
@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
             jumpStartTime = Time.time;
             jumpCount += 1;
-            if(jumpCount == 1)
+            if (jumpCount == 1)
             {
                 animator.SetBool("Jump", isJumping);
 
@@ -266,15 +266,30 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                if (drillOn)
+                {
+                    animator.SetTrigger("DrillRight");
 
-                transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
-                transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+                }
+                else
+                {
+                    transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+                }
+                    transform.Translate(Vector3.right * moveSpeed * Time.deltaTime);
 
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
-                transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-                transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+                if (drillOn)
+                {
+                    transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+                    animator.SetTrigger("DrillLeft");
+                }
+                else
+                {
+                    transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
+                }
+                    transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.DownArrow) && !isAir)
             {
@@ -304,7 +319,6 @@ public class PlayerController : MonoBehaviour
                 boxCollider.offset = new Vector2(0.385f, -0.9f);
             }
         }
-       
     }
 
     private void playerAnimation()      // 플레이어 지상 애니메이션
@@ -534,7 +548,8 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag.Equals("Sand"))
-        { 
+        {
+            jumpCount = 3;
             inSand = false;
             if (trigger)
             {
@@ -548,7 +563,7 @@ public class PlayerController : MonoBehaviour
             boxCollider.size = new Vector2(0.7f, 2.1f);
             boxCollider.offset = new Vector2(0.385f, -0.9f);
             drillOn = false;
-            animator.SetBool("Drill", drillOn);            
+            animator.SetBool("Drill", drillOn);
         }
     }
 
