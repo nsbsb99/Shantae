@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private bool inSand = false;
     private bool drillOn = false;
     private bool drillJump = false;
+    private Vector3 headDirection = Vector3.up;
     private List<GameObject> breakSand = new List<GameObject>();            // 부숴진 모래들의 리스트 (레버 당기면 활성화)
     public List<GameObject> deactivatedParents = new List<GameObject>();
 
@@ -79,15 +80,7 @@ public class PlayerController : MonoBehaviour
         // === (노솔빈 수정) 플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
         // ===
-
-        //Debug.Log("");
-
-        //if(!isAir && !drillOn)
-        //{
-        //    isJumping = false;
-        //    animator.SetBool("Jump", isJumping);
-
-        //}
+        
         float playerHeight = GetComponent<Renderer>().bounds.extents.y;
         bottomY = transform.position.y - playerHeight;
 
@@ -97,8 +90,15 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FlashPlayer(0.1f)); 
         }
 
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            isJumping = false;
 
-        Vector2 raycastOrigin = new Vector2(transform.position.x,
+            animator.SetBool("Jump", isJumping);
+        }
+
+
+            Vector2 raycastOrigin = new Vector2(transform.position.x,
             transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
 
         Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스 레이저 가시광선
@@ -113,6 +113,8 @@ public class PlayerController : MonoBehaviour
                 {
                     isAir = false;
                     animator.SetBool("isGround", !isAir);
+                    isJumping = false;
+                    animator.SetBool("Jump", isJumping);
                 }
                 else
                 {
@@ -127,7 +129,6 @@ public class PlayerController : MonoBehaviour
             }
             if (hit.collider.CompareTag("Ground"))
             {
-                Debug.Log("땅");
                 // 바닥과 충돌한 경우
                  octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
@@ -138,7 +139,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("SandStep"))
             {
-                Debug.Log("모래");
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
 
@@ -177,7 +177,6 @@ public class PlayerController : MonoBehaviour
         playerAnimation();          // 플레이어가 보여줄 애니메이션
 
 
-        //if (Input.GetKeyDown(KeyCode.X) && !isJumping && !isAir && !isDown)      // 점프
         if (Input.GetKeyDown(KeyCode.X) && jumpCount < 3 && !isDown)      // 점프
         {
             isJumping = true;
@@ -193,7 +192,6 @@ public class PlayerController : MonoBehaviour
                 octoJump = true;
                 animator.SetBool("OctoJump", octoJump);
             }
-            //animator.SetBool("Jump", isJumping);
             if (Input.GetKeyDown(KeyCode.Z))        // 공격
             {
                 animator.SetBool("Attack", isAttack);
@@ -247,7 +245,7 @@ public class PlayerController : MonoBehaviour
 
         if ((!isAttack || isJumping) && !isDamage)
         {
-            if (Input.GetKeyDown(KeyCode.Z))        // 공격
+            if (Input.GetKeyDown(KeyCode.Z) && !drillOn)        // 공격
             {
                 isAttack = true;
 
@@ -258,7 +256,7 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine(DownAttack(0.15f));         //공격하면 
 
                 }
-                else if (!isJumping && !isDown)
+                else if (!isAir && !isDown)
                 {
                     originalPosition = transform.position;
                     animator.SetBool("Attack", isAttack);
@@ -313,7 +311,7 @@ public class PlayerController : MonoBehaviour
                 boxCollider.offset = new Vector2(0.385f, -0.9f);
             }
         }
-
+       
     }
 
     private void playerAnimation()      // 플레이어 지상 애니메이션
@@ -514,7 +512,6 @@ public class PlayerController : MonoBehaviour
             {
                 invincible = true;
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
-                //Debug.Log("123");
 
                 // === (노솔빈 수정) 플레이어의 데미지를 게임매니저에 전달
                 // 무적시간 동안 추가 피격 없도록 수정이 필요. 
@@ -540,14 +537,6 @@ public class PlayerController : MonoBehaviour
                 deactivatedParents.Add(sandPiece); // 비활성화된 부모 오브젝트를 리스트에 추가
             }
         }
-        //if (collision.tag.Equals("Air"))
-        //{
-        //    isAir = true;
-        //    if (!isJumping && !drillOn)
-        //    {
-        //        transform.Translate(Vector3.down * fallForce * Time.deltaTime);
-        //    }
-        //}
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -563,25 +552,10 @@ public class PlayerController : MonoBehaviour
                 trigger = false;
             }
 
-            //float jumptime = Time.time - jumpStartTime;
-
-            //if (jumptime <= 0.3)
-            //{
-            //    isJumping = false;
-            //    animator.SetBool("Jump", isJumping);
-            //    transform.Translate(Vector3.up * jumpForce * Time.deltaTime);
-
-            //}
-            //else
-            //{
-            //    isJumping = false;
-            //    animator.SetBool("Jump", isJumping);
             boxCollider.size = new Vector2(0.7f, 2.1f);
             boxCollider.offset = new Vector2(0.385f, -0.9f);
             drillOn = false;
-            animator.SetBool("Drill", drillOn);
-
-            //}
+            animator.SetBool("Drill", drillOn);            
         }
     }
 
@@ -589,16 +563,12 @@ public class PlayerController : MonoBehaviour
     {
          transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
-        // Start Invincible coroutine
         StartCoroutine(Invincible(invincibleDelay));
 
-        // Start Damage coroutine
         StartCoroutine(Damage(damageDelay));
 
-        // Wait for both coroutines to finish
         yield return new WaitForSeconds(invincibleDelay);
 
-        //originalPosition = transform.position;
 
         invincible = false;
     }
@@ -608,7 +578,6 @@ public class PlayerController : MonoBehaviour
         isDamage = true;
         animator.SetBool("isDamage", isDamage);
 
-        // Save the original position before the delay
         originalPosition = transform.position;
 
         yield return new WaitForSeconds(delay);

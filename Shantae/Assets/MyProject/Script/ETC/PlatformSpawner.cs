@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
+
     public GameObject platformPrefab;
     public float speedSlow;
     public float speedFast;
@@ -36,16 +37,28 @@ public class PlatformSpawner : MonoBehaviour
 
     private void Update()
     {
+        bool trigger = EndBoss.finish;
         lastSpawnTime += Time.deltaTime;
         selectSpeed = (Random.Range(0, 3) == 0) ? speedFast : speedSlow;
-        
-        if (lastSpawnTime >= timeBetSpawn)
+        if (!trigger)
         {
-            SpawnPlatform();
-            timeBetSpawn = Random.Range(spawnMin, spawnMax);
-            lastSpawnTime = 0f;
+
+            if (lastSpawnTime >= timeBetSpawn)
+            {
+                SpawnPlatform();
+                timeBetSpawn = Random.Range(spawnMin, spawnMax);
+                lastSpawnTime = 0f;
+            }
+
         }
-        
+        else
+        {
+            for (int i = 0; i < poolSize; i++)
+            {
+                platforms[i] = Instantiate(platformPrefab, Vector3.zero, Quaternion.identity);
+                platforms[i].SetActive(false);
+            }
+        }
     }
     private void SpawnPlatform()
     {

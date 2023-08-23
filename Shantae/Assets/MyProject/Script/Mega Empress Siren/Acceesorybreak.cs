@@ -8,7 +8,7 @@ public class Acceesorybreak : MonoBehaviour
     public float rotationSpeed; // 회전 속도 
     public bool isClockwise; // 시계방향 회전 여부
 
-    private float floatSpeed = 200.0f; // 오브젝트가 위로 올라가는 속도
+    public float floatSpeed = 200.0f; // 오브젝트가 위로 올라가는 속도
 
     private Rigidbody2D rb;
 
