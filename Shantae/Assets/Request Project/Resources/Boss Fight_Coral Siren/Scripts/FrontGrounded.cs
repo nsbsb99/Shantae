@@ -17,6 +17,7 @@ public class FrontGrounded : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("1");
         animator = GetComponent<Animator>();
     }
 
@@ -26,7 +27,7 @@ public class FrontGrounded : MonoBehaviour
         if (collision.gameObject.CompareTag("SandStep") ||
             (collision.gameObject.CompareTag("SandPiece")))
         {
-            Debug.Log("모래와 충돌!");
+            //Debug.Log("모래와 충돌!");
             coralSiren_Front_Grounded = true;
         }
 
