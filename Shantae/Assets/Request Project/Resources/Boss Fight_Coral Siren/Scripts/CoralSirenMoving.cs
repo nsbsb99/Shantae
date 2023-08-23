@@ -72,7 +72,7 @@ public class CoralSirenMoving : MonoBehaviour
         // 레버를 당기는 액션을 취했다면 모래를 채우고 초기화 신호 뿌리기
         if (GrabLever.sandActive == true)
         {
-            for (int i = 1; i < 7; i++)
+            for (int i = 0; i < 7; i++)
             {
                 firstSand.transform.GetChild(i).gameObject.SetActive(true);
                 secondSand.transform.GetChild(i).gameObject.SetActive(true);
@@ -108,7 +108,7 @@ public class CoralSirenMoving : MonoBehaviour
     IEnumerator RandomMoving()
     {
         // 모래 채우기 발동 조건 체크
-        for (int i = 1; i < 7; i++)
+        for (int i = 0; i < 7; i++)
         {
             if (firstSand.transform.GetChild(i).gameObject.activeSelf == false ||
                 secondSand.transform.GetChild(i).gameObject.activeSelf == false ||
@@ -121,6 +121,7 @@ public class CoralSirenMoving : MonoBehaviour
             else
             {
                 randomAttack = Random.Range(0, 3);
+                randomAttack = 2; // 임시
             }
         }
        
