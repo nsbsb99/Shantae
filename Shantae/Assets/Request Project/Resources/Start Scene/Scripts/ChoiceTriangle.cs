@@ -45,8 +45,8 @@ public class ChoiceTriangle : MonoBehaviour
             // Enter 입력 시 다음 씬으로.
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                SceneManager.instance.StartCoroutine
-                    (SceneManager.instance.OpenLoadingScene());
+                AllSceneManager.instance.StartCoroutine
+                    (AllSceneManager.instance.OpenLoadingScene());
             }
         }    
         else if (wantStart == false)
