@@ -53,6 +53,17 @@ public class HopBackAttack : MonoBehaviour
 
             readyRun = false;
         }
+
+        // 만약 empressHP <= 0이면 전부 파괴
+        if (EmpressController.empressHP <= 0)
+        {
+            for (int i = 0; i < hopBackCount; i++)
+            {
+                // 이동 스크립트 끄기
+                hopBacks[i].GetComponent<HopBackBullet>().enabled = false;
+                hopBacks[i].transform.position = poolPosition_hopBack;
+            }
+        }
     }
 
     IEnumerator LocateFirePosition()

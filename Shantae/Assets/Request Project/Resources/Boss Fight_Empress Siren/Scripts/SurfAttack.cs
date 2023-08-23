@@ -71,6 +71,12 @@ public class SurfAttack : MonoBehaviour
 
             runCheck = false;
         }
+            
+        if (EmpressController.empressHP <= 0)
+        {
+            frontScimatar.transform.position = poolPosition_scimartar;
+            backScimatar.transform.position = poolPosition_scimartar;
+        }
     }
 
     IEnumerator FireBlades()

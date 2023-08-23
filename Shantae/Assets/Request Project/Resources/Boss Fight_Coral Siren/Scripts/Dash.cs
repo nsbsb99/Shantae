@@ -41,6 +41,8 @@ public class Dash : MonoBehaviour
     private ParticleSystem leftDashParticle_Front;
     private ParticleSystem rightDashParticle_Front;
 
+    private CapsuleCollider2D dashCollider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -87,6 +89,8 @@ public class Dash : MonoBehaviour
         // 우측으로 대시할 때 파티클 시스템_앞
         rightDashParticle_Front =
             coralSiren_Front.GetChild(1).GetComponent<ParticleSystem>();
+
+        dashCollider = coralSiren_Front.GetComponent<CapsuleCollider2D>();
 
     }
 

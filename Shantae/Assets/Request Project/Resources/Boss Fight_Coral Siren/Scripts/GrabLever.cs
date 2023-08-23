@@ -43,12 +43,15 @@ public class GrabLever : MonoBehaviour
         if (CoralSirenMoving.grabLever == true)
         {
             animator.SetBool("Fire Bomb", true);
+            transform.GetComponent<SpriteRenderer>().flipX = false;
+
             // 레버 위치로 이동
             transform.position = Vector2.MoveTowards(transform.position, leverPosition,
                 moveSpeed * Time.deltaTime);
 
             if (Vector2.Distance(leverPosition, transform.position) <= 0.1f)
             {
+                CoralSirenMoving.grabLever = false;
                 StartCoroutine(PullLever());
             }
         }

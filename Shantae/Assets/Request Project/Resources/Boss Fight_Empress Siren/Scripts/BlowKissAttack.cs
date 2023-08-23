@@ -137,6 +137,15 @@ public class BlowKissAttack : MonoBehaviour
                 blowKisses[i].GetComponent<BlowKissMoving>().enabled = false;
             }
         }
+
+        // empressHP <= 0이면 전부 풀에 고정
+        if (EmpressController.empressHP <= 0)
+        {
+            for (int i = 0; i < blowKissCount; i++)
+            {
+                blowKisses[i].transform.position = poolPosition_blowKiss;
+            }
+        }
     }
 
     IEnumerator StartAttack()

@@ -68,6 +68,14 @@ public class EmpressMoving : MonoBehaviour
         StartCoroutine(RandomMoving());
     }
 
+    private void Update()
+    {
+        if (EmpressController.empressHP <= 0)
+        {
+            StopCoroutine(RandomMoving());
+        }
+    }
+
     public IEnumerator RandomMoving()
     {
         ///<summary>
@@ -86,7 +94,6 @@ public class EmpressMoving : MonoBehaviour
             rightWall = false;
 
             randomValue = Random.Range(0, 3);
-            randomValue = 2; // 임시
 
             if (randomValue == 0)
             {
@@ -171,7 +178,6 @@ public class EmpressMoving : MonoBehaviour
             }
 
             randomValue_Ground = Random.Range(0, 2);
-            randomValue_Ground = 0; // 임시
 
             // x축으로 뒤집힌 보스를 원상태로 되돌리기
             if (spriteRenderer.flipX == true)

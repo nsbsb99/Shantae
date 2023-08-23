@@ -66,7 +66,10 @@ public class PlayerController : MonoBehaviour
         Debug.Assert(animator != null);
 
         // === (³ë¼Öºó ¼öÁ¤)
-        transform.GetComponent<PlayerEntry>().enabled = false;
+        if (transform.GetComponent<PlayerEntry>() != null)
+        {
+            transform.GetComponent<PlayerEntry>().enabled = false;
+        }
         // ===
     }
 

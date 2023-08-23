@@ -72,15 +72,16 @@ public class CoralSirenMoving : MonoBehaviour
         // 레버를 당기는 액션을 취했다면 모래를 채우고 초기화 신호 뿌리기
         if (GrabLever.sandActive == true)
         {
-            firstSand.SetActive(true);
-            secondSand.SetActive(true);
-            thirdSand.SetActive(true);
-            fourthSand.SetActive(true);
+            for (int i = 1; i < 7; i++)
+            {
+                firstSand.transform.GetChild(i).gameObject.SetActive(true);
+                secondSand.transform.GetChild(i).gameObject.SetActive(true);
+                thirdSand.transform.GetChild(i).gameObject.SetActive(true);
+                fourthSand.transform.GetChild(i).gameObject.SetActive(true);
+            }
 
-            grabLever = false;
             GrabLever.sandActive = false;
-
-            thirdPatternDone = true;
+            StartCoroutine(RandomMoving());
         }
 
         // 패턴 연속 실행 코드
@@ -106,24 +107,29 @@ public class CoralSirenMoving : MonoBehaviour
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
-        Debug.Log("행동 코루틴 진입");
-
-        // 발동 조건 체크
-        if (firstSand.activeSelf == false || secondSand.activeSelf == false
-                || thirdSand.activeSelf == false || fourthSand.activeSelf == false)
+        // 모래 채우기 발동 조건 체크
+        for (int i = 1; i < 7; i++)
         {
-            // 모래 중 하나라도 비어있다면 바로 모래 채우는 패턴 실행
-            randomAttack = 3;
+            if (firstSand.transform.GetChild(i).gameObject.activeSelf == false ||
+                secondSand.transform.GetChild(i).gameObject.activeSelf == false ||
+                thirdSand.transform.GetChild(i).gameObject.activeSelf == false ||
+                fourthSand.transform.GetChild(i).gameObject.activeSelf == false)
+            {
+                // 모래 중 하나라도 비어있다면 바로 모래 채우는 패턴 실행
+                randomAttack = 3;
+            }
+            else
+            {
+                randomAttack = Random.Range(0, 3);
+            }
         }
-        else
-        {
-            randomAttack = Random.Range(0, 3);
-        }
-
+       
         yield return new WaitForSeconds(3f);
 
         if (randomAttack == 0)
         {
+            Debug.Log("0: 폭탄 발사");
+
             // 폭탄 발사
             animator.SetBool("Fire Bomb", true);
 
@@ -139,18 +145,24 @@ public class CoralSirenMoving : MonoBehaviour
         }
         else if (randomAttack == 1)
         {
+            Debug.Log("1: 대시");
+
             // 대시 준비 (DashCharging)
             dash = true;
            
         }
         else if (randomAttack == 2)
         {
+            Debug.Log("2: 불 뿌리기");
+
             /// <problem> 불뿌리기 자세로 전환되지 않고 오른쪽 대시 애니메이션으로 전환되는 문제
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
         }
         else if (randomAttack == 3)
         {
+            Debug.Log("3: 모래 채우기");
+
             // 모래 채우기 준비
             grabLever = true;
         }

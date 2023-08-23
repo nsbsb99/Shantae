@@ -93,6 +93,12 @@ public class CeilingAttack : MonoBehaviour
             LeftCeilingAttack();
             RightCeilingAttack();
         }
+
+        if (EmpressController.empressHP <= 0)
+        {
+            ceiling_first.position = poolPosition_ceiling;
+            ceiling_second.position = poolPosition_ceiling;
+        }
     }
 
     void LeftCeilingAttack()

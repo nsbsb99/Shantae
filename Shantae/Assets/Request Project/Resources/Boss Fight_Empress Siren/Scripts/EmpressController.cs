@@ -23,8 +23,8 @@ public class EmpressController : MonoBehaviour
     private Color transparentColor = default;
     // 플레이어 포지션
     private Vector2 playerPosition = default;
-    // Empress Siren의 포지션
-    private Vector2 empressPosition = default;
+
+    private bool alreadyRun = false;
 
     private void Start()
     {
@@ -45,11 +45,12 @@ public class EmpressController : MonoBehaviour
     private void Update()
     {
         // Empress Siren의 패배 확인
-        if (empressHP <= 0)
+        if (empressHP <= 0 && alreadyRun == false)
         {
-            // EmpressMoving 코루틴 종료 메서드 추가
-            StopCoroutine(EmpressMoving.instance.RandomMoving());
+            // EmpressMoving 종료 메서드 추가
+            transform.GetComponent<EmpressMoving>().enabled = false;
 
+            alreadyRun = true;
             StartCoroutine(PlayerWin());
         }
     }
@@ -93,34 +94,43 @@ public class EmpressController : MonoBehaviour
 
     private IEnumerator PlayerWin()
     {
-        playerPosition = GameObject.FindWithTag("Player").transform.position;
-        empressPosition = transform.position;
-
         GameObject.FindWithTag("Player").GetComponent<PlayerExit>().enabled = true;
 
+        yield return new WaitForSeconds(0.5f);
+
+        playerPosition = GameObject.FindWithTag("Player").transform.position;
+
         // 패배 시 플레이어가 Empress Siren의 왼쪽에 위치
-        if (playerPosition.x < empressPosition.x)
+        if (playerPosition.x < 0)
         {
+            Debug.Log("왼쪽 보기");
+            transform.position = new Vector2(playerPosition.x + 4f, -1.44f);
             transform.GetComponent<SpriteRenderer>().flipX = true;
+            animator.SetTrigger("Empress Lose");
         }
-        else if (playerPosition.x > empressPosition.x) // Empress Siren의 오른쪽에 위치
+        else if (playerPosition.x >= 0) // Empress Siren의 오른쪽에 위치
         {
+            Debug.Log("오른쪽 보기");
+            transform.position = new Vector2(playerPosition.x - 4f, -1.44f);
             transform.GetComponent<SpriteRenderer>().flipX = false;
+
+            animator.SetTrigger("Empress Lose");
         }
 
-        animator.SetTrigger("Empress Lose");
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(3.5f);
 
         teleportAnimator.SetActive(true);
+        transform.GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds
             (teleportAnimator.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length);
         teleportAnimator.SetActive(false);
 
-        transform.GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(3f);
 
-        yield return new WaitForSeconds(2f);
-
+        GameObject.FindWithTag("Player").GetComponent<PlayerController>().enabled = false;
         CameraShake.instance.StartCoroutine(CameraShake.instance.OpenTheDoor());
+
+        StopCoroutine(PlayerWin());
 
         // 자기자신(Empress Siren 종료)
         gameObject.SetActive(false);
