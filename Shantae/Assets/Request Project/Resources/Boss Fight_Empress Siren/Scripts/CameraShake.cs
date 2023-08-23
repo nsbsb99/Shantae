@@ -24,6 +24,10 @@ public class CameraShake : MonoBehaviour
 
     private Vector3 originalPosition;
 
+    // Empress Siren 패배 시 백그라운드 교체
+    private GameObject backgrounds;
+    public bool itPlayed = false;
+
     private void Awake()
     {
         if (instance == null)
@@ -43,6 +47,9 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         originalPosition = transform.position;
+
+        backgrounds = GameObject.Find("Backgrounds");
+
         StartCoroutine(ShakeThisCam());
     }
 
@@ -131,4 +138,48 @@ public class CameraShake : MonoBehaviour
 
         StopCoroutine(CeilingShake());
     }
+
+    public IEnumerator OpenTheDoor()
+    {
+        Vector3 originPosition = transform.position;
+
+        float elapsed = 0.0f;
+
+        while (elapsed < firstShakeTime)
+        {
+            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * firstShakeAmount;
+            transform.position = new Vector3
+                (originPosition.x, originPosition.y - yOffset, -10f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 본래 좌표로 복귀
+        transform.position = originalPosition;
+
+        elapsed = 0.0f;
+
+        while (elapsed < secondShakeTime)
+        {
+            float yOffset = Mathf.Sin(Time.time * shakeSpeed) * secondShakeAmount;
+            transform.position = new Vector3
+                (originPosition.x, originPosition.y - yOffset, -10f);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // 백그라운드 교체 
+        backgrounds.transform.GetChild(2).gameObject.SetActive(false);
+        backgrounds.transform.GetChild(1).gameObject.SetActive(true);
+
+        // 본래 좌표로 복귀
+        transform.position = originalPosition;
+
+        // PlayerExit 활성화
+        itPlayed = true;
+
+        StopCoroutine(OpenTheDoor());
+    }    
 }

@@ -13,6 +13,7 @@ using UnityEngine;
 public class EmpressMoving : MonoBehaviour
 {
     public static EmpressMoving instance;
+    private BoxCollider2D empressHitBox;
 
     #region 움직임 패턴 결정
     // 보스의 패턴 결정_벽 or 천장
@@ -62,7 +63,17 @@ public class EmpressMoving : MonoBehaviour
 
     private void Start()
     {
+        empressHitBox = transform.GetComponent<BoxCollider2D>();
+
         StartCoroutine(RandomMoving());
+    }
+
+    private void Update()
+    {
+        if (EmpressController.empressHP <= 0)
+        {
+            StopCoroutine(RandomMoving());
+        }
     }
 
     public IEnumerator RandomMoving()
@@ -72,7 +83,7 @@ public class EmpressMoving : MonoBehaviour
         /// </summary>
         
         /// <point> Empress Siren의 시작 유예 시간. CameraShake와 같음. (컷신 종료 후 실행)
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3.5f);
 
         spriteRenderer.flipX = false;
 
@@ -90,6 +101,11 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds
                     (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
                 teleportAni.SetActive(false);
+
+                // 콜라이더 사이즈 조정
+                empressHitBox.size = new Vector2(5, 4.2f);
+                // 콜라이더 위치 조정
+                empressHitBox.offset = new Vector2(0.8f, -0.2f);
 
                 // 왼쪽 벽
                 transform.position = new Vector2(-6.6f, 1.54f);
@@ -112,6 +128,11 @@ public class EmpressMoving : MonoBehaviour
                     (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
                 teleportAni.SetActive(false);
 
+                // 콜라이더 사이즈 조정
+                empressHitBox.size = new Vector2(5, 4.2f);
+                // 콜라이더 위치 조정
+                empressHitBox.offset = new Vector2(0.8f, -0.2f);
+
                 // 오른쪽 벽
                 transform.position = new Vector2(6.43f, 1.54f);
                 spriteRenderer.flipX = true;
@@ -133,6 +154,11 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds
                     (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
                 teleportAni.SetActive(false);
+
+                // 콜라이더 사이즈 조정
+                empressHitBox.size = new Vector2(3.2f, 3);
+                // 콜라이더 위치 조정
+                empressHitBox.offset = new Vector2(0.3f, 0.2f);
 
                 // 천장
                 transform.position = new Vector2(-0.29f, 2.18f);
@@ -166,6 +192,11 @@ public class EmpressMoving : MonoBehaviour
                     (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
                 teleportAni.SetActive(false);
 
+                // 콜라이더 사이즈 조정
+                empressHitBox.size = new Vector2(6.5f, 4.2f);
+                // 콜라이더 위치 조정
+                empressHitBox.offset = new Vector2(0.5f, -0.2f);
+
                 // 바닥 Surf
                 transform.position = new Vector2(-4.07f, -1.72f);
                 animator.Play("Surf");
@@ -186,6 +217,11 @@ public class EmpressMoving : MonoBehaviour
                 yield return new WaitForSeconds
                     (teleportAniTime.GetCurrentAnimatorStateInfo(0).length - 0.2f);
                 teleportAni.SetActive(false);
+
+                // 콜라이더 사이즈 조정
+                empressHitBox.size = new Vector2(4, 4.2f);
+                // 콜라이더 위치 조정
+                empressHitBox.offset = new Vector2(-0.2f, -0.2f);
 
                 // 바닥 Hop
                 transform.position = new Vector2(-4.07f, -1.44f);

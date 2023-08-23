@@ -18,20 +18,25 @@ public class GrabLever : MonoBehaviour
 
     private GameObject sandCloud;
 
+    private bool pullLever = default;
+    private bool backLever = default;
+
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         lever = GameObject.Find("Lever").transform;
+        Debug.Assert(lever != null);
+
         originLever = lever.eulerAngles.z;
 
         // 레버를 잡아당길 위치
         leverPosition = new Vector2(5.58f, transform.position.y);
 
         sandCloud = GameObject.Find("FX_Full Sand Effects");
-        
+
         // 모래구름
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
             sandCloud.transform.GetChild(i).gameObject.SetActive(false);
         }
@@ -43,28 +48,55 @@ public class GrabLever : MonoBehaviour
         if (CoralSirenMoving.grabLever == true)
         {
             animator.SetBool("Fire Bomb", true);
+            transform.GetComponent<SpriteRenderer>().flipX = false;
+
             // 레버 위치로 이동
             transform.position = Vector2.MoveTowards(transform.position, leverPosition,
                 moveSpeed * Time.deltaTime);
 
             if (Vector2.Distance(leverPosition, transform.position) <= 0.1f)
             {
+                CoralSirenMoving.grabLever = false;
                 StartCoroutine(PullLever());
             }
         }
 
-        if (sandActive == true)
+        // 레버 당기기
+        if (pullLever == true && backLever == false)
         {
-            StartCoroutine(RemoveSandCloud());
+            Debug.Log("진입!");
+            //레버 rotation 삽입
+            lever.Rotate(Vector3.forward * Time.deltaTime * degreePerSecond);
+
+            Debug.Log(lever.rotation.eulerAngles.z);
+
+            // 레버가 돌아갈 각도 결정
+            if (lever.rotation.eulerAngles.z > 40f)
+            {
+                backLever = true;
+            }
         }
+        else if (pullLever == true && backLever == true)
+        {
+            Debug.Log("이차 진입!");
+            lever.Rotate(Vector3.back * Time.deltaTime * degreePerSecond_Return);
+
+            if (Mathf.Abs(lever.eulerAngles.z - originLever) <= 3f)
+            {
+                lever.eulerAngles = Vector3.zero;
+
+                pullLever = false;
+                backLever = false;
+            }
+        }
+
     }
 
     IEnumerator PullLever()
     {
         animator.SetBool("Grab Lever", true);
-        //레버 rotation 삽입
-        lever.Rotate(Vector3.forward * Time.deltaTime * degreePerSecond);
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        pullLever = true;
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length + 0.5f);
 
         // 모래 채우기 이펙트 재생
         for (int i = 0; i < 8; i++)
@@ -72,28 +104,20 @@ public class GrabLever : MonoBehaviour
             sandCloud.transform.GetChild(i).gameObject.SetActive(true);
         }
 
+        sandActive = true;
+
         animator.SetBool("Grab Lever", false);
         animator.SetBool("Fire Bomb", false);
 
-        // 레버가 돌아갈 각도 결정
-        if (Mathf.Abs(lever.eulerAngles.z - originLever) > 3f)
-        {
-            lever.Rotate(-(Vector3.forward) * Time.deltaTime * degreePerSecond_Return);
-        }
-        else if (Mathf.Abs(lever.eulerAngles.z - originLever) <= 3f)
-        {
-            lever.eulerAngles = Vector3.zero;
-        }
-
-        sandActive = true;
-
-        StopCoroutine(PullLever());
+        StartCoroutine(RemoveSandCloud());
     }
 
     private IEnumerator RemoveSandCloud()
     {
+        StopCoroutine(PullLever());
+
         yield return new WaitForSeconds(3);
-        
+
         // 모래 채우기 이펙트 초기화
         for (int i = 0; i < 8; i++)
         {

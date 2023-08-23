@@ -65,6 +65,13 @@ public class PlayerController : MonoBehaviour
 
         Debug.Assert(playerRigid != null);
         Debug.Assert(animator != null);
+
+        // === (³ë¼Öºó ¼öÁ¤)
+        if (transform.GetComponent<PlayerEntry>() != null)
+        {
+            transform.GetComponent<PlayerEntry>().enabled = false;
+        }
+        // ===
     }
 
     // Update is called once per frame

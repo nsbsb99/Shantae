@@ -25,15 +25,17 @@ public class CeilingAttack : MonoBehaviour
     // 왼쪽
     Vector2 firstDestination_Left = default;
     Vector2 secondDestination_Left = default;
-    Vector2 thirdDestination_Left = default;
 
     //오른쪽
     Vector2 firstDestination_Right = default;
     Vector2 secondDestination_Right = default;
+
+    // 마지막 목적지
+    Vector2 thirdDestination_Left = default;
     Vector2 thirdDestination_Right = default;
 
-    private int ceilingMoveIndex = 0;
-    private int ceilingMoveIndex_Right = 0;
+    public int ceilingMoveIndex = 0;
+    public int ceilingMoveIndex_Right = 0;
 
     private bool leftFinish = false;
     private bool rightFinish = false;
@@ -64,12 +66,13 @@ public class CeilingAttack : MonoBehaviour
         // 왼쪽 공격의 목적지 순차적 설정
         firstDestination_Left = new Vector2(-7.25f, 3.35f);
         secondDestination_Left = new Vector2(-7.25f, -3.0f);
-        thirdDestination_Left = new Vector2(-0.7f, -3.0f);
 
         //오른쪽 공격의 목적지 순차적 설정
         firstDestination_Right = new Vector2(7.0f, 3.35f);
         secondDestination_Right = new Vector2(7.0f, -3.0f);
-        thirdDestination_Right = new Vector2(0.6f, -3.0f);
+
+        thirdDestination_Left = new Vector2(0f, -3.2f);
+        thirdDestination_Right = new Vector2(0f, -3.2f);
 
         playerPosition = GameObject.FindWithTag("Player");
     }
@@ -90,11 +93,16 @@ public class CeilingAttack : MonoBehaviour
             LeftCeilingAttack();
             RightCeilingAttack();
         }
+
+        if (EmpressController.empressHP <= 0)
+        {
+            ceiling_first.position = poolPosition_ceiling;
+            ceiling_second.position = poolPosition_ceiling;
+        }
     }
 
     void LeftCeilingAttack()
     {
-
         if (ceilingMoveIndex == 0 && leftFinish == false)
         {
             // 양쪽 공격이 공유하는 공격 시작 지점
@@ -117,12 +125,15 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_first.position, firstDestination_Left) < 0.01f)
             {
+                ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Play();
                 ceilingMoveIndex++;
             }
         }
 
         else if (ceilingMoveIndex == 2)
         {
+            ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Stop();
+
             ceiling_first.eulerAngles = new Vector3(0, 0, 0);
 
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
@@ -130,8 +141,7 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_first.position, secondDestination_Left) < 0.01f)
             {
-                thirdDestination_Left = new Vector2
-                (playerPosition.transform.position.x, thirdDestination_Left.y);
+                ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Play();
 
                 ceilingMoveIndex++;
             }
@@ -139,14 +149,17 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex == 3)
         {
+            ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Stop();
+
             ceiling_first.eulerAngles = new Vector3(0, 0, 90);
 
             ceiling_first.position = Vector2.MoveTowards(ceiling_first.position,
             thirdDestination_Left, ceilingBallSpeed * Time.deltaTime);
 
-            if (Vector2.Distance(ceiling_first.position, thirdDestination_Left) < 0.01f)
+            if (Mathf.Abs(ceiling_first.position.x - thirdDestination_Left.x) <= 0.01f)
             {
-                ceiling_first.GetChild(1).GetComponent<ParticleSystem>().Play();
+                // 터지는 효과
+                ceiling_first.GetChild(2).gameObject.SetActive(true);
                 ceilingMoveIndex++;
             }
         }
@@ -154,10 +167,7 @@ public class CeilingAttack : MonoBehaviour
         // 오브젝트 풀로 복귀
         else if (ceilingMoveIndex == 4)
         {
-            ceiling_first.position = poolPosition_ceiling;
-            
-            leftFinish = true;
-            ceilingMoveIndex = 0;
+            StartCoroutine(CeilingAttackBack());
         }
     }
 
@@ -180,12 +190,15 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_second.position, firstDestination_Right) < 0.01f)
             {
+                ceiling_second.GetChild(1).GetComponent<ParticleSystem>().Play();
                 ceilingMoveIndex_Right++;
             }
         }
 
         else if (ceilingMoveIndex_Right == 2)
         {
+            ceiling_second.GetChild(1).GetComponent<ParticleSystem>().Stop();
+
             ceiling_second.eulerAngles = new Vector3(0, 0, 0);
 
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
@@ -193,8 +206,7 @@ public class CeilingAttack : MonoBehaviour
 
             if (Vector2.Distance(ceiling_second.position, secondDestination_Right) < 0.01f)
             {
-                thirdDestination_Right = new Vector2
-                (playerPosition.transform.position.x, thirdDestination_Right.y);
+                ceiling_second.GetChild(1).GetComponent<ParticleSystem>().Play();
 
                 ceilingMoveIndex_Right++;
             }
@@ -202,24 +214,41 @@ public class CeilingAttack : MonoBehaviour
 
         else if (ceilingMoveIndex_Right == 3)
         {
+            ceiling_second.GetChild(1).GetComponent<ParticleSystem>().Stop();
+
             ceiling_second.eulerAngles = new Vector3(0, 0, -90);
 
             ceiling_second.position = Vector2.MoveTowards(ceiling_second.position,
             thirdDestination_Right, ceilingBallSpeed * Time.deltaTime);
 
-            if (Vector2.Distance(ceiling_second.position, thirdDestination_Right) < 0.01f)
+            if (Mathf.Abs(ceiling_second.position.x - thirdDestination_Right.x) <= 0.01f)
             {
+                // 터지는 효과
+                ceiling_first.GetChild(2).gameObject.SetActive(true);
+
                 ceilingMoveIndex_Right++;
             }
-        }
 
-        // 오브젝트 풀로 복귀
-        else if (ceilingMoveIndex_Right == 4)
-        {
-            ceiling_second.position = poolPosition_ceiling;
-            
-            rightFinish = true;
-            ceilingMoveIndex_Right = 0;
+            // 복귀 코루틴은 왼쪽 공격구가 체크
         }
+    }
+
+    IEnumerator CeilingAttackBack()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        ceiling_first.position = poolPosition_ceiling;
+        ceiling_second.position = poolPosition_ceiling;
+
+        ceiling_first.GetChild(2).gameObject.SetActive(false);
+        ceiling_second.GetChild(2).gameObject.SetActive(false);
+
+        leftFinish = true;
+        ceilingMoveIndex = 0;
+
+        rightFinish = true;
+        ceilingMoveIndex_Right = 0;
+
+        StopCoroutine(CeilingAttackBack());
     }
 }

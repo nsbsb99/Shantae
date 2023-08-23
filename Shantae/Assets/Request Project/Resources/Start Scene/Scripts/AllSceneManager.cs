@@ -44,6 +44,8 @@ public class AllSceneManager : MonoBehaviour
 
     public IEnumerator OpenLoadingScene_Second()
     {
+        Debug.Log("코루틴 진입!");
+
         SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
 
         yield return new WaitForSeconds(3);
