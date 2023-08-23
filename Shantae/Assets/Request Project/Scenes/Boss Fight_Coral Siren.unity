@@ -6203,7 +6203,7 @@ GameObject:
   - component: {fileID: 563690815}
   - component: {fileID: 563690814}
   m_Layer: 0
-  m_Name: 0 (4)
+  m_Name: g6
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11576,7 +11576,7 @@ GameObject:
   - component: {fileID: 794650029}
   - component: {fileID: 794650028}
   m_Layer: 0
-  m_Name: 0 (2)
+  m_Name: g4
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12249,7 +12249,7 @@ GameObject:
   - component: {fileID: 1058286691}
   - component: {fileID: 1058286690}
   m_Layer: 0
-  m_Name: 0
+  m_Name: g2
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22866,7 +22866,7 @@ GameObject:
   - component: {fileID: 1330827362}
   - component: {fileID: 1330827361}
   m_Layer: 0
-  m_Name: 0 (0)
+  m_Name: g1
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22911,7 +22911,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 20, y: 0.59}
+  m_Size: {x: 13, y: 0.59}
   m_EdgeRadius: 0
 --- !u!212 &1330827362
 SpriteRenderer:
@@ -23717,7 +23717,7 @@ GameObject:
   - component: {fileID: 1529060006}
   - component: {fileID: 1529060005}
   m_Layer: 0
-  m_Name: 0 (1)
+  m_Name: g3
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25703,7 +25703,7 @@ GameObject:
   - component: {fileID: 2064691436}
   - component: {fileID: 2064691435}
   m_Layer: 0
-  m_Name: 0 (3)
+  m_Name: g5
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
