@@ -6,7 +6,7 @@ public class Gem : MonoBehaviour
 {
     //public bool startTimer = false;
     public GameObject gemBreakPrefab;
-    private int gemHP = 10;
+    private int gemHP = 3;
     private EmpressAnimation[] empressAnimations;
 
     private float blinkDuration = 0.1f;
@@ -43,7 +43,6 @@ public class Gem : MonoBehaviour
     {
         if (collision.tag.Equals("PlayerAttack"))
         {
-            Debug.Log("1");
 
             gemHP -= 1;
             StartBlinkingOnce();
@@ -53,7 +52,6 @@ public class Gem : MonoBehaviour
     }
     public void StartBlinkingOnce()
     {
-        Debug.Log("1");
         StartCoroutine(BlinkCoroutine());
     }
 
