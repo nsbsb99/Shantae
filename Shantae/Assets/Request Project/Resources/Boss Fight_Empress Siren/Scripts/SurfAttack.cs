@@ -84,9 +84,10 @@ public class SurfAttack : MonoBehaviour
         frontScimatar.transform.position = startPosition_Front;
         backScimatar.transform.position = startPosition_Back;
 
+        // 발사 목적지 (플레이어 위치)
         nowPlayerPosition =
         new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 1f,
-        GameObject.FindGameObjectWithTag("Player").transform.position.y + 1f);
+        GameObject.FindGameObjectWithTag("Player").transform.position.y + 2f);
 
         yield return new WaitForSeconds(2.0f);
 
