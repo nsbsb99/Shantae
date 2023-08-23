@@ -90,8 +90,15 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(FlashPlayer(0.1f)); 
         }
 
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            isJumping = false;
 
-        Vector2 raycastOrigin = new Vector2(transform.position.x,
+            animator.SetBool("Jump", isJumping);
+        }
+
+
+            Vector2 raycastOrigin = new Vector2(transform.position.x,
             transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
 
         Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스 레이저 가시광선
@@ -106,6 +113,8 @@ public class PlayerController : MonoBehaviour
                 {
                     isAir = false;
                     animator.SetBool("isGround", !isAir);
+                    isJumping = false;
+                    animator.SetBool("Jump", isJumping);
                 }
                 else
                 {
@@ -120,7 +129,6 @@ public class PlayerController : MonoBehaviour
             }
             if (hit.collider.CompareTag("Ground"))
             {
-                Debug.Log("땅");
                 // 바닥과 충돌한 경우
                  octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
@@ -131,7 +139,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("SandStep"))
             {
-                Debug.Log("모래");
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
 

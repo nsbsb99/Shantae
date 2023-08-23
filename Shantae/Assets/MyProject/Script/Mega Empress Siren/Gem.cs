@@ -6,14 +6,19 @@ public class Gem : MonoBehaviour
 {
     //public bool startTimer = false;
     public GameObject gemBreakPrefab;
-    private int gemHP = 1;
+    private int gemHP = 10;
     private EmpressAnimation[] empressAnimations;
+
+    private float blinkDuration = 0.1f;
+
+    private Renderer parentRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
         empressAnimations = FindObjectsOfType<EmpressAnimation>();
 
-        
+        parentRenderer = transform.parent.GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -38,8 +43,27 @@ public class Gem : MonoBehaviour
     {
         if (collision.tag.Equals("PlayerAttack"))
         {
+            Debug.Log("1");
+
             gemHP -= 1;
+            StartBlinkingOnce();
             Debug.Log(gemHP);
         }
+
+    }
+    public void StartBlinkingOnce()
+    {
+        Debug.Log("1");
+        StartCoroutine(BlinkCoroutine());
+    }
+
+    private IEnumerator BlinkCoroutine()
+    {
+        
+        Color blinkColor = Color.gray;
+        Color originalColor = Color.white;
+        parentRenderer.material.color = blinkColor;
+        yield return new WaitForSeconds(blinkDuration);
+        parentRenderer.material.color = originalColor;
     }
 }

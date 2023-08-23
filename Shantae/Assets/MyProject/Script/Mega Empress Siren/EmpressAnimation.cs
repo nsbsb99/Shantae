@@ -17,7 +17,10 @@ public class EmpressAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        bool die = EndBoss.finish;
+
+        animator.SetBool("Die", die);
+
     }
     public void EmpressDamage()
     {

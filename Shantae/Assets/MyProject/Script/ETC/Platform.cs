@@ -8,15 +8,21 @@ public class Platform : MonoBehaviour
     private Collider2D platform;
     private PlayerController playerController;
     private ObjectPool<GameObject> pool;
-
+    public Vector2 movementDirection;
+    public bool first = false;
    public void Initialize(ObjectPool<GameObject> objectPool)
     {
         pool = objectPool;
     }
     private void Start()
     {
+        Rigidbody2D rb = transform.GetComponent<Rigidbody2D>();
         platform = GetComponent<Collider2D>(); 
         playerController = FindObjectOfType<PlayerController>();
+        if (first)
+        {
+            rb.velocity = movementDirection * -3f;
+        }
     }
     void Update()
     {
@@ -24,6 +30,7 @@ public class Platform : MonoBehaviour
         float objectHeight = GetComponent<Renderer>().bounds.extents.y;
         float topY = transform.position.y + objectHeight;
 
+        
 
         if( topY - 0.5 <= playerBottom)
         {
@@ -34,15 +41,5 @@ public class Platform : MonoBehaviour
             platform.isTrigger = true;
         }
 
-    }
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("end"))
-    //    {
-    //        if (pool  != null)
-    //        {
-    //            pool.Release(gameObject);
-    //        }
-    //    }
-    //}
+    }   
 }
