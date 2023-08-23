@@ -107,7 +107,7 @@ public class EmpressController : MonoBehaviour
     {
         if (other.CompareTag("end"))
         {
-            SceneManager.instance.StartCoroutine(SceneManager.instance.OpenLoadingScene_Second());
+            AllSceneManager.instance.StartCoroutine(AllSceneManager.instance.OpenLoadingScene_Second());
         }
     }
 }
