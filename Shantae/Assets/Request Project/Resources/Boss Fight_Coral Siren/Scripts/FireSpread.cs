@@ -206,24 +206,21 @@ public class FireSpread : MonoBehaviour
                 coralSiren_Front.position = new Vector2
                     (coralSiren_Front.position.x, coralSiren_Front_OriginPosition.y);
 
-                collisionCheck = true;
+                if (FrontGrounded.coralSiren_Front_Sanded == true) // 모래와 충돌하면
+                {
+                    Debug.Log("모래 충격 감지");
+                    collisionCheck = true;
+
+                    StartCoroutine(Sanded());
+                }
+                else if (FrontGrounded.coralSiren_Front_Sanded == false) // 모래가 없으면
+                {
+                    Debug.Log("땅 충격 감지");
+                    collisionCheck = true;
+
+                    StartCoroutine(Grounded());
+                }
             }
-        }
-
-        // 앞의 Coral Siren이 땅과 충돌하면 
-        if (CoralSirenMoving.fireSpread == true &&
-            FrontGrounded.coralSiren_Front_Grounded == true && collisionCheck == true)
-        {
-            FrontGrounded.coralSiren_Front_Grounded = false;
-
-            StartCoroutine(Grounded());
-        }
-        else if (CoralSirenMoving.fireSpread == true &&
-            FrontGrounded.coralSiren_Front_Sanded == true && collisionCheck == true) // 모래와 충돌하면
-        {
-            FrontGrounded.coralSiren_Front_Sanded = false;
-
-            StartCoroutine(Sanded());
         }
 
         // 불 공격 이동
@@ -240,8 +237,6 @@ public class FireSpread : MonoBehaviour
 
                 fireBall_Left.transform.position = poolPosition_fireBalls;
                 fireBall_Right.transform.position = poolPosition_fireBalls;
-
-                collisionCheck = false;
             }
         }
 
@@ -256,7 +251,7 @@ public class FireSpread : MonoBehaviour
             // 만약 앞의 Coral Siren이 일정 고도에 도달했다면
             if (coralSiren_Front.position.y >= 13f)
             {
-                coralSiren_Front_Animator.SetBool("Go Back", false);
+                coralSiren_Front_Animator.SetTrigger("Fire_GoBack");
 
                 // 풀로 복귀
                 coralSiren_Front.position = coralSiren_Front_OriginPosition;
@@ -294,15 +289,35 @@ public class FireSpread : MonoBehaviour
             secondDestination = false;
             thirdDestination = false;
             alreadyChoice = false;
+            collisionCheck = false;
 
             allStop = false;
         }
     }
 
-    IEnumerator Grounded()
+    IEnumerator Grounded() // 버둥거림
     {
+        coralSiren_Front_Animator.SetBool("Fire_Frail", true);
+        // 3초간 버둥거림
+        yield return new WaitForSeconds(3.0f);
+        coralSiren_Front_Animator.SetBool("Fire_Frail", false);
+
+        // 탈출 모션 동안 대기
+        yield return new WaitForSeconds
+            (coralSiren_Front_Animator.GetCurrentAnimatorStateInfo(0).length);
+
+        coralSiren_Front_Animator.SetBool("Go Back", true);
+
+        secondDestination = true;
+    }
+
+    IEnumerator Sanded() // 불 공격
+    {
+        FrontGrounded.coralSiren_Front_Sanded = false;
+
         // 불 공격 진입 
         coralSiren_Front_Animator.SetBool("Fire", true);
+
         fireBall_Right.transform.position = new Vector2
             (coralSiren_Front.position.x + 3f, coralSiren_Front.position.y - 1.45f);
         fireBall_Left.transform.position = new Vector2
@@ -310,28 +325,10 @@ public class FireSpread : MonoBehaviour
 
         launchFireBalls = true;
 
-        yield return new WaitForSeconds(4.0f);
-
-        // 앞의 Coral Siren을 위로 올려보내기
-        coralSiren_Front_Animator.SetBool("Fire", false);
-        coralSiren_Front_Animator.SetBool("Go Back", true);
-
-        secondDestination = true;
-    }
-
-    IEnumerator Sanded()
-    {
-        coralSiren_Front_Animator.SetBool("Fire_Frail", true);
-        // 3초간 버둥거림
-        yield return new WaitForSeconds(3.0f);
-
-        coralSiren_Front_Animator.SetBool("Fire_Frail", false);
-        // 탈출 모션 동안 대기
         yield return new WaitForSeconds
-            (coralSiren_Front_Animator.GetCurrentAnimatorStateInfo(0).length);
+            (coralSiren_Front_Animator.GetCurrentAnimatorClipInfo(0).Length);
 
-        coralSiren_Front_Animator.SetBool("Go Back", true);
-
+        coralSiren_Front_Animator.SetBool("Fire", false);
         secondDestination = true;
     }
 

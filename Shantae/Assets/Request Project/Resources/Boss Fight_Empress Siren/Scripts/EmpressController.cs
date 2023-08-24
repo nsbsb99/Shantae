@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class EmpressController : MonoBehaviour
 {
+    #region Empress Siren의 피격, 패배 여부 확인 변수
     // Empress Siren의 HP
     public static float empressHP = default;
     // 플레이어 데미지 판정 (Empress 피격 판정)
@@ -25,6 +26,7 @@ public class EmpressController : MonoBehaviour
     private Vector2 playerPosition = default;
 
     private bool alreadyRun = false;
+    #endregion
 
     private void Start()
     {

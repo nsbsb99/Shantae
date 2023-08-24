@@ -17,8 +17,6 @@ public class HitController : MonoBehaviour
     {
         if (collision.CompareTag("PlayerAttack"))
         {
-            Debug.Log("보스가 공격 받음!");
-
             coralDamaged = true;
         }
     }
