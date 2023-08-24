@@ -18,6 +18,7 @@ public class FadeOut : MonoBehaviour
     {
         if(EndBoss.finish == true)
         {
+            BGMManager.playing = false;
             timer += Time.deltaTime;
             if( timer > 2f )
             {

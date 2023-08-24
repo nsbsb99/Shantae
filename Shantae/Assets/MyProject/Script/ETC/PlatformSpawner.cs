@@ -14,8 +14,8 @@ public class PlatformSpawner : MonoBehaviour
     private int poolSize = 80;
     private int currentPlatformIndex = 0;
 
-    private float spawnMax = 2f;
-    private float spawnMin = 1f;
+    private float spawnMax = 3f;
+    private float spawnMin = 2f;
     private float lastSpawnTime = 0f;
     private float timeBetSpawn = 0f;
 

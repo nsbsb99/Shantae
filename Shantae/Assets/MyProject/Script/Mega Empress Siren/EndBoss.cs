@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EndBoss : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class EndBoss : MonoBehaviour
     private float spawnDelay = 0.5f;
     public float spawnTime;
     private float nextSpawnTime;
+    private float count;
+
+    private AudioSource audioSource;
+    public AudioClip blow;
 
     private int blowCount = 0;
 
@@ -20,6 +25,9 @@ public class EndBoss : MonoBehaviour
     void Start()
     {
         nextSpawnTime = Time.time + spawnDelay;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = blow;
+        count = 0;
     }
 
     // Update is called once per frame
@@ -31,7 +39,7 @@ public class EndBoss : MonoBehaviour
         }
         if (finish)
         {
-            Debug.Log("1");
+            count += Time.deltaTime;
             if (player != null)
             {
                 Vector3 newPosition = new Vector3(0f, 0f, 0f); // »õ·Î¿î À§Ä¡ ¼³Á¤
@@ -41,16 +49,21 @@ public class EndBoss : MonoBehaviour
             //Æø¹ßÀÌ¹ÌÁö ·»´ý½ºÆù
             if (Time.time >= nextSpawnTime)
             {
-                Debug.Log("2");
 
+                audioSource.Play();
                 SpawnObject();
-                if (blowCount < 7)
+                if (blowCount < 6)
                 {
-                    spawnDelay -= 0.06f;
+                    spawnDelay -= 0.03f;
                     blowCount += 1;
                 }
                 nextSpawnTime = Time.time + spawnDelay;
             }
+            if(count >8)
+            {
+                SceneManager.LoadScene("Lobby");
+            }
+            
         }
     }
     private void SpawnObject()
