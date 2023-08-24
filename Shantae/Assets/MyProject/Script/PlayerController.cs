@@ -308,8 +308,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (drillOn)
                 {
-                    animator.SetTrigger("DrillRight");
+                    transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
 
+                    animator.SetTrigger("DrillRight");
+                    animator.ResetTrigger("DrillLeft");
                 }
                 else
                 {
@@ -324,6 +326,7 @@ public class PlayerController : MonoBehaviour
                 {
                     transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
                     animator.SetTrigger("DrillLeft");
+                    animator.ResetTrigger("DrillRight");
                 }
                 else
                 {
@@ -349,6 +352,9 @@ public class PlayerController : MonoBehaviour
                     boxCollider.offset = new Vector2(0f, 0f);
                     drillOn = true;
                     animator.SetBool("Drill", drillOn);
+                    animator.SetTrigger("DrillDown");
+                    animator.ResetTrigger("DrillRight");
+                    animator.ResetTrigger("DrillLeft");
 
                 }
             }
@@ -612,6 +618,8 @@ public class PlayerController : MonoBehaviour
             boxCollider.offset = new Vector2(0.385f, -0.9f);
             drillOn = false;
             animator.SetBool("Drill", drillOn);
+            animator.ResetTrigger("DrillRight");
+            animator.ResetTrigger("DrillLeft");
         }
     }
 
