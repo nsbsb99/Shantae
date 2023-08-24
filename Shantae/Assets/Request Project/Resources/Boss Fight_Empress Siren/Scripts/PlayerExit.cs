@@ -23,8 +23,6 @@ public class PlayerExit : MonoBehaviour
         {
             float moveSpeed = 3f;
 
-            transform.GetComponent<SpriteRenderer>().flipX = true;
-
             animator.SetBool("Run", true);
 
             transform.position = Vector2.MoveTowards

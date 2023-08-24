@@ -297,6 +297,8 @@ public class FireSpread : MonoBehaviour
             // 만약 앞의 Coral Siren이 일정 고도에 도달했다면
             if (coralSiren_Front.position.y >= 13f)
             {
+                // 모래 & 땅 애니메이션 => 원상태 애니메이션
+                coralSiren_Front_Animator.SetTrigger("Return Fire_Drop");
                 coralSiren_Front_Animator.SetTrigger("Fire_GoBack");
 
                 // 풀로 복귀
@@ -350,9 +352,9 @@ public class FireSpread : MonoBehaviour
 
         // 탈출 모션 동안 대기
         yield return new WaitForSeconds
-            (coralSiren_Front_Animator.GetCurrentAnimatorStateInfo(0).length);
+            (coralSiren_Front_Animator.GetCurrentAnimatorStateInfo(0).length + 0.3f);
 
-        coralSiren_Front_Animator.SetBool("Go Back", true);
+        coralSiren_Front_Animator.SetTrigger("GoBack_Sand");
 
         secondDestination = true;
     }
