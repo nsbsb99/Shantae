@@ -120,17 +120,15 @@ public class CoralSirenMoving : MonoBehaviour
             }
             else
             {
-                /// <problem> 대시에서 불뿌리기로 넘어갈 때 문제 발생 (불뿌리기랑 대시가 동시 출력)
                 randomAttack = Random.Range(0, 3);
-            }
+            }   
         }
        
-        yield return new WaitForSeconds(3f);
+        // 다음 패턴 재생 대기 시간
+        yield return new WaitForSeconds(1.5f);
 
         if (randomAttack == 0)
         {
-            Debug.Log("0: 폭탄 발사");
-
             // 폭탄 발사
             animator.SetBool("Fire Bomb", true);
 
@@ -146,23 +144,17 @@ public class CoralSirenMoving : MonoBehaviour
         }
         else if (randomAttack == 1)
         {
-            Debug.Log("1: 대시");
-
             // 대시 준비 (DashCharging)
             dash = true;
            
         }
         else if (randomAttack == 2)
         {
-            Debug.Log("2: 불 뿌리기");
-
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
         }
         else if (randomAttack == 3)
         {
-            Debug.Log("3: 모래 채우기");
-
             // 모래 채우기 준비
             grabLever = true;
         }

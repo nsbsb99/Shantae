@@ -43,6 +43,7 @@ public class FireSpread : MonoBehaviour
     private float coralPositionY = default;
     #endregion
 
+    #region 불을 발사하는 변수
     private GameObject fireBallPrefab;
     private GameObject[] fireBalls;
     private GameObject fireBall_Left;
@@ -52,6 +53,10 @@ public class FireSpread : MonoBehaviour
 
     private bool launchFireBalls = false;
     private float fireBallSpeed = 10f;
+
+    // bool의 활성화 이전 충돌을 체크하는 것을 막기 위함.
+    public static bool collisionCheck = false;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -106,8 +111,6 @@ public class FireSpread : MonoBehaviour
     {
         if (CoralSirenMoving.fireSpread == true && firstDestination == false)
         {
-            Debug.Log("불뿌리기 진행");
-
             if (moveDone == false)
             {
                 if (alreadyChoice == false)
@@ -116,6 +119,7 @@ public class FireSpread : MonoBehaviour
                     alreadyChoice = true;
                 }
 
+                // 착륙 장소 정하기 (네 개의 모래)
                 if (selectedRandom == 0)
                 {
                     whatFirePosition = firstFirePosition;
@@ -190,30 +194,36 @@ public class FireSpread : MonoBehaviour
         }
 
         if (CoralSirenMoving.fireSpread == true && firstDestination == true
-            && secondDestination == false)
+            && secondDestination == false && collisionCheck == false)
         {
             // 앞 Coral Siren이 추락
             coralSiren_Front.position = Vector2.MoveTowards(coralSiren_Front.position,
                 new Vector2(coralSiren_Back.position.x, coralSiren_Front_OriginPosition.y),
                 fallSpeed * Time.deltaTime);
+
+            if (Mathf.Abs(coralSiren_Front.position.y - coralSiren_Front_OriginPosition.y) <= 0.01f)
+            {
+                coralSiren_Front.position = new Vector2
+                    (coralSiren_Front.position.x, coralSiren_Front_OriginPosition.y);
+
+                collisionCheck = true;
+            }
         }
 
         // 앞의 Coral Siren이 땅과 충돌하면 
         if (CoralSirenMoving.fireSpread == true &&
-            FrontGrounded.coralSiren_Front_Grounded == true)
+            FrontGrounded.coralSiren_Front_Grounded == true && collisionCheck == true)
         {
-            StartCoroutine(Grounded());
-
             FrontGrounded.coralSiren_Front_Grounded = false;
-            coralSiren_Front.GetComponent<FrontGrounded>().enabled = false;
+
+            StartCoroutine(Grounded());
         }
         else if (CoralSirenMoving.fireSpread == true &&
-            FrontGrounded.coralSiren_Front_Sanded == true)
+            FrontGrounded.coralSiren_Front_Sanded == true && collisionCheck == true) // 모래와 충돌하면
         {
-            StartCoroutine(Sanded());
-
             FrontGrounded.coralSiren_Front_Sanded = false;
-            coralSiren_Front.GetComponent<FrontGrounded>().enabled = false;
+
+            StartCoroutine(Sanded());
         }
 
         // 불 공격 이동
@@ -223,6 +233,16 @@ public class FireSpread : MonoBehaviour
                 (Vector2.left * Time.deltaTime * fireBallSpeed);
             fireBall_Right.transform.Translate
                 (Vector2.right * Time.deltaTime * fireBallSpeed);
+
+            if (secondDestination == true) // 앞의 Coral Siren이 다시 위로 상승하면
+            {
+                launchFireBalls = false;
+
+                fireBall_Left.transform.position = poolPosition_fireBalls;
+                fireBall_Right.transform.position = poolPosition_fireBalls;
+
+                collisionCheck = false;
+            }
         }
 
         // 앞의 Coral Siren이 위로 올라가라는 신호를 받았다면

@@ -32,8 +32,6 @@ public class CoralSirenController : MonoBehaviour
 
         while (nowTime < blinkTime)
         {
-            Debug.Log("¹ÝÂ¦¹ÝÂ¦");
-
             nowTime += Time.deltaTime * 30;
 
             transform.GetComponent<SpriteRenderer>().color = transparentColor;
