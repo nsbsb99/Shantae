@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2678332051701207257, guid: b4cabf5de8cbb5547821cfe6a7d28bde, type: 3}
       propertyPath: isEmpress
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4330303511824562580, guid: b4cabf5de8cbb5547821cfe6a7d28bde, type: 3}
       propertyPath: m_RootOrder
