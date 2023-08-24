@@ -96,7 +96,11 @@ public class EmpressController : MonoBehaviour
 
     private IEnumerator PlayerWin()
     {
-        GameObject.FindWithTag("Player").GetComponent<PlayerExit>().enabled = true;
+        //GameObject.FindWithTag("Player").GetComponent<PlayerExit>().enabled = true;
+
+        GameObject.FindWithTag("Player").transform.GetChild(0).
+            GetComponent<PlayerExit>().enabled = true;
+
 
         yield return new WaitForSeconds(0.5f);
 
