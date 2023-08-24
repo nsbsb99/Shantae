@@ -24,13 +24,16 @@ public class CoralSirenMoving : MonoBehaviour
     public static bool secondPatternDone = false;
     public static bool thirdPatternDone = false;
     public static bool fourthPatternDone = false;
-    private bool patternFinished = false;
+    private bool patternPlay = false;
 
     private GameObject sandGroup;
     private GameObject firstSand;
     private GameObject secondSand;
     private GameObject thirdSand;
     private GameObject fourthSand;
+
+    // 중복 실행 버그를 막기 위함. 
+    private bool notDuplication = false;
 
     private void Awake()
     {
@@ -79,28 +82,24 @@ public class CoralSirenMoving : MonoBehaviour
                 thirdSand.transform.GetChild(i).gameObject.SetActive(true);
                 fourthSand.transform.GetChild(i).gameObject.SetActive(true);
             }
-
             GrabLever.sandActive = false;
-            StartCoroutine(RandomMoving());
         }
 
-        // 패턴 연속 실행 코드
-        if (firstPatternDone == true || secondPatternDone == true 
-            || thirdPatternDone == true || fourthPatternDone == true)
+        // 네 패턴 중 하나라도 완전히 끝났다면
+        if ((firstPatternDone == true || secondPatternDone == true
+            || thirdPatternDone == true || fourthPatternDone == true))
         {
-            if (patternFinished == false)
-            {
-                StopCoroutine(RandomMoving());
-                StartCoroutine(RandomMoving());
-                patternFinished = true;
-            }
+            StopCoroutine(RandomMoving());
 
+            // 전부 초기화하고 패턴 코루틴 다시 실행 
             firstPatternDone = false;
             secondPatternDone = false;
             thirdPatternDone = false;
             fourthPatternDone = false;
 
-            patternFinished = false;
+            patternPlay = false;
+
+            StartCoroutine(RandomMoving());
         }
     }
 
@@ -121,15 +120,17 @@ public class CoralSirenMoving : MonoBehaviour
             else
             {
                 randomAttack = Random.Range(0, 3);
-                randomAttack = 2; // 임시
-            }
+            }   
         }
        
-        yield return new WaitForSeconds(3f);
+        // 다음 패턴 재생 대기 시간
+        yield return new WaitForSeconds(1.5f);
 
-        if (randomAttack == 0)
+        if (randomAttack == 0 && patternPlay == false)
         {
-            Debug.Log("0: 폭탄 발사");
+            patternPlay = true;
+
+            Debug.Log("1. 폭탄 발사");
 
             // 폭탄 발사
             animator.SetBool("Fire Bomb", true);
@@ -144,25 +145,29 @@ public class CoralSirenMoving : MonoBehaviour
                 fireBomb = false;
             }
         }
-        else if (randomAttack == 1)
+        else if (randomAttack == 1 && patternPlay == false)
         {
-            Debug.Log("1: 대시");
+            patternPlay = true;
+
+            Debug.Log("2. 대시");
 
             // 대시 준비 (DashCharging)
             dash = true;
-           
         }
-        else if (randomAttack == 2)
+        else if (randomAttack == 2 && patternPlay == false)
         {
-            Debug.Log("2: 불 뿌리기");
+            patternPlay = true;
 
-            /// <problem> 불뿌리기 자세로 전환되지 않고 오른쪽 대시 애니메이션으로 전환되는 문제
+            Debug.Log("3. 불 뿌리기");
+
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
         }
-        else if (randomAttack == 3)
+        else if (randomAttack == 3 && patternPlay == false)
         {
-            Debug.Log("3: 모래 채우기");
+            patternPlay = true;
+
+            Debug.Log("4. 모래 채우기");
 
             // 모래 채우기 준비
             grabLever = true;

@@ -23,6 +23,7 @@ public class BombUpDown : MonoBehaviour
     private Vector2 originScale;
 
     private Animator animator;
+    private SpriteRenderer sparkRenderer;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,10 @@ public class BombUpDown : MonoBehaviour
         originScale = transform.localScale;
 
         animator = GetComponent<Animator>();
+
+        // 스파크가 표시되는 렌더러
+        sparkRenderer = transform.GetChild(0).
+            transform.GetChild(0).transform.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -78,6 +83,9 @@ public class BombUpDown : MonoBehaviour
         // 만약 바닥 콜라이더와 충돌하면
         if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Sand"))
         {
+            // 스파크 렌더러 끄기
+            sparkRenderer.enabled = false;
+
             // 추락을 멈춤
             falling = false;
 
@@ -97,6 +105,8 @@ public class BombUpDown : MonoBehaviour
                (bombAnimator.GetCurrentAnimatorStateInfo(0).length);
         // 애니메이션 종료
         transform.GetComponent<Animator>().enabled = false;
+        // 스파크 렌더러 복귀
+        sparkRenderer.enabled = true;
 
         animator.Rebind();
         

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GrabLever : MonoBehaviour
@@ -38,7 +39,8 @@ public class GrabLever : MonoBehaviour
         // 모래구름
         for (int i = 0; i < 8; i++)
         {
-            sandCloud.transform.GetChild(i).gameObject.SetActive(false);
+            sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
+            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = false;
         }
     }
 
@@ -64,11 +66,8 @@ public class GrabLever : MonoBehaviour
         // 레버 당기기
         if (pullLever == true && backLever == false)
         {
-            Debug.Log("진입!");
             //레버 rotation 삽입
             lever.Rotate(Vector3.forward * Time.deltaTime * degreePerSecond);
-
-            Debug.Log(lever.rotation.eulerAngles.z);
 
             // 레버가 돌아갈 각도 결정
             if (lever.rotation.eulerAngles.z > 40f)
@@ -78,7 +77,6 @@ public class GrabLever : MonoBehaviour
         }
         else if (pullLever == true && backLever == true)
         {
-            Debug.Log("이차 진입!");
             lever.Rotate(Vector3.back * Time.deltaTime * degreePerSecond_Return);
 
             if (Mathf.Abs(lever.eulerAngles.z - originLever) <= 3f)
@@ -89,19 +87,21 @@ public class GrabLever : MonoBehaviour
                 backLever = false;
             }
         }
-
     }
 
     IEnumerator PullLever()
     {
+        Debug.Log("코루틴 작동 확인");
+
         animator.SetBool("Grab Lever", true);
         pullLever = true;
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length + 0.5f);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         // 모래 채우기 이펙트 재생
         for (int i = 0; i < 8; i++)
         {
-            sandCloud.transform.GetChild(i).gameObject.SetActive(true);
+            sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
+            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = true;
         }
 
         sandActive = true;
@@ -109,21 +109,18 @@ public class GrabLever : MonoBehaviour
         animator.SetBool("Grab Lever", false);
         animator.SetBool("Fire Bomb", false);
 
-        StartCoroutine(RemoveSandCloud());
-    }
-
-    private IEnumerator RemoveSandCloud()
-    {
-        StopCoroutine(PullLever());
-
         yield return new WaitForSeconds(3);
 
         // 모래 채우기 이펙트 초기화
         for (int i = 0; i < 8; i++)
         {
-            sandCloud.transform.GetChild(i).gameObject.SetActive(false);
+            Debug.Log("모래구름 초기화");
+            sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
+            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = false;
         }
 
-        StopCoroutine(RemoveSandCloud());
+        CoralSirenMoving.fourthPatternDone = true;
+
+        StopCoroutine(PullLever());
     }
 }

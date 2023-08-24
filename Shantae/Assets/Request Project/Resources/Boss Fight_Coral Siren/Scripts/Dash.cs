@@ -99,13 +99,15 @@ public class Dash : MonoBehaviour
     {
         if (CoralSirenMoving.dash == true && directionCheck == false)
         {
+            Debug.Log("대시 진행");
+
             realPlayerPosition = player.position.x;
 
             directionCheck = true;
         }
 
         // 우측 대시
-        if (realPlayerPosition < 0)
+        if (CoralSirenMoving.dash == true &&  directionCheck == true && realPlayerPosition < 0)
         {
             if (CoralSirenMoving.dash == true && animationFinish == false)
             {
@@ -132,6 +134,7 @@ public class Dash : MonoBehaviour
                     coralSiren_Back.position =
                         new Vector2(-12f, coralSiren_Back.transform.position.y);
 
+                    Debug.Log("Dash 애니메이션에 접근했는가");
                     // 앞의 보스는 이동 전 준비
                     coralSiren_Front.GetComponent<SpriteRenderer>().flipX = true;
                     coralSiren_Front_Animator.SetBool("Front Dash", true);
@@ -205,7 +208,7 @@ public class Dash : MonoBehaviour
         }
 
         // 좌측 대시
-        if (realPlayerPosition >= 0)
+        if (CoralSirenMoving.dash == true && directionCheck == true && realPlayerPosition >= 0)
         {
             if (realPlayerPosition > 0)
             {
@@ -299,8 +302,9 @@ public class Dash : MonoBehaviour
                     alreadyRun = false;
                     getFirstDestination = false;
 
-                    CoralSirenMoving.dash = false;
+                    CoralSirenMoving.dash = false;  
                     animationFinish = false;
+
                     CoralSirenMoving.secondPatternDone = true;
                 }
             }
