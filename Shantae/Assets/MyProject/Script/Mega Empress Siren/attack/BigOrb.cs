@@ -100,7 +100,7 @@ public class BigOrb : MonoBehaviour
                 transform.position += forwardDirection * moveSpeed * Time.deltaTime;
             
         }
-        else if (elapsedTime >= 10f && elapsedTime <= 17f)
+        else if (elapsedTime >= 10f && elapsedTime <= 25f)
         {
 
             bool move = false;
@@ -126,7 +126,7 @@ public class BigOrb : MonoBehaviour
                 }
             }
         }
-        else if(elapsedTime >17f)
+        else if(elapsedTime >25f)
         {
             Destroy(gameObject);
         }

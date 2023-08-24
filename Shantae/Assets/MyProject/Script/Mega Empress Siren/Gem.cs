@@ -64,12 +64,14 @@ public class Gem : MonoBehaviour
 
     private IEnumerator BlinkCoroutine()
     {
-        
-        Color blinkColor = Color.gray;
-        Color originalColor = Color.white;
-        parentRenderer.material.color = blinkColor;
-        yield return new WaitForSeconds(blinkDuration);
-        parentRenderer.material.color = originalColor;
+        if (gemHP > 0)
+        {
+            Color blinkColor = Color.gray;
+            Color originalColor = Color.white;
+            parentRenderer.material.color = blinkColor;
+            yield return new WaitForSeconds(blinkDuration);
+            parentRenderer.material.color = originalColor;
+        }
     }
 
    

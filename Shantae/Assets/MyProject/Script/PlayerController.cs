@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
     public AudioClip drill;
     public AudioClip octo;
     public AudioClip doubleJump;
+    public bool isEmpress;
+    private int maxJump = 3;
 
     private BoxCollider2D boxCollider;
     public float bottomY;
@@ -73,6 +75,10 @@ public class PlayerController : MonoBehaviour
         Debug.Assert(playerRigid != null);
         Debug.Assert(animator != null);
 
+        if(!isEmpress)
+        {
+            maxJump = 1;
+        }
         // === (노솔빈 수정)
         if (transform.GetComponent<PlayerEntry>() != null)
         {
@@ -189,7 +195,7 @@ public class PlayerController : MonoBehaviour
         playerAnimation();          // 플레이어가 보여줄 애니메이션
 
 
-        if (Input.GetKeyDown(KeyCode.X) && jumpCount < 3 && !isDown)      // 점프
+        if (Input.GetKeyDown(KeyCode.X) && jumpCount < maxJump && !isDown)      // 점프
         {
             isJumping = true;
             jumpStartTime = Time.time;
@@ -200,7 +206,7 @@ public class PlayerController : MonoBehaviour
                 playerAudio.clip = jumping;
                 playerAudio.Play();
             }
-            else if (jumpCount >= 2)
+            else if (jumpCount >= 2 && isEmpress)
             {
                 if (jumpCount == 2)
                 {
@@ -239,7 +245,7 @@ public class PlayerController : MonoBehaviour
                        
                         animator.SetBool("Jump", isJumping);
                     }
-                    else if (jumpCount >= 2)
+                    else if (jumpCount >= 2 && isEmpress)
                     {
                         
                         octoJump = false;
@@ -254,8 +260,7 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
                 animator.SetBool("Jump", isJumping);
                 if (jumpCount == 1)
-                {
-                }
+                {       }
                 else
                 {
                     octoJump = false;

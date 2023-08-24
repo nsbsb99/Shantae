@@ -41,13 +41,15 @@ public class Door : MonoBehaviour
         {
             LeftD.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             RightD.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-            if(isEmpress)
+            if (isEmpress)
             {
-                 SceneManager.LoadScene("Boss Fight Mega_Empress Siren");
+                BGMManager.playing = false;
+                SceneManager.LoadScene("Boss Fight Mega_Empress Siren");
             }
             else
             {
-                 SceneManager.LoadScene("Boss Fight_Coral Siren");
+                BGMManager.playing = false;
+                SceneManager.LoadScene("Boss Fight_Coral Siren");
             }
         }
     }
