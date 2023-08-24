@@ -22553,6 +22553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1247159635}
   - component: {fileID: 1247159636}
+  - component: {fileID: 1247159637}
   m_Layer: 0
   m_Name: Hit Box
   m_TagString: Untagged
@@ -22601,6 +22602,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.5, y: 6}
   m_EdgeRadius: 0
+--- !u!114 &1247159637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247159634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311ec29eba4c64d49b3def93952bb10c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1306970615
 GameObject:
   m_ObjectHideFlags: 0
@@ -23173,7 +23186,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1410485146}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a296c515a9aa2ca488f6739877cc2bb5, type: 3}
   m_Name: 
@@ -23209,7 +23222,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1

@@ -106,6 +106,8 @@ public class FireSpread : MonoBehaviour
     {
         if (CoralSirenMoving.fireSpread == true && firstDestination == false)
         {
+            Debug.Log("불뿌리기 진행");
+
             if (moveDone == false)
             {
                 if (alreadyChoice == false)
@@ -183,8 +185,6 @@ public class FireSpread : MonoBehaviour
                 coralSiren_Front.position =
                     new Vector2(coralSiren_Back.position.x, 13f);
 
-                coralSiren_Front.GetComponent<FrontGrounded>().enabled = true;
-
                 firstDestination = true;
             }
         }
@@ -196,7 +196,6 @@ public class FireSpread : MonoBehaviour
             coralSiren_Front.position = Vector2.MoveTowards(coralSiren_Front.position,
                 new Vector2(coralSiren_Back.position.x, coralSiren_Front_OriginPosition.y),
                 fallSpeed * Time.deltaTime);
-
         }
 
         // 앞의 Coral Siren이 땅과 충돌하면 

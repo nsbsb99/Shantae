@@ -97,8 +97,11 @@ public class Dash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (CoralSirenMoving.dash == true && directionCheck == false)
         {
+            Debug.Log("대시 진행");
+
             realPlayerPosition = player.position.x;
 
             directionCheck = true;

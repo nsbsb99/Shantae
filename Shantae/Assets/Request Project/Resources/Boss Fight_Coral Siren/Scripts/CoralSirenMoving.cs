@@ -120,8 +120,8 @@ public class CoralSirenMoving : MonoBehaviour
             }
             else
             {
+                /// <problem> 대시에서 불뿌리기로 넘어갈 때 문제 발생 (불뿌리기랑 대시가 동시 출력)
                 randomAttack = Random.Range(0, 3);
-                randomAttack = 2; // 임시
             }
         }
        
@@ -156,7 +156,6 @@ public class CoralSirenMoving : MonoBehaviour
         {
             Debug.Log("2: 불 뿌리기");
 
-            /// <problem> 불뿌리기 자세로 전환되지 않고 오른쪽 대시 애니메이션으로 전환되는 문제
             // 불 뿌리기 준비 (FireSpread)
             fireSpread = true;
         }
