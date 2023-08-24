@@ -49,6 +49,12 @@ public class FireSpread : MonoBehaviour
     private GameObject fireBall_Left;
     private GameObject fireBall_Right;
 
+    private GameObject mainHole;
+    public GameObject hole1;
+    public GameObject hole2;
+    public GameObject hole3;
+    public GameObject hole4;
+
     private Vector2 poolPosition_fireBalls = new Vector2(-2, 10f);
 
     private bool launchFireBalls = false;
@@ -58,6 +64,8 @@ public class FireSpread : MonoBehaviour
     public static bool collisionCheck = false;
     #endregion
 
+
+    private int childCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -123,18 +131,22 @@ public class FireSpread : MonoBehaviour
                 if (selectedRandom == 0)
                 {
                     whatFirePosition = firstFirePosition;
+                    mainHole = hole1;
                 }
                 else if (selectedRandom == 1)
                 {
                     whatFirePosition = secondFirePosition;
+                    mainHole = hole2;
                 }
                 else if (selectedRandom == 2)
                 {
                     whatFirePosition = thirdFirePosition;
+                    mainHole = hole3;
                 }
                 else if (selectedRandom == 3)
                 {
                     whatFirePosition = fourthFirePosition;
+                    mainHole = hole4;
                 }
 
                 coralSiren_Back_Animator.SetBool("Fire Bomb", true);
@@ -206,20 +218,54 @@ public class FireSpread : MonoBehaviour
                 coralSiren_Front.position = new Vector2
                     (coralSiren_Front.position.x, coralSiren_Front_OriginPosition.y);
 
-                if (FrontGrounded.coralSiren_Front_Sanded == true) // 모래와 충돌하면
-                {
-                    Debug.Log("모래 충격 감지");
-                    collisionCheck = true;
+                //if (FrontGrounded.coralSiren_Front_Sanded == true) // 모래와 충돌하면
+                //{
+                //    Debug.Log("모래 충격 감지");
+                //    collisionCheck = true;
 
-                    StartCoroutine(Sanded());
-                }
-                else if (FrontGrounded.coralSiren_Front_Sanded == false) // 모래가 없으면
+                //    StartCoroutine(Sanded());
+                //}
+                //else if (FrontGrounded.coralSiren_Front_Sanded == false) // 모래가 없으면
+                //{
+                //    Debug.Log("땅 충격 감지");
+                //    collisionCheck = true;
+
+                //    StartCoroutine(Grounded());
+                //}
+                Transform[] childTransforms = mainHole.GetComponentsInChildren<Transform>(true);
+
+                // 첫 번째 요소는 부모 오브젝트이므로 제외하고 순회
+                
+                for (int i = 1; i < childTransforms.Length; i++)
                 {
+                    GameObject childObject = childTransforms[i].gameObject;
+                    if (childObject.activeSelf)
+                    {
+                        childCount += 1;
+                    }
+                }
+
+                if (childCount == 0) // 모래가 없으면
+                {
+                    Debug.Log(childCount);
+
                     Debug.Log("땅 충격 감지");
                     collisionCheck = true;
 
                     StartCoroutine(Grounded());
                 }
+                else// 모래와 충돌하면
+                {
+                    Debug.Log(childCount);
+
+                    Debug.Log("모래 충격 감지");
+                    collisionCheck = true;
+
+                    StartCoroutine(Sanded());
+                }
+                childCount = 0;
+                Debug.Log(childCount);
+
             }
         }
 

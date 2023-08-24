@@ -12,6 +12,8 @@ using UnityEngine.UIElements;
 
 public class SurfAttack : MonoBehaviour
 {
+    public Transform targetTransform;
+    private string player = "Player";
     #region 검 발사 변수
     // 공격 시작 지점
     private Vector2 startPosition_Front;
@@ -52,6 +54,11 @@ public class SurfAttack : MonoBehaviour
             (frontScimatarPrefab, poolPosition_scimartar, Quaternion.identity);
         backScimatar = Instantiate
             (backScimatarPrefab, poolPosition_scimartar, Quaternion.identity);
+
+
+        GameObject playerTransform = GameObject.Find(player);
+
+        targetTransform = playerTransform.transform;
     }
 
     // Update is called once per frame
@@ -92,8 +99,8 @@ public class SurfAttack : MonoBehaviour
 
         // 발사 목적지 (플레이어 위치)
         nowPlayerPosition =
-        new Vector2(GameObject.FindGameObjectWithTag("Player").transform.position.x + 1f,
-        GameObject.FindGameObjectWithTag("Player").transform.position.y + 2f);
+        new Vector2(targetTransform.transform.position.x + 1f,
+        targetTransform.transform.position.y + 2f);
 
         yield return new WaitForSeconds(2.0f);
 

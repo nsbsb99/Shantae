@@ -6,11 +6,13 @@ public class HopBackBullet : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public Transform targetTransform; // 다른 오브젝트의 Transform
+    private string player = "Player";
 
     private void Start()
     {
+        GameObject playerTransform = GameObject.Find(player);
         // 만약 풀로 돌아간다면 해당 스크립트가 적용되지 않도록 하기. 
-        targetTransform = GameObject.FindWithTag("Player").transform;
+        targetTransform = playerTransform.transform;
     }
 
     private void FixedUpdate()
