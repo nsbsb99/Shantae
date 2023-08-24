@@ -55,10 +55,10 @@ public class CoralSirenMoving : MonoBehaviour
         sandGroup = GameObject.Find("Sand");
         Debug.Assert(sandGroup != null);
 
-        firstSand = sandGroup.transform.GetChild(0).gameObject;
-        secondSand = sandGroup.transform.GetChild(1).gameObject;
-        thirdSand = sandGroup.transform.GetChild(2).gameObject;
-        fourthSand = sandGroup.transform.GetChild(3).gameObject;
+        firstSand = sandGroup.transform.GetChild(0).GetChild(1).gameObject;
+        secondSand = sandGroup.transform.GetChild(1).GetChild(1).gameObject;
+        thirdSand = sandGroup.transform.GetChild(2).GetChild(1).gameObject;
+        fourthSand = sandGroup.transform.GetChild(3).GetChild(1).gameObject;
 
         // 패턴 시작
         StartCoroutine(RandomMoving());
@@ -75,7 +75,7 @@ public class CoralSirenMoving : MonoBehaviour
         // 레버를 당기는 액션을 취했다면 모래를 채우고 초기화 신호 뿌리기
         if (GrabLever.sandActive == true)
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 6; i++)
             {
                 firstSand.transform.GetChild(i).gameObject.SetActive(true);
                 secondSand.transform.GetChild(i).gameObject.SetActive(true);
@@ -107,7 +107,7 @@ public class CoralSirenMoving : MonoBehaviour
     IEnumerator RandomMoving()
     {
         // 모래 채우기 발동 조건 체크
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 6; i++)
         {
             if (firstSand.transform.GetChild(i).gameObject.activeSelf == false ||
                 secondSand.transform.GetChild(i).gameObject.activeSelf == false ||

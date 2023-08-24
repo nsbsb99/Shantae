@@ -9,6 +9,11 @@ using UnityEngine;
 
 public class EmpressController : MonoBehaviour
 {
+
+    public Transform targetTransform; // 다른 오브젝트의 Transform
+    private string player = "Player";
+    private GameObject playerTransform;
+
     #region Empress Siren의 피격, 패배 여부 확인 변수
     // Empress Siren의 HP
     public static float empressHP = default;
@@ -30,6 +35,10 @@ public class EmpressController : MonoBehaviour
 
     private void Start()
     {
+        playerTransform = GameObject.Find(player);
+        // 만약 풀로 돌아간다면 해당 스크립트가 적용되지 않도록 하기. 
+        targetTransform = playerTransform.transform;
+
         // Empress Siren 게임 오브젝트가 !null인지 확인
         Debug.Assert(this.gameObject != null);
 
@@ -96,15 +105,15 @@ public class EmpressController : MonoBehaviour
 
     private IEnumerator PlayerWin()
     {
-        //GameObject.FindWithTag("Player").GetComponent<PlayerExit>().enabled = true;
+        playerTransform.GetComponent<PlayerExit>().enabled = true;
 
-        GameObject.FindWithTag("Player").transform.GetChild(0).
+        playerTransform.transform.
             GetComponent<PlayerExit>().enabled = true;
 
 
         yield return new WaitForSeconds(0.5f);
 
-        playerPosition = GameObject.FindWithTag("Player").transform.position;
+        playerPosition = playerTransform.transform.position;
 
         // 패배 시 플레이어가 Empress Siren의 왼쪽에 위치
         if (playerPosition.x < 0)
@@ -133,7 +142,7 @@ public class EmpressController : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
 
-        GameObject.FindWithTag("Player").GetComponent<PlayerController>().enabled = false;
+        playerTransform.GetComponent<PlayerController>().enabled = false;
         CameraShake.instance.StartCoroutine(CameraShake.instance.OpenTheDoor());
 
         StopCoroutine(PlayerWin());
