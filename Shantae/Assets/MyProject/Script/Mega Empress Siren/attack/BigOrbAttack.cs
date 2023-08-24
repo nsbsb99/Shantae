@@ -13,9 +13,16 @@ public class BigOrbAttack : MonoBehaviour
     private float lastSpawnTime = 0f;
     private float timeBetSpawn = 3f;
     private float witchHand;
-    
 
+    private AudioSource audioSource;
+    public AudioClip charge;
     // Update is called once per frame
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+
+    }
     void Update()
     {
         if (body != null)
@@ -34,5 +41,7 @@ public class BigOrbAttack : MonoBehaviour
     {
         Vector3 spawnPosition = new Vector3(witchHand, transform.position.y, transform.position.z);
         Instantiate(bigOrnPrefab, spawnPosition, Quaternion.identity);
+        audioSource.clip = charge;
+        audioSource.Play();
     }
 }

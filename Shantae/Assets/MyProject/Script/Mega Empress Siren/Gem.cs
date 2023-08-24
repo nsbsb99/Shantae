@@ -13,12 +13,18 @@ public class Gem : MonoBehaviour
 
     private Renderer parentRenderer;
 
+    private AudioSource audioSource;
+    public AudioClip gemHit;
+
     // Start is called before the first frame update
     void Start()
     {
         empressAnimations = FindObjectsOfType<EmpressAnimation>();
 
         parentRenderer = transform.parent.GetComponent<Renderer>();
+
+        audioSource = GetComponent<AudioSource>();
+        
     }
 
     // Update is called once per frame
@@ -43,10 +49,11 @@ public class Gem : MonoBehaviour
     {
         if (collision.tag.Equals("PlayerAttack"))
         {
-
+            audioSource.clip = gemHit;
+            audioSource.Play();
             gemHP -= 1;
             StartBlinkingOnce();
-            Debug.Log(gemHP);
+            //Debug.Log(gemHP);
         }
 
     }
@@ -64,4 +71,6 @@ public class Gem : MonoBehaviour
         yield return new WaitForSeconds(blinkDuration);
         parentRenderer.material.color = originalColor;
     }
+
+   
 }

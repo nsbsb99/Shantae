@@ -14,12 +14,17 @@ public class EndBoss : MonoBehaviour
     public float spawnTime;
     private float nextSpawnTime;
 
+    private AudioSource audioSource;
+    public AudioClip blow;
+
     private int blowCount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         nextSpawnTime = Time.time + spawnDelay;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = blow;
     }
 
     // Update is called once per frame
@@ -31,7 +36,6 @@ public class EndBoss : MonoBehaviour
         }
         if (finish)
         {
-            Debug.Log("1");
             if (player != null)
             {
                 Vector3 newPosition = new Vector3(0f, 0f, 0f); // »õ·Î¿î À§Ä¡ ¼³Á¤
@@ -41,8 +45,7 @@ public class EndBoss : MonoBehaviour
             //Æø¹ßÀÌ¹ÌÁö ·»´ý½ºÆù
             if (Time.time >= nextSpawnTime)
             {
-                Debug.Log("2");
-
+                audioSource.Play();
                 SpawnObject();
                 if (blowCount < 7)
                 {

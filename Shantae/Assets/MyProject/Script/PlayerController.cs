@@ -44,7 +44,14 @@ public class PlayerController : MonoBehaviour
     private bool isFlashing = false;
 
     private Rigidbody2D playerRigid = default;
-    private AudioSource playerAudio = default;
+    private AudioSource playerAudio;
+    public AudioClip hurt;
+    public AudioClip hair;
+    public AudioClip jumping;
+    public AudioClip drill;
+    public AudioClip octo;
+    public AudioClip doubleJump;
+
     private BoxCollider2D boxCollider;
     public float bottomY;
 
@@ -77,6 +84,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // === (노솔빈 수정) 플레이어의 좌표를 실시간으로 뿌림.
         playerPosition = transform.position;
         // ===
@@ -106,11 +114,11 @@ public class PlayerController : MonoBehaviour
         if (Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f))        //플레이어가 바닥에 있는지
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
-            jumpCount = 0;
             if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
             {
                 if (hit.collider.CompareTag("Ground"))
                 {
+                    jumpCount = 0;
                     isAir = false;
                     animator.SetBool("isGround", !isAir);
                     isJumping = false;
@@ -129,6 +137,8 @@ public class PlayerController : MonoBehaviour
             }
             if (hit.collider.CompareTag("Ground"))
             {
+                jumpCount = 0;
+
                 // 바닥과 충돌한 경우
                 octoJump = false;
                 animator.SetBool("OctoJump", octoJump);
@@ -139,6 +149,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (hit.collider.CompareTag("SandStep"))
             {
+                jumpCount = 0;
+
                 isAir = false;
                 animator.SetBool("isGround", !isAir);
 
@@ -185,10 +197,21 @@ public class PlayerController : MonoBehaviour
             if (jumpCount == 1)
             {
                 animator.SetBool("Jump", isJumping);
-
+                playerAudio.clip = jumping;
+                playerAudio.Play();
             }
             else if (jumpCount >= 2)
             {
+                if (jumpCount == 2)
+                {
+                    playerAudio.clip = octo;
+                    playerAudio.Play();
+                }
+                else if (jumpCount == 3)
+                {
+                    playerAudio.clip = doubleJump;
+                    playerAudio.Play();
+                }
                 octoJump = true;
                 animator.SetBool("OctoJump", octoJump);
             }
@@ -212,12 +235,17 @@ public class PlayerController : MonoBehaviour
                     isJumping = false;
                     if (jumpCount == 1)
                     {
+                        Debug.Log(jumpCount);
+                       
                         animator.SetBool("Jump", isJumping);
                     }
                     else if (jumpCount >= 2)
                     {
+                        
                         octoJump = false;
-                        animator.SetBool("OctoJump", octoJump);
+                        animator.SetBool("OctoJump", octoJump); 
+                        Debug.Log(jumpCount);
+
                     }
                 }
             }
@@ -248,7 +276,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z) && !drillOn)        // 공격
             {
                 isAttack = true;
-
+                playerAudio.clip = hair;
                 if (isDown)
                 {
                     originalPosition = transform.position;
@@ -308,6 +336,8 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (overSand)
                 {
+                    playerAudio.clip = drill;
+                    playerAudio.Play();
                     playerRigid.gravityScale = 1;
                     stepSand.SetActive(false);      //저장한(밟고있던)모래를 비활성화
                     boxCollider.size = new Vector2(0.7f, 0.7f);
@@ -474,6 +504,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator DownAttack(float delay)
     {
         down.SetActive(true);
+        playerAudio.Play();
 
         originalPosition = transform.position;
         yield return new WaitForSeconds(delay); // 1초 대기
@@ -486,6 +517,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator GroundAttack(float delay)
     {
         ground.SetActive(true);
+        playerAudio.Play();
 
         originalPosition = transform.position;
         yield return new WaitForSeconds(delay); // 1초 대기
@@ -505,6 +537,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator AirAttack(float delay)
     {
         jump.SetActive(true);
+        playerAudio.Play();
 
         yield return new WaitForSeconds(delay); // 1초 대기
 
@@ -524,6 +557,9 @@ public class PlayerController : MonoBehaviour
         {
             if (!invincible)        // 무적시간
             {
+                playerAudio.clip = hurt; 
+                playerAudio.Play();
+
                 invincible = true;
                 StartCoroutine(HandleInvincibleAndDamage(1.5f, 0.25f));
 

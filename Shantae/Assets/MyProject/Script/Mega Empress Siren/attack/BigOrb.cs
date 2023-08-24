@@ -14,8 +14,12 @@ public class BigOrb : MonoBehaviour
     private float startTime;
     private float elapsedTime;
     private float originalPositionX;
+
+   
     private void Start()
     {
+        
+
         originalPositionX = transform.position.x;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -35,6 +39,8 @@ public class BigOrb : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         GameObject empress = GameObject.Find("Mega Empress Siren");
 
+
+        bool trigger = true;
         if (player != null && empress != null)
         {
             // Player의 좌표값 가져오기
@@ -57,11 +63,16 @@ public class BigOrb : MonoBehaviour
         }
         if(elapsedTime<= 5f)
         {
+            if(trigger)
+            {
+                //audioSource.Play();
+                trigger = false;
+            }
             Vector3 newPosition = transform.position;
             newPosition.x = empress.transform.position.x + originalPositionX;
             transform.position = newPosition;
         }
-        else if (elapsedTime > 5f && elapsedTime < 13f)
+        else if (elapsedTime > 5f && elapsedTime < 10f)
         {
             bool move = false;
             if (!move)
@@ -89,7 +100,7 @@ public class BigOrb : MonoBehaviour
                 transform.position += forwardDirection * moveSpeed * Time.deltaTime;
             
         }
-        else if (elapsedTime >= 13f && elapsedTime <= 20f)
+        else if (elapsedTime >= 10f && elapsedTime <= 17f)
         {
 
             bool move = false;
@@ -115,7 +126,7 @@ public class BigOrb : MonoBehaviour
                 }
             }
         }
-        else if(elapsedTime >20f)
+        else if(elapsedTime >17f)
         {
             Destroy(gameObject);
         }
