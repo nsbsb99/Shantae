@@ -24,6 +24,7 @@ public class CoralSirenController : MonoBehaviour
     // Coral Siren의 패배를 전달
     public static bool coralDefeated = false;
 
+    public static bool die = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -131,6 +132,11 @@ public class CoralSirenController : MonoBehaviour
                 transform.GetComponent<Animator>().Play("Fire_Frail");
             }
         }
+    }
+
+    public static void Die()
+    {
+        
     }
 
     private IEnumerator FlashCoral()
