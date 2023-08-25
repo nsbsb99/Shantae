@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
     private bool move = false;
     private bool move2 = false;
 
+    public float x;
+    public float y;
+    public float z;
+
     // ±è°ÇÈÖ
 
     private void Awake()
@@ -52,6 +56,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Vector3 newPosition = new Vector3(x, y, z); // »õ·Î¿î À§Ä¡ ¼³Á¤
+        player.position = newPosition;
         //// UI Äµ¹ö½º
         //canvas_UI = GameObject.Find("UI Canvas");
         //DontDestroyOnLoad(canvas_UI);
@@ -218,6 +224,7 @@ public class GameManager : MonoBehaviour
         //        Debug.Log("ÇÃ·¹ÀÌ¾î Á×À½");
         //    }
         //}
+        
     }
 
     // ±è°ÇÈÖ ÀÛ¼º
@@ -254,6 +261,8 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    
 
     // ±è°ÇÈÖ ÀÛ¼º
 

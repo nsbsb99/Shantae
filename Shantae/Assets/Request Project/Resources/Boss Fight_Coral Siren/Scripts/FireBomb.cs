@@ -238,6 +238,7 @@ public class FireBomb : MonoBehaviour
         }
 
         // 애니메이션 기본 상태로
+        Debug.Log("1");
         animator.SetBool("Fire Bomb", false);
         bossNowMove = false;
 
@@ -271,6 +272,7 @@ public class FireBomb : MonoBehaviour
         }
 
         // 애니메이션 기본 상태로
+        Debug.Log("1");
         animator.SetBool("Fire Bomb", false);
         bossNowMove = false;
 
@@ -308,6 +310,7 @@ public class FireBomb : MonoBehaviour
         whatBombPattern = 3;
 
         // 애니메이션 기본 상태로
+        Debug.Log("1");
         animator.SetBool("Fire Bomb", false);
         bossNowMove = false;
 

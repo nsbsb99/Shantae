@@ -26,7 +26,6 @@ public class AcceesoryBreakManager : MonoBehaviour
     void Update()
     {
         gemCount = objectList.Count;
-        Debug.Log(gemCount);
         for (int i = objectList.Count - 1; i >= 0; i--)
         {
             if (objectList[i] == null)

@@ -19,6 +19,11 @@ public class EndBoss : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip blow;
 
+    public float blowX;
+    public float blowY;
+
+    public Transform endBlow;
+
     private int blowCount = 0;
 
     // Start is called before the first frame update
@@ -69,8 +74,8 @@ public class EndBoss : MonoBehaviour
     private void SpawnObject()
     {
         // ·»´ý ÁÂÇ¥ »ý¼º
-        float randomX = Random.Range(-5.5f, 5.5f);
-        float randomY = Random.Range(8f, 21f);
+        float randomX = Random.Range(endBlow.position.x + blowX, endBlow.position.x - blowX);
+        float randomY = Random.Range(endBlow.position.y + blowY, endBlow.position.y - blowY);
         Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
 
         // ¿ÀºêÁ§Æ® »ý¼º

@@ -8,6 +8,7 @@ public class CoralSirenController : MonoBehaviour
     private Color originColor = default;
     private Color transparentColor = default;
 
+    public static bool die = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +24,11 @@ public class CoralSirenController : MonoBehaviour
         {
             StartCoroutine(FlashCoral());
         }
+    }
+
+    public static void Die()
+    {
+        
     }
 
     private IEnumerator FlashCoral()
