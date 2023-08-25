@@ -91,6 +91,12 @@ public class CoralSirenMoving : MonoBehaviour
         {
             StopCoroutine(RandomMoving());
 
+            /// <problem> 알 수 없는 확률로 여러 패턴이 동시에 등장. 한 번 더 초기화
+            fireBomb = false;
+            dash = false;
+            fireSpread = false;
+            grabLever = false;
+
             // 전부 초기화하고 패턴 코루틴 다시 실행 
             firstPatternDone = false;
             secondPatternDone = false;
@@ -99,7 +105,10 @@ public class CoralSirenMoving : MonoBehaviour
 
             patternPlay = false;
 
-            StartCoroutine(RandomMoving());
+            if (CoralSirenController.coralDefeated == false)
+            {
+                StartCoroutine(RandomMoving());
+            }
         }
     }
 
@@ -118,8 +127,9 @@ public class CoralSirenMoving : MonoBehaviour
                 randomAttack = 3;
             }
             else
-            {
+            {   
                 randomAttack = Random.Range(0, 3);
+                randomAttack = Random.Range(1, 3);
             }   
         }
        

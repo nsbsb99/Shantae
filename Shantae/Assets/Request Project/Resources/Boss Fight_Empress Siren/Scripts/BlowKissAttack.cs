@@ -14,7 +14,6 @@ public class BlowKissAttack : MonoBehaviour
     private int blowKissCount = 25;
 
     // 날아가는 속도
-    private float blowKissSpeed = 15.0f;
     private float gap = 0.8f;
 
     private Vector2 firePosition = default;

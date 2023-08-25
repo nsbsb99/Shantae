@@ -41,6 +41,9 @@ public class FireSpread : MonoBehaviour
     private int selectedRandom = default;
     private float coralPositionX = default;
     private float coralPositionY = default;
+
+    private bool sanded = false;
+    private bool grounded = false;
     #endregion
 
     #region 불을 발사하는 변수
@@ -201,6 +204,10 @@ public class FireSpread : MonoBehaviour
                 coralSiren_Front.position =
                     new Vector2(coralSiren_Back.position.x, 13f);
 
+                /// <problem> 여기서 Dash의 애니메이션 "Right Dash"가 개입. 개입을 막는 코드를 작성했다.
+                // 앞 Coral Siren는 디폴트 애니메이션 그대로 떨어진다. 
+                coralSiren_Front_Animator.SetBool("Front Dash", false);
+
                 firstDestination = true;
             }
         }
@@ -298,8 +305,16 @@ public class FireSpread : MonoBehaviour
             if (coralSiren_Front.position.y >= 13f)
             {
                 // 모래 & 땅 애니메이션 => 원상태 애니메이션
-                coralSiren_Front_Animator.SetTrigger("Return Fire_Drop");
-                coralSiren_Front_Animator.SetTrigger("Fire_GoBack");
+                if (grounded == true)
+                {
+                    coralSiren_Front_Animator.SetTrigger("Return Fire_Drop");
+                    grounded = false;
+                }
+                else if (sanded == true)
+                {
+                    coralSiren_Front_Animator.SetTrigger("Fire_GoBack");
+                    sanded = false;
+                }
 
                 // 풀로 복귀
                 coralSiren_Front.position = coralSiren_Front_OriginPosition;
@@ -356,6 +371,8 @@ public class FireSpread : MonoBehaviour
 
         coralSiren_Front_Animator.SetTrigger("GoBack_Sand");
 
+        grounded = true;
+
         secondDestination = true;
     }
 
@@ -377,6 +394,9 @@ public class FireSpread : MonoBehaviour
             (coralSiren_Front_Animator.GetCurrentAnimatorClipInfo(0).Length);
 
         coralSiren_Front_Animator.SetBool("Fire", false);
+
+        sanded = true;
+
         secondDestination = true;
     }
 
