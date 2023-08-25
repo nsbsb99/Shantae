@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Debug.Log(playerHP);
         if (playerHP <= 0)
         {
@@ -132,74 +133,74 @@ public class PlayerController : MonoBehaviour
             Vector2 raycastOrigin = new Vector2(transform.position.x,
             transform.position.y - GetComponent<SpriteRenderer>().bounds.extents.y); // 플레이어의 오브잭트 중앙에서 아랫쪽 끝까지의 거리 계산
 
-            Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스 레이저 가시광선
+            Debug.DrawRay(raycastOrigin, Vector2.down, Color.black);           // 레이케스트 레이저 가시광선
+            RaycastHit2D[] hits = Physics2D.RaycastAll(raycastOrigin, Vector2.down, 0.1f);
 
-            if (Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f))        //플레이어가 바닥에 있는지
+            foreach (RaycastHit2D hit in hits)
             {
-                RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, Vector2.down, 0.1f);
-                if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
+                if (hit.collider != null)
                 {
+
+                    //if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
+                    //{
+                    //     Debug.Log("플레이어의 위치: " + hit.collider);
+                    //    if (hit.collider.CompareTag("Ground"))
+                    //    {
+                    //        jumpCount = 0;
+                    //        isAir = false;
+                    //        animator.SetBool("isGround", !isAir);
+                    //        isJumping = false;
+                    //        animator.SetBool("Jump", isJumping);
+                    //    }
+                    //    else
+                    //    {
+                    //        jumpCount += 1;
+                    //        isAir = true;
+                    //        animator.SetBool("isGround", !isAir);
+                    //        isJumping = true;
+                    //        animator.SetBool("Jump", isJumping);
+                    //        if (playerHP > 0)
+                    //        {
+                    //            transform.Translate(Vector3.down * fallForce * Time.deltaTime);
+                    //        }
+                    //    }
+                    //}
+
                     if (hit.collider.CompareTag("Ground"))
                     {
                         jumpCount = 0;
+
+                        // 바닥과 충돌한 경우
+                        octoJump = false;
+                        animator.SetBool("OctoJump", octoJump);
                         isAir = false;
                         animator.SetBool("isGround", !isAir);
-                        isJumping = false;
-                        animator.SetBool("Jump", isJumping);
+                        overSand = false;
+                        playerRigid.gravityScale = 1;
+                    }
+                    else if (hit.collider.CompareTag("SandStep"))
+                    {
+                        jumpCount = 0;
+
+                        isAir = false;
+                        animator.SetBool("isGround", !isAir);
+
+                        overSand = true;
+                        stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
+                        playerRigid.gravityScale = 1;
                     }
                     else
                     {
-                        jumpCount += 1;
-                        isAir = true;
-                        animator.SetBool("isGround", !isAir);
-                        isJumping = true;
-                        animator.SetBool("Jump", isJumping);
+                        overSand = false;
                         if (playerHP > 0)
                         {
-
                             transform.Translate(Vector3.down * fallForce * Time.deltaTime);
-
                         }
-                    }
-
-                }
-                if (hit.collider.CompareTag("Ground"))
-                {
-                    jumpCount = 0;
-
-                    // 바닥과 충돌한 경우
-                    octoJump = false;
-                    animator.SetBool("OctoJump", octoJump);
-                    isAir = false;
-                    animator.SetBool("isGround", !isAir);
-                    overSand = false;
-                    playerRigid.gravityScale = 1;
-                }
-                else if (hit.collider.CompareTag("SandStep"))
-                {
-                    jumpCount = 0;
-
-                    isAir = false;
-                    animator.SetBool("isGround", !isAir);
-
-                    overSand = true;
-                    stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
-                    playerRigid.gravityScale = 1;
-
-                }
-                else
-                {
-
-                    overSand = false;
-                    if (playerHP > 0)
-                    {
-
-                        transform.Translate(Vector3.down * fallForce * Time.deltaTime);
-
                     }
                 }
             }
-            else if (!Physics2D.Raycast(raycastOrigin, Vector2.down, 0.005f))
+
+            if (hits.Length == 0)
             {
                 // 바닥과 충돌하지 않은 경우
                 if (!drillOn)
@@ -217,9 +218,7 @@ public class PlayerController : MonoBehaviour
 
                     if (playerHP > 0)
                     {
-
                         transform.Translate(Vector3.down * fallForce * Time.deltaTime);
-
                     }
                 }
             }

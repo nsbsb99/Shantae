@@ -6099,7 +6099,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 500
+  m_SortingOrder: 600
   m_Sprite: {fileID: 21300000, guid: 6db3cf0a54588c84fa4c48a0224a6556, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7049,7 +7049,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 500
+  m_SortingOrder: 600
   m_Sprite: {fileID: 21300000, guid: 73dd02973dc141a4080fcf78b10ef331, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -27922,6 +27922,7 @@ MonoBehaviour:
   jump: {fileID: 8146656072500797279}
   down: {fileID: 8146656070566891334}
   sandCollider: {fileID: 0}
+  fadeDuration: 1
   jumpForce: 20
   fallForce: 10
   stepSand: {fileID: 0}
@@ -27932,8 +27933,10 @@ MonoBehaviour:
   drill: {fileID: 8300000, guid: 9ccb667d009392f458add6a4f9f4aabc, type: 3}
   octo: {fileID: 8300000, guid: 2dc70f3f3d0344c4c888874a1d8dccd3, type: 3}
   doubleJump: {fileID: 8300000, guid: 5a28e148da763bc4fb5a4dbc1c92f542, type: 3}
+  dieVioce: {fileID: 0}
   isEmpress: 0
   bottomY: 0
+  deathParticle: {fileID: 0}
 --- !u!82 &8146656070653142050
 AudioSource:
   m_ObjectHideFlags: 0
