@@ -238,6 +238,8 @@ public class Dash : MonoBehaviour
                         coralSiren_Back.position =
                             new Vector2(12f, coralSiren_Back.transform.position.y);
 
+                        Debug.Log("대시 애니메이션 켜짐");
+
                         // 앞의 보스는 이동 전 준비
                         coralSiren_Front_Animator.SetBool("Front Dash", true);
 

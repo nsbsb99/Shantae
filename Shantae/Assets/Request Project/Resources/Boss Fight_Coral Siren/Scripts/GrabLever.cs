@@ -11,7 +11,6 @@ public class GrabLever : MonoBehaviour
 
     private float degreePerSecond = 100;
     private float degreePerSecond_Return = 200;
-    private bool returnLever = false;
     private float originLever;
 
     public static bool sandActive = false;

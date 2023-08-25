@@ -14,6 +14,8 @@ public class EmpressController : MonoBehaviour
     private string player = "Player";
     private GameObject playerTransform;
 
+    private bool playerControllerOff = false;
+
     #region Empress Siren의 피격, 패배 여부 확인 변수
     // Empress Siren의 HP
     public static float empressHP = default;
@@ -58,12 +60,32 @@ public class EmpressController : MonoBehaviour
         // Empress Siren의 패배 확인
         if (empressHP <= 0 && alreadyRun == false)
         {
+            alreadyRun = true;
+
             // EmpressMoving 종료 메서드 추가
             transform.GetComponent<EmpressMoving>().enabled = false;
+            transform.GetComponent<EmpressMoving>().StopAllCoroutines();
 
-            alreadyRun = true;
+            transform.GetComponent<CeilingAttack>().enabled = false;
+            transform.GetComponent<CeilingAttack>().StopAllCoroutines();
+
+            transform.GetComponent<BlowKissAttack>().enabled = false;
+            transform.GetComponent<BlowKissAttack>().StopAllCoroutines();
+
+            transform.GetComponent<SurfAttack>().enabled = false;
+            transform.GetComponent<SurfAttack>().StopAllCoroutines();
+
+            transform.GetComponent<HopBackAttack>().enabled = false;
+            transform.GetComponent<HopBackAttack>().StopAllCoroutines();
+
+            // 피격 중일 때를 고려
+            transform.GetComponent<SpriteRenderer>().color = originColor;
+
             StartCoroutine(PlayerWin());
         }
+
+        /// <problem> 왜 시작부터 true?
+        Debug.Log(transform.GetComponent<SpriteRenderer>().flipX);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -105,44 +127,66 @@ public class EmpressController : MonoBehaviour
 
     private IEnumerator PlayerWin()
     {
-        playerTransform.GetComponent<PlayerExit>().enabled = true;
+        GameObject.FindWithTag("Player").transform.GetChild(0).
+            transform.GetComponent<PlayerExit>().enabled = true;
 
-        playerTransform.transform.
-            GetComponent<PlayerExit>().enabled = true;
-
-
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         playerPosition = playerTransform.transform.position;
 
-        // 패배 시 플레이어가 Empress Siren의 왼쪽에 위치
+        // 패배 시 플레이어가 Empress Siren의 왼쪽에 위치 (Empress Siren의 시선)
         if (playerPosition.x < 0)
         {
             Debug.Log("왼쪽 보기");
-            transform.position = new Vector2(playerPosition.x + 4f, -1.44f);
+            transform.position = new Vector2(4.89f, -1.44f);
+
             transform.GetComponent<SpriteRenderer>().flipX = true;
+
             animator.SetTrigger("Empress Lose");
+
+            playerControllerOff = true;
         }
         else if (playerPosition.x >= 0) // Empress Siren의 오른쪽에 위치
         {
             Debug.Log("오른쪽 보기");
-            transform.position = new Vector2(playerPosition.x - 4f, -1.44f);
+            transform.position = new Vector2(-4.89f, -1.44f);
+
             transform.GetComponent<SpriteRenderer>().flipX = false;
 
             animator.SetTrigger("Empress Lose");
+
+            playerControllerOff = true;
         }
 
         yield return new WaitForSeconds(3.5f);
 
+        // Empress Siren이 사라지는 효과
         teleportAnimator.SetActive(true);
         transform.GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds
             (teleportAnimator.GetComponent<Animator>().GetCurrentAnimatorClipInfo(0).Length);
         teleportAnimator.SetActive(false);
 
+        Debug.Log(targetTransform.GetComponent<SpriteRenderer>().flipX);
+
+        /// <problem> 플레이어 스프라이트의 방향을 고정하지 못하는 문제 
+        SpriteRenderer forFlipX = GameObject.Find(player).transform.GetComponent<SpriteRenderer>();
+
+        // 플레이어의 이동을 금지하기 전 스프라이트 방향 고정
+        if (forFlipX.flipX == true) // 왼쪽을 보고 있다면 오른쪽을 보도록
+        {
+            transform.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (forFlipX.flipX == false) // 오른쪽을 보고 있더라도 오른쪽을 보도록
+        {
+            transform.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        // 플레이어의 이동 막기
+        targetTransform.GetComponent<PlayerController>().enabled = false;
+
         yield return new WaitForSeconds(3f);
 
-        playerTransform.GetComponent<PlayerController>().enabled = false;
         CameraShake.instance.StartCoroutine(CameraShake.instance.OpenTheDoor());
 
         StopCoroutine(PlayerWin());
