@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CoralSirenController : MonoBehaviour
 {
+    private bool coralDamaged = false;
     // 피격 시 색상 교체를 위함
     private Color originColor = default;
     private Color transparentColor = default;
@@ -41,6 +42,13 @@ public class CoralSirenController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
+            if (coralSirenHP <= 0)
+            {
+                CoralSirenController.die = true;
+                CoralSirenController.Die();
+            }
+        
         if (HitController.coralDamaged == true)
         {
             // 플레이어가 입힌 데미지는 4부터 9까지의 정수
@@ -156,7 +164,7 @@ public class CoralSirenController : MonoBehaviour
         }
 
         transform.GetComponent<SpriteRenderer>().color = originColor;
-        HitController.coralDamaged = false;
+        coralDamaged = false;
 
         StopCoroutine(FlashCoral());
     }
@@ -170,5 +178,15 @@ public class CoralSirenController : MonoBehaviour
         GameObject player = GameObject.Find("Player");
 
         yield return null;
+    }
+    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerAttack"))
+        {
+            coralDamaged = true;
+            coralSirenHP -= 1;
+        }
     }
 }

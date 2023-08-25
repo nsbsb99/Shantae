@@ -6,7 +6,7 @@ public class Gem : MonoBehaviour
 {
     //public bool startTimer = false;
     public GameObject gemBreakPrefab;
-    private int gemHP = 3;
+    private int gemHP = 6;
     private EmpressAnimation[] empressAnimations;
 
     private float blinkDuration = 0.1f;

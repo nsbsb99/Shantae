@@ -73,6 +73,9 @@ public class PlayerController : MonoBehaviour
     private bool triggerDie1;
     private bool triggerDie2;
 
+
+    private bool a = false;
+    private bool b = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -102,7 +105,8 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        //Debug.Log(playerHP);
+        Debug.LogFormat("a = {0}", a); Debug.LogFormat("b = {0}", b);
+
         if (playerHP <= 0)
         {
             //Debug.Log("!");
@@ -140,36 +144,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider != null)
                 {
-
-                    //if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("jewel"))
-                    //{
-                    //     Debug.Log("플레이어의 위치: " + hit.collider);
-                    //    if (hit.collider.CompareTag("Ground"))
-                    //    {
-                    //        jumpCount = 0;
-                    //        isAir = false;
-                    //        animator.SetBool("isGround", !isAir);
-                    //        isJumping = false;
-                    //        animator.SetBool("Jump", isJumping);
-                    //    }
-                    //    else
-                    //    {
-                    //        jumpCount += 1;
-                    //        isAir = true;
-                    //        animator.SetBool("isGround", !isAir);
-                    //        isJumping = true;
-                    //        animator.SetBool("Jump", isJumping);
-                    //        if (playerHP > 0)
-                    //        {
-                    //            transform.Translate(Vector3.down * fallForce * Time.deltaTime);
-                    //        }
-                    //    }
-                    //}
-
                     if (hit.collider.CompareTag("Ground"))
                     {
                         jumpCount = 0;
-
+                        a = true;
                         // 바닥과 충돌한 경우
                         octoJump = false;
                         animator.SetBool("OctoJump", octoJump);
@@ -181,7 +159,7 @@ public class PlayerController : MonoBehaviour
                     else if (hit.collider.CompareTag("SandStep"))
                     {
                         jumpCount = 0;
-
+                        b = true;
                         isAir = false;
                         animator.SetBool("isGround", !isAir);
 
@@ -189,8 +167,14 @@ public class PlayerController : MonoBehaviour
                         stepSand = hit.collider.gameObject;     // 밟고있는 모래의 정보를 저장
                         playerRigid.gravityScale = 1;
                     }
+                    else if (hit.collider.CompareTag("Damage") || hit.collider.CompareTag("Untagged"))
+                    {
+
+                    }
                     else
                     {
+                        a = false;
+                        b = false;
                         overSand = false;
                         if (playerHP > 0)
                         {
