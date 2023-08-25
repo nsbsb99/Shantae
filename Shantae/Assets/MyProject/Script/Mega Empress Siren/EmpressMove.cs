@@ -7,6 +7,7 @@ public class EmpressMove : MonoBehaviour
     private bool moveLeft = true;
     private float moveSpeed = 5f;
 
+    public GameObject tiara;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +34,10 @@ public class EmpressMove : MonoBehaviour
         {
             Vector3 newPosition = new Vector3(0f, 0f, 0f); // 새로운 위치 설정
             transform.position = newPosition;
+        }
+        if(tiara == null)
+        {
+            EndBoss.finish = true;
         }
     }
 
