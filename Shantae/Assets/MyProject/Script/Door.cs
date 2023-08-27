@@ -22,7 +22,7 @@ public class Door : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(timer);
+        //Debug.Log(timer);
         if (triggerA)
         {
             timer += Time.deltaTime;

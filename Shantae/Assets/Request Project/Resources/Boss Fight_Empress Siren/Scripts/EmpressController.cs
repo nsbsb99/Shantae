@@ -48,7 +48,7 @@ public class EmpressController : MonoBehaviour
         teleportAnimator = transform.GetChild(0).gameObject;
         teleportParticle = transform.GetChild(1).gameObject;
 
-        empressHP = 15f; // 임시 조정
+        empressHP = 10f;
 
         originColor = transform.GetComponent<SpriteRenderer>().color;
         transparentColor = originColor;
@@ -93,8 +93,8 @@ public class EmpressController : MonoBehaviour
         // Empress Siren의 피격 확인
         if (collision.CompareTag("PlayerAttack") && empressHP > 0)
         {
-            // 플레이어가 입힌 데미지는 4부터 9까지의 정수
-            getDamage = Random.Range(4, 10);
+            // 플레이어가 입힌 데미지
+            getDamage = 1;
             // Empress HP 깎기. 
             empressHP -= getDamage;
 

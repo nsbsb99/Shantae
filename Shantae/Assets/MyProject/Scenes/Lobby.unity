@@ -1710,7 +1710,7 @@ MonoBehaviour:
   spawner: {fileID: 0}
   end: {fileID: 0}
   x: -11
-  y: 10
+  y: -4
   z: 0
 --- !u!4 &1947982307
 Transform:
