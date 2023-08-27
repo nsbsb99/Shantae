@@ -21,6 +21,8 @@ public class GrabLever : MonoBehaviour
     private bool pullLever = default;
     private bool backLever = default;
 
+    public static bool recolor = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +41,6 @@ public class GrabLever : MonoBehaviour
         for (int i = 0; i < 8; i++)
         {
             sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
-            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = false;
         }
     }
 
@@ -90,18 +91,10 @@ public class GrabLever : MonoBehaviour
 
     IEnumerator PullLever()
     {
-        Debug.Log("코루틴 작동 확인");
-
         animator.SetBool("Grab Lever", true);
         pullLever = true;
+        recolor = true;
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-        // 모래 채우기 이펙트 재생
-        for (int i = 0; i < 8; i++)
-        {
-            sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = true;
-            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = true;
-        }
 
         sandActive = true;
 
@@ -110,13 +103,8 @@ public class GrabLever : MonoBehaviour
 
         yield return new WaitForSeconds(3);
 
-        // 모래 채우기 이펙트 초기화
-        for (int i = 0; i < 8; i++)
-        {
-            Debug.Log("모래구름 초기화");
-            sandCloud.transform.GetChild(i).GetComponent<SpriteRenderer>().enabled = false;
-            sandCloud.transform.GetChild(i).GetComponent<SandCloudEffect>().enabled = false;
-        }
+        // 색상/크기 초기화
+        recolor = false;
 
         CoralSirenMoving.fourthPatternDone = true;
 

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class AllSceneManager : MonoBehaviour
 {
     public static AllSceneManager instance;
+    private bool alreadyEmpressScene = false;
 
     // Start is called before the first frame update
     void Start()
@@ -34,23 +35,31 @@ public class AllSceneManager : MonoBehaviour
 
     public IEnumerator OpenLoadingScene()
     {
-        SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+        SceneManager.LoadScene("Loading Scene", LoadSceneMode.Additive);
+        yield return new WaitForSeconds(1.5f);
 
-        yield return new WaitForSeconds(3);
-
-        /// <point> 추후 완성 시 'Lobby'로 교체
-        SceneManager.LoadScene("Boss Fight_Empress Siren", LoadSceneMode.Single);
+        SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+        SceneManager.UnloadScene("Loading Scene");
     }
 
     public IEnumerator OpenLoadingScene_Second()
     {
-        Debug.Log("코루틴 진입!");
+        if (alreadyEmpressScene == false)
+        {
+            alreadyEmpressScene = true;
 
+            SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+            yield return new WaitForSeconds(1.5f);
+
+            SceneManager.LoadScene("Boss Fight_Empress Siren", LoadSceneMode.Single);
+        }
+    }
+
+    public IEnumerator OpenLoadingScene_Third() 
+    {
         SceneManager.LoadScene("Loading Scene", LoadSceneMode.Single);
+        yield return new WaitForSeconds(1.5f);
 
-        yield return new WaitForSeconds(3);
-
-        /// <point> 추후 완성 시 'Mega Empress Siren'으로 교체
-        SceneManager.LoadScene("Boss Fight_Coral Siren", LoadSceneMode.Single);
+        SceneManager.LoadScene("Boss Fight Mega_Empress Siren", LoadSceneMode.Single);
     }
 }

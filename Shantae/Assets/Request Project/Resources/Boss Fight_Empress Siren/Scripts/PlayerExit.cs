@@ -35,7 +35,7 @@ public class PlayerExit : MonoBehaviour
             if (Mathf.Abs(transform.position.x - playerDestination.x) <= 0.01f)
             {
                 AllSceneManager.instance.StartCoroutine
-                    (AllSceneManager.instance.OpenLoadingScene_Second());
+                    (AllSceneManager.instance.OpenLoadingScene_Third());
             }
         }
     }

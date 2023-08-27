@@ -44,7 +44,12 @@ public class Door : MonoBehaviour
             if (isEmpress)
             {
                 BGMManager.playing = false;
-                SceneManager.LoadScene("Boss Fight Mega_Empress Siren");
+
+                // === (노솔빈 수정)
+                //SceneManager.LoadScene("Boss Fight Mega_Empress Siren"); 원본
+                AllSceneManager.instance.StartCoroutine
+                    (AllSceneManager.instance.OpenLoadingScene_Second());
+                // ===
             }
             else
             {

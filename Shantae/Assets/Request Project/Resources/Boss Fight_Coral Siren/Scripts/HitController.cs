@@ -18,7 +18,6 @@ public class HitController : MonoBehaviour
         if(coralSirenHP <= 0)
         {
             CoralSirenController.die = true;
-            CoralSirenController.Die();
         }
     }
 

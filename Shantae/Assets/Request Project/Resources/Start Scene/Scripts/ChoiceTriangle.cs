@@ -15,7 +15,8 @@ public class ChoiceTriangle : MonoBehaviour
     private bool wantStart = default;
     // 화살표를 움직이면 울릴 햅틱음
     private AudioSource tiktok = default;
-
+    // 배경 사운드
+    private AudioSource bgm = default;
 
     // Start is called before the first frame update
     void Start()
@@ -24,10 +25,12 @@ public class ChoiceTriangle : MonoBehaviour
         wantStart = true;
 
         canvas_UI = GameObject.Find("UI Canvas");
-        firstTriangle = canvas_UI.transform.GetChild(1).gameObject;
+        firstTriangle = canvas_UI.transform.GetChild(3).gameObject;
         Debug.Assert(firstTriangle != null);
-        secondTriangle = canvas_UI.transform.GetChild(2).gameObject;
+        secondTriangle = canvas_UI.transform.GetChild(4).gameObject;
         Debug.Assert(secondTriangle != null);
+
+        bgm = GameObject.Find("Sound Controller").GetComponent<AudioSource>();
 
         tiktok = GetComponent<AudioSource>();
         Debug.Assert(tiktok != null);
@@ -52,6 +55,8 @@ public class ChoiceTriangle : MonoBehaviour
             // Enter 입력 시 다음 씬으로.
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                bgm.Stop();
+
                 AllSceneManager.instance.StartCoroutine
                     (AllSceneManager.instance.OpenLoadingScene());
             }
@@ -66,6 +71,7 @@ public class ChoiceTriangle : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 wantStart = true;
+                tiktok.Play();
             }
 
             // Enter 입력 시 게임 종료

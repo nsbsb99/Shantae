@@ -32,6 +32,9 @@ public class CoralSirenMoving : MonoBehaviour
     private GameObject thirdSand;
     private GameObject fourthSand;
 
+    // 첫 재생 시 컷신 이후 동작하도록
+    private bool firstCutScene = default;
+
     // 중복 실행 버그를 막기 위함. 
     private bool notDuplication = false;
 
@@ -115,6 +118,12 @@ public class CoralSirenMoving : MonoBehaviour
     // Update is called once per frame
     IEnumerator RandomMoving()
     {
+        if (firstCutScene == false)
+        {
+            yield return new WaitForSeconds(3.5f);
+            firstCutScene = true;
+        }
+
         // 모래 채우기 발동 조건 체크
         for (int i = 0; i < 6; i++)
         {
@@ -129,7 +138,7 @@ public class CoralSirenMoving : MonoBehaviour
             else
             {   
                 randomAttack = Random.Range(0, 3);
-                randomAttack = Random.Range(1, 3);
+                randomAttack = Random.Range(1, 3); // 임시
             }   
         }
        
