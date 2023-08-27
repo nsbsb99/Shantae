@@ -37,11 +37,7 @@ public class EndBoss : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if(tiara == null)
-        {
-            finish = true;
-        }
+    {        
         if (finish)
         {
             count += Time.deltaTime;
