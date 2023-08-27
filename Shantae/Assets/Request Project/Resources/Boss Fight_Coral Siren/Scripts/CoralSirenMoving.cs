@@ -138,7 +138,7 @@ public class CoralSirenMoving : MonoBehaviour
             else
             {   
                 randomAttack = Random.Range(0, 3);
-                randomAttack = Random.Range(1, 3); // 임시
+                //randomAttack = Random.Range(1, 3); // 임시
             }   
         }
        

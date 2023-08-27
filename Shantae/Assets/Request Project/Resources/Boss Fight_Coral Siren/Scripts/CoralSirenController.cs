@@ -54,18 +54,16 @@ public class CoralSirenController : MonoBehaviour
             // 밑에 수정하기
             //explosions[i] = Instantiate(explosionPrefab, )
         }
+
+        for (int i = 0; i < 45; i++)
+        {
+
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-       
-            if (coralSirenHP <= 0)
-            {
-                CoralSirenController.die = true;
-                CoralSirenController.Die();
-            }
-        
         if (HitController.coralDamaged == true)
         {
             // 플레이어가 입힌 데미지는 4부터 9까지의 정수
@@ -116,6 +114,8 @@ public class CoralSirenController : MonoBehaviour
             // boss attack manager
             bossAttackManager.GetComponent<Dash>().enabled = false;
             bossAttackManager.GetComponent<FireSpread>().enabled = false;
+
+
 
             // 기존에 진행되던 스크립트와 코루틴 전부 종료하기_CoralSiren_Front
             transform.GetComponent<FrontGrounded>().enabled = false;

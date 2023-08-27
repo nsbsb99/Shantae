@@ -82,7 +82,7 @@ public class BombUpDown : MonoBehaviour
     {
         // 만약 바닥 콜라이더와 충돌하면
         if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("Sand"))
-        {
+        { 
             // 스파크 렌더러 끄기
             sparkRenderer.enabled = false;
 
